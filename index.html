@@ -15,7 +15,7 @@
      then replace "sgunihub" below with your own site code. no_onload is set
      because this is a single-page app: pageviews are fired manually on each
      hash/route change instead (see trackPageview() in the script). -->
-<script data-goatcounter="https://sgunihub.goatcounter.com/count"
+<script data-goatcounter="https://eloori.goatcounter.com/count"
         data-goatcounter-settings='{"no_onload": true}'
         async src="//gc.zgo.at/count.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;0,900;1,500&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap">
@@ -242,10 +242,9 @@
     font-family:var(--font-display); font-weight:700; font-size:1.2rem;
     transition:background .35s ease, color .35s ease, transform .35s cubic-bezier(.34,1.56,.64,1);
   }
-  /* Emoji carry their own colour (the OS font renders them in full colour
-     regardless of `color`), so only their size needs adjusting — a touch
-     larger than the letter monogram reads better at a glance. */
-  .tile-icon-emoji{ font-size:1.55rem; }
+  /* Phosphor icons are inline SVGs using fill="currentColor", so they pick up
+     .tile-icon's `color` automatically — only explicit sizing is needed. */
+  .tile-icon svg{ width:28px; height:28px; display:block; }
   .tile-inner:hover .tile-icon, .tile-inner:focus-visible .tile-icon{
     background:var(--accent); color:var(--accent-contrast);
     transform:scale(1.08) rotate(-4deg);
@@ -414,7 +413,7 @@
       height:auto; padding:.85rem 1rem; gap:.85rem;
     }
     .tile-icon{ width:42px; height:42px; font-size:1rem; }
-    .tile-icon-emoji{ font-size:1.3rem; }
+    .tile-icon svg{ width:22px; height:22px; }
     .tile-pop{
       position:static; opacity:1; transform:none; pointer-events:auto;
       width:auto; max-width:none; min-width:0;
@@ -459,6 +458,7 @@
         <a href="#dashboard" data-view-link="dashboard" data-de="Dashboard" data-en="Dashboard"></a>
         <a href="#guide" data-view-link="guide" data-de="Neu an der HSG" data-en="New to HSG"></a>
         <a href="#journey" data-view-link="journey" data-de="Studienreise" data-en="Your Journey"></a>
+        <a href="#business" data-view-link="business" data-de="Business Case" data-en="Business Case"></a>
         <a href="#contact" data-view-link="contact" data-de="Kontakt" data-en="Contact"></a>
       </nav>
       <a class="brand" href="#dashboard" data-view-link="dashboard">sg<span class="slash">/</span>unihub</a>
@@ -513,6 +513,57 @@
       </div>
     </section>
 
+    <section class="view" id="view-business" data-view="business" hidden>
+      <header class="page-head">
+        <span class="eyebrow" data-de="Hintergrund" data-en="Background"></span>
+        <h1 class="page-title" data-de="Business Case" data-en="Business Case"></h1>
+        <p class="page-sub" data-de="Warum es sg/unihub gibt – und wie du am meisten aus der Seite herausholst."
+           data-en="Why sg/unihub exists – and how to get the most out of it."></p>
+      </header>
+      <div class="category-box guide-section">
+        <div data-lang-block="de">
+          <div class="legal-block">
+            <h2>Warum sg/unihub?</h2>
+            <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
+            <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Es ist ein Prototyp: Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+          </div>
+          <div class="legal-block">
+            <h2>So nutzt du sg/unihub am besten</h2>
+            <p>Je nachdem, was du gerade brauchst, gibt es drei Einstiegspunkte:</p>
+            <ul class="guide-points">
+              <li data-de="Dashboard – die schnelle Übersicht aller Tools, kategorisiert nach Studium &amp; Verwaltung, Campusleben, Karriere und mehr." data-en=""></li>
+              <li data-de="Neu an der HSG – ein kompakter Guide mit den Basics, die man am Anfang des Studiums wissen sollte (Bidding, Vertiefungen, Austausch etc.)." data-en=""></li>
+              <li data-de="Deine Studienreise – klick dich chronologisch durch einen typischen Weg durchs Bachelor-Studium und siehst, welches Tool wann relevant wird." data-en=""></li>
+            </ul>
+            <p><strong>Tipp:</strong> Damit du sg/unihub immer griffbereit hast, kannst du die Seite wie eine App auf deinem Homescreen bzw. im Dock installieren – ganz ohne App Store.</p>
+            <p>Auf dem iPhone/iPad (Safari): Seite öffnen → auf das Teilen-Symbol tippen → „Zum Home-Bildschirm" auswählen → bestätigen. Danach öffnet sich sg/unihub mit einem Tap direkt vom Homescreen, ganz ohne Browser-Leiste – wie eine echte App.</p>
+            <p>Auf dem Mac (Safari, ab macOS Sonoma): Seite öffnen → in der Menüleiste „Ablage" → „Zum Dock hinzufügen" → bestätigen. Danach startet sg/unihub als eigenes Fenster direkt vom Dock aus.</p>
+          </div>
+        </div>
+        <div data-lang-block="en" hidden>
+          <div class="legal-block">
+            <h2>Why sg/unihub?</h2>
+            <p>HSG has ended up with an enormous number of different websites and tools built by students – Biddit, Studienplan, prisma, UniClubs, and many more. Each of them is great on its own. The problem: it's easy to lose track of which ones even exist and what they're for. At the same time, HSG also has official offerings that are simply hard to find, buried somewhere across its many websites.</p>
+            <p>sg/unihub brings all of these tools and offerings – official and student-built alike – together in one place: minimalist, clear, and available in German and English. It's not a replacement for the individual tools, but the central hub that shows you which tool you need, and when.</p>
+            <p>I built sg/unihub as a side project alongside my studies, through Eloori Interactive, my small software studio. It's a prototype – feedback, criticism and suggestions are always welcome (see Contact).</p>
+          </div>
+          <div class="legal-block">
+            <h2>Getting the most out of sg/unihub</h2>
+            <p>Depending on what you need right now, there are three entry points:</p>
+            <ul class="guide-points">
+              <li data-de="" data-en="Dashboard – a quick overview of all tools, grouped by Study &amp; Administration, Campus Life, Career and more."></li>
+              <li data-de="" data-en="New to HSG – a compact guide covering the basics you should know at the start of your studies (bidding, specializations, exchange, etc.)."></li>
+              <li data-de="" data-en="Your Journey – click chronologically through a typical path through the Bachelor's and see which tool becomes relevant when."></li>
+            </ul>
+            <p><strong>Tip:</strong> To always have sg/unihub within reach, you can install the page like an app on your home screen or in your Dock – no App Store needed.</p>
+            <p>On iPhone/iPad (Safari): open the page → tap the Share icon → select "Add to Home Screen" → confirm. From then on, sg/unihub opens with a single tap right from your home screen, without any browser bar – just like a real app.</p>
+            <p>On Mac (Safari, macOS Sonoma or later): open the page → in the menu bar go to "File" → "Add to Dock" → confirm. sg/unihub then launches as its own window straight from the Dock.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="view" id="view-contact" data-view="contact" hidden>
       <header class="page-head">
         <span class="eyebrow" data-de="Kontakt" data-en="Contact"></span>
@@ -559,7 +610,7 @@
           </div>
           <div class="legal-block">
             <h2>Urheberrecht</h2>
-            <p>Design, Text und Code dieser Seite gehören Elija Zemp / Eloori Interactive, soweit nicht anders gekennzeichnet.</p>
+            <p>Design, Text und Code dieser Seite gehören Elija Zemp / Eloori Interactive, soweit nicht anders gekennzeichnet. Die verwendeten Icons stammen von <a href="https://phosphoricons.com" target="_blank" rel="noopener">Phosphor Icons</a>, lizenziert unter der <a href="https://github.com/phosphor-icons/core/blob/main/LICENSE" target="_blank" rel="noopener">MIT-Lizenz</a> (© Phosphor Icons).</p>
           </div>
         </div>
         <div data-lang-block="en" hidden>
@@ -583,7 +634,7 @@
           </div>
           <div class="legal-block">
             <h2>Copyright</h2>
-            <p>Design, text and code on this site belong to Elija Zemp / Eloori Interactive unless otherwise noted.</p>
+            <p>Design, text and code on this site belong to Elija Zemp / Eloori Interactive unless otherwise noted. The icons used are from <a href="https://phosphoricons.com" target="_blank" rel="noopener">Phosphor Icons</a>, licensed under the <a href="https://github.com/phosphor-icons/core/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a> (© Phosphor Icons).</p>
           </div>
         </div>
       </div>
@@ -597,12 +648,23 @@
       <div class="category-box guide-section">
         <div data-lang-block="de">
           <div class="legal-block">
+            <h2>Anwendbares Recht</h2>
+            <p>Diese Datenschutzerklärung richtet sich nach dem Schweizer Datenschutzgesetz (DSG). Soweit die Datenschutz-Grundverordnung (DSGVO) der EU anwendbar ist, werden auch deren Vorgaben eingehalten.</p>
+          </div>
+          <div class="legal-block">
             <h2>Verantwortliche Stelle</h2>
             <p>Eloori Interactive, Elija Zemp, Zylistrasse 10, 9000 St. Gallen, Schweiz. E-Mail: <a href="mailto:contact@eloori-interactive.com">contact@eloori-interactive.com</a></p>
           </div>
           <div class="legal-block">
+            <h2>Hosting &amp; Server-Logfiles (GitHub Pages)</h2>
+            <p>Diese Website wird bei GitHub Pages (GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA) gehostet. GitHub ist der technische Empfänger deiner Daten, um die Auslieferung der Website zu ermöglichen.</p>
+            <p>Beim Aufruf unserer Website erfasst der Webserver (GitHub) automatisch Informationen technischer Natur in sogenannten Server-Logfiles. Dies ist technisch notwendig, um dir die Website anzuzeigen und die Stabilität sowie Sicherheit zu gewährleisten. Dazu gehören: IP-Adresse des anfragenden Geräts, Datum und Uhrzeit des Zugriffs, Name und URL der abgerufenen Datei, Referrer-URL sowie verwendeter Browser und Betriebssystem.</p>
+            <p><strong>Zweck:</strong> Gewährleistung der Netzsicherheit und Fehleranalyse. <strong>Rechtsgrundlage:</strong> berechtigtes Interesse an einem sicheren und stabilen Betrieb der Website (Art. 6 Abs. 1 lit. f DSGVO; Art. 31 Abs. 1 DSG).</p>
+            <p><strong>Datenübermittlung in die USA:</strong> Da GitHub seinen Sitz in den USA hat, können dabei Daten in die USA übertragen werden. Die Übermittlung stützt sich auf die einschlägigen Garantien des Anbieters (u. a. Standardvertragsklauseln bzw. Zertifizierung unter dem EU-US Data Privacy Framework). Logfiles werden gemäss den Richtlinien von GitHub temporär gespeichert und in der Regel nach wenigen Tagen automatisch gelöscht; da diese Erfassung technisch zwingend für Bereitstellung und Sicherheit der Website ist, besteht seitens der Nutzenden keine Widerspruchsmöglichkeit.</p>
+          </div>
+          <div class="legal-block">
             <h2>Reichweitenmessung (GoatCounter)</h2>
-            <p>sg/unihub nutzt den datensparsamen Analysedienst GoatCounter, um zu sehen, wie viele Personen die Seite besuchen und welche Links genutzt werden. GoatCounter setzt keine Cookies und speichert weder auf dieser Seite noch in deinem Browser Daten (kein localStorage, kein geräteübergreifendes Tracking). IP-Adressen werden nur für maximal 8 Stunden zwischengespeichert, um automatisierte Zugriffe zu erkennen, und danach nicht mehr im Klartext gespeichert; ausgewertet werden nur anonymisierte, aggregierte Kennzahlen (z. B. Land, Browser, aufgerufene Seite, angeklickter Link). Ein Rückschluss auf einzelne Personen ist damit nicht möglich.</p>
+            <p>sg/unihub nutzt zusätzlich den datensparsamen Analysedienst GoatCounter, um zu sehen, wie viele Personen die Seite besuchen und welche Links genutzt werden. GoatCounter setzt keine Cookies und speichert weder auf dieser Seite noch in deinem Browser Daten (kein localStorage, kein geräteübergreifendes Tracking). IP-Adressen werden nur für maximal 8 Stunden zwischengespeichert, um automatisierte Zugriffe zu erkennen, und danach nicht mehr im Klartext gespeichert; ausgewertet werden nur anonymisierte, aggregierte Kennzahlen (z. B. Land, Browser, aufgerufene Seite, angeklickter Link). Ein Rückschluss auf einzelne Personen ist damit nicht möglich.</p>
             <p>Weil dabei keine personenbezogenen Daten im Sinn von DSGVO/revDSG verarbeitet werden, gehen wir davon aus, dass kein Cookie-Banner erforderlich ist – wir sind aber keine Anwälte; bei rechtlichen Detailfragen empfiehlt sich fachkundiger Rat.</p>
           </div>
           <div class="legal-block">
@@ -615,7 +677,24 @@
           </div>
           <div class="legal-block">
             <h2>Deine Rechte</h2>
-            <p>Du hast das Recht auf Auskunft, Berichtigung und Löschung der dich betreffenden Daten. Da wir keine personenbezogenen Daten speichern, betrifft dies in der Praxis vor allem Anfragen, die du uns direkt per E-Mail schickst. Kontaktiere uns dazu unter <a href="mailto:contact@eloori-interactive.com">contact@eloori-interactive.com</a>.</p>
+            <p>Gemäss dem geltenden Datenschutzrecht (DSG und, soweit anwendbar, DSGVO) hast du jederzeit das Recht auf:</p>
+            <ul class="guide-points">
+              <li data-de="Auskunft: Du kannst Informationen über deine von uns verarbeiteten Daten anfordern (Art. 25 DSG, Art. 15 DSGVO)." data-en=""></li>
+              <li data-de="Berichtigung: Du kannst die Korrektur unrichtiger Daten verlangen (Art. 32 DSG, Art. 16 DSGVO)." data-en=""></li>
+              <li data-de="Löschung: Du kannst die Löschung deiner Daten verlangen, sofern keine gesetzlichen Aufbewahrungspflichten bestehen (Art. 17 DSGVO)." data-en=""></li>
+              <li data-de="Einschränkung: Du kannst die Einschränkung der Verarbeitung deiner Daten verlangen (Art. 18 DSGVO)." data-en=""></li>
+              <li data-de="Datenübertragbarkeit: Du kannst die Herausgabe deiner Daten in einem gängigen elektronischen Format verlangen (Art. 28 DSG, Art. 20 DSGVO)." data-en=""></li>
+              <li data-de="Widerspruch: Du kannst der Verarbeitung, die auf einem berechtigten Interesse beruht, aus Gründen deiner besonderen Situation widersprechen (Art. 21 DSGVO)." data-en=""></li>
+            </ul>
+            <p>Bitte wende dich für die Ausübung deiner Rechte an <a href="mailto:contact@eloori-interactive.com">contact@eloori-interactive.com</a>. Die Auskunft ist grundsätzlich kostenlos und wird in der Regel innerhalb von 30 Tagen erteilt.</p>
+          </div>
+          <div class="legal-block">
+            <h2>Beschwerderecht bei einer Aufsichtsbehörde</h2>
+            <p>Wenn du der Ansicht bist, dass die Verarbeitung deiner Daten gegen das Datenschutzrecht verstösst, hast du das Recht, dich bei einer Aufsichtsbehörde zu beschweren:</p>
+            <ul class="guide-points">
+              <li data-de="Schweiz: Eidgenössischer Datenschutz- und Öffentlichkeitsbeauftragter (EDÖB), Feldeggweg 1, 3003 Bern (edoeb.admin.ch)." data-en=""></li>
+              <li data-de="EU/EWR: Du kannst dich an die Datenschutzbehörde deines Wohnsitzlandes wenden." data-en=""></li>
+            </ul>
           </div>
           <div class="legal-block">
             <h2>Stand</h2>
@@ -624,13 +703,24 @@
         </div>
         <div data-lang-block="en" hidden>
           <div class="legal-block">
+            <h2>Applicable law</h2>
+            <p>This privacy policy is based on the Swiss Federal Act on Data Protection (FADP). Where the EU General Data Protection Regulation (GDPR) applies, its requirements are also observed.</p>
+          </div>
+          <div class="legal-block">
             <h2>Data controller</h2>
             <p>Eloori Interactive, Elija Zemp, Zylistrasse 10, 9000 St. Gallen, Switzerland. Email: <a href="mailto:contact@eloori-interactive.com">contact@eloori-interactive.com</a></p>
           </div>
           <div class="legal-block">
+            <h2>Hosting &amp; server log files (GitHub Pages)</h2>
+            <p>This website is hosted on GitHub Pages (GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA). GitHub is the technical recipient of your data in order to deliver the website to you.</p>
+            <p>When you visit our website, the web server (GitHub) automatically records technical information in so-called server log files. This is technically necessary to display the website to you and to ensure stability and security. This includes: the IP address of the requesting device, date and time of access, name and URL of the file retrieved, the referrer URL, and the browser and operating system used.</p>
+            <p><strong>Purpose:</strong> ensuring network security and error analysis. <strong>Legal basis:</strong> legitimate interest in a secure and stable operation of the website (Art. 6(1)(f) GDPR; Art. 31(1) FADP).</p>
+            <p><strong>Data transfer to the USA:</strong> Because GitHub is based in the USA, data may be transferred there in the process. This transfer relies on the provider's relevant safeguards (including standard contractual clauses and/or certification under the EU-US Data Privacy Framework). Log files are stored temporarily according to GitHub's policies and are generally deleted automatically after a few days; since this collection is technically required to provide and secure the website, there is no opt-out available to visitors.</p>
+          </div>
+          <div class="legal-block">
             <h2>Analytics (GoatCounter)</h2>
-            <p>sg/unihub uses the privacy-friendly analytics service GoatCounter to see how many people visit the site and which links get used. GoatCounter doesn't set cookies and doesn't store anything on this site or in your browser (no localStorage, no cross-device tracking). IP addresses are only cached for up to 8 hours to detect automated traffic and aren't stored afterward; only anonymized, aggregated figures are evaluated (e.g. country, browser, page visited, link clicked). This makes it impossible to identify individual people.</p>
-            <p>Because no personal data under GDPR/Swiss revFADP is processed, we don't believe a cookie banner is required – but we're not lawyers, so for specific legal questions we'd recommend professional advice.</p>
+            <p>sg/unihub also uses the privacy-friendly analytics service GoatCounter to see how many people visit the site and which links get used. GoatCounter doesn't set cookies and doesn't store anything on this site or in your browser (no localStorage, no cross-device tracking). IP addresses are only cached for up to 8 hours to detect automated traffic and aren't stored afterward; only anonymized, aggregated figures are evaluated (e.g. country, browser, page visited, link clicked). This makes it impossible to identify individual people.</p>
+            <p>Because no personal data under GDPR/Swiss FADP is processed, we don't believe a cookie banner is required – but we're not lawyers, so for specific legal questions we'd recommend professional advice.</p>
           </div>
           <div class="legal-block">
             <h2>Local browser storage</h2>
@@ -642,7 +732,24 @@
           </div>
           <div class="legal-block">
             <h2>Your rights</h2>
-            <p>You have the right to access, correct and delete data concerning you. Since we don't store personal data ourselves, this mainly concerns requests you send us directly by email. Reach out at <a href="mailto:contact@eloori-interactive.com">contact@eloori-interactive.com</a>.</p>
+            <p>Under applicable data protection law (FADP and, where applicable, GDPR) you have the right at any time to:</p>
+            <ul class="guide-points">
+              <li data-de="" data-en="Access: you can request information about the data we process about you (Art. 25 FADP, Art. 15 GDPR)."></li>
+              <li data-de="" data-en="Rectification: you can request correction of inaccurate data (Art. 32 FADP, Art. 16 GDPR)."></li>
+              <li data-de="" data-en="Erasure: you can request deletion of your data, provided no statutory retention obligations apply (Art. 17 GDPR)."></li>
+              <li data-de="" data-en="Restriction: you can request that processing of your data be restricted (Art. 18 GDPR)."></li>
+              <li data-de="" data-en="Data portability: you can request your data in a common electronic format (Art. 28 FADP, Art. 20 GDPR)."></li>
+              <li data-de="" data-en="Objection: you can object to processing based on a legitimate interest for reasons relating to your particular situation (Art. 21 GDPR)."></li>
+            </ul>
+            <p>To exercise your rights, please contact <a href="mailto:contact@eloori-interactive.com">contact@eloori-interactive.com</a>. Information is provided free of charge as a rule and generally within 30 days.</p>
+          </div>
+          <div class="legal-block">
+            <h2>Right to lodge a complaint with a supervisory authority</h2>
+            <p>If you believe that the processing of your data violates data protection law, you have the right to lodge a complaint with a supervisory authority:</p>
+            <ul class="guide-points">
+              <li data-de="" data-en="Switzerland: Federal Data Protection and Information Commissioner (FDPIC), Feldeggweg 1, 3003 Bern (edoeb.admin.ch)."></li>
+              <li data-de="" data-en="EU/EEA: you may contact the data protection authority of your country of residence."></li>
+            </ul>
           </div>
           <div class="legal-block">
             <h2>Last updated</h2>
@@ -675,43 +782,43 @@
       subEn:"Course bidding, grades, learning platforms and student-built planning tools",
       cols:3,
       items:[
-        { name:"Compass", icon:"🧭", url:"https://compass.unisg.ch", tag:"compass.unisg.ch",
+        { name:"Compass", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM172.42,72.84l-64,32a8.05,8.05,0,0,0-3.58,3.58l-32,64A8,8,0,0,0,80,184a8.1,8.1,0,0,0,3.58-.84l64-32a8.05,8.05,0,0,0,3.58-3.58l32-64a8,8,0,0,0-10.74-10.74ZM138,138,97.89,158.11,118,118l40.15-20.07Z"/></svg>', url:"https://compass.unisg.ch", tag:"compass.unisg.ch",
           de:"Zentrales Portal für die Studienorganisation: Bidding, Semestereinschreibung, Prüfungen & Noten, persönlicher Studienplan – plus Links zu StudentWeb, StudyNet, Bibliothek und Raumbuchung.",
           en:"Central portal for course administration: bidding, semester enrollment, exams & grades, your personal study plan – plus links to StudentWeb, StudyNet, the library and room bookings." },
-        { name:"Courses", icon:"📖", url:"https://courses.unisg.ch/", tag:"courses.unisg.ch",
-          de:"Öffentliche Übersicht aller Kursmerkblätter: Inhalte, Lernziele, Bewertung und Literatur zu jeder Lehrveranstaltung.",
-          en:"Public overview of every course description: content, learning objectives, assessment and reading list for each course." },
-        { name:"StudentWeb", icon:"🎓", url:"https://studentweb.unisg.ch", tag:"studentweb.unisg.ch",
+        { name:"Courses", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64Z"/></svg>', url:"https://courses.unisg.ch/", tag:"courses.unisg.ch",
+          de:"Öffentliche Übersicht aller Kursmerkblätter: Inhalte, Lernziele, Prüfungsform und Literatur zu jeder Lehrveranstaltung.",
+          en:"Public overview of every course description: content, learning objectives, exam format and reading list for each course." },
+        { name:"StudentWeb", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V240a8,8,0,0,0,16,0V199.51a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12ZM128,200c-43.27,0-68.72-21.14-80-33.71V126.4l76.24,40.66a8,8,0,0,0,7.52,0L176,143.47v46.34C163.4,195.69,147.52,200,128,200Zm80-33.75a97.83,97.83,0,0,1-16,14.25V134.93l16-8.53ZM188,118.94l-.22-.13-56-29.87a8,8,0,0,0-7.52,14.12L171,128l-43,22.93L25,96,128,41.07,231,96Z"/></svg>', url:"https://studentweb.unisg.ch", tag:"studentweb.unisg.ch",
           de:"Infoportal mit Ankündigungen, Prüfungsplänen, Bidding-Terminen sowie Infos zu Abschlussarbeiten, Austausch und IT.",
           en:"Student portal for announcements, exam schedules, bidding timelines, and info on theses, exchange and IT." },
-        { name:"Canvas", icon:"🖥️", url:"https://learning.unisg.ch/", tag:"learning.unisg.ch",
+        { name:"Canvas", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,40H48A24,24,0,0,0,24,64V176a24,24,0,0,0,24,24h72v16H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V200h72a24,24,0,0,0,24-24V64A24,24,0,0,0,208,40ZM48,56H208a8,8,0,0,1,8,8v80H40V64A8,8,0,0,1,48,56ZM208,184H48a8,8,0,0,1-8-8V160H216v16A8,8,0,0,1,208,184Z"/></svg>', url:"https://learning.unisg.ch/", tag:"learning.unisg.ch",
           de:"Lernplattform der HSG (an der Uni intern auch als \"StudyNet\" bekannt): Kursräume, Materialien, Ankündigungen und Lernaktivitäten via HSG-Login.",
           en:"HSG's learning platform (internally also branded \"StudyNet\"): course spaces, materials, announcements and learning activities via HSG login." },
-        { name:"Studienplan", icon:"🗓️", url:"https://studienplan.ch", tag:"studienplan.ch",
+        { name:"Studienplan", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z"/></svg>', url:"https://studienplan.ch", tag:"studienplan.ch",
           de:"Studentische Lösung für die persönliche Studienplanung: Aus vier Angaben (Programm, Nebenjob, Austausch, Tempo) entsteht ein Bachelor-Studienplan vom 3. bis 6. Semester, laufend geprüft gegen die Studienordnung (StO O19).",
           en:"A student-built solution for personal study planning: four inputs (program, side job, exchange, pace) generate a Bachelor's study plan for the 3rd–6th semester, checked live against the study regulations (StO O19)." },
-        { name:"Biddit", icon:"🎯", url:"https://biddit.app/", tag:"biddit.app",
-          de:"Kostenlose, von HSG-Studierenden gebaute Lösung: bündelt Kursinfos, zeigt Terminüberschneidungen und erleichtert die Bidding-Vergabe.",
-          en:"Free student-built solution: consolidates course info, flags schedule conflicts, and simplifies course bidding." },
+        { name:"Biddit", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M221.87,83.16A104.1,104.1,0,1,1,195.67,49l22.67-22.68a8,8,0,0,1,11.32,11.32l-96,96a8,8,0,0,1-11.32-11.32l27.72-27.72a40,40,0,1,0,17.87,31.09,8,8,0,1,1,16-.9,56,56,0,1,1-22.38-41.65L184.3,60.39a87.88,87.88,0,1,0,23.13,29.67,8,8,0,0,1,14.44-6.9Z"/></svg>', url:"https://biddit.app/", tag:"biddit.app",
+          de:"Kostenlose, von HSG-Studierenden gebaute Lösung: bündelt Kursinfos, zeigt Terminüberschneidungen, Kursbewertungen anderer Studierender und erleichtert die Bidding-Vergabe.",
+          en:"Free student-built solution: consolidates course info, flags schedule conflicts, shows course ratings from other students, and simplifies course bidding." },
       ]},
     { de:"Sport & Gesundheit", en:"Sport & Wellness",
       subDe:"Bewegung neben dem Studium", subEn:"Staying active alongside your studies",
       items:[
-        { name:"Unisport", icon:"🏅", url:"https://sportangebot.unisg.ch/pages/login", tag:"sportangebot.unisg.ch",
+        { name:"Unisport", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,96A88,88,0,1,0,72,163.83V240a8,8,0,0,0,11.58,7.16L128,225l44.43,22.21A8.07,8.07,0,0,0,176,248a8,8,0,0,0,8-8V163.83A87.85,87.85,0,0,0,216,96ZM56,96a72,72,0,1,1,72,72A72.08,72.08,0,0,1,56,96ZM168,227.06l-36.43-18.21a8,8,0,0,0-7.16,0L88,227.06V174.37a87.89,87.89,0,0,0,80,0ZM128,152A56,56,0,1,0,72,96,56.06,56.06,0,0,0,128,152Zm0-96A40,40,0,1,1,88,96,40,40,0,0,1,128,56Z"/></svg>', url:"https://sportangebot.unisg.ch/pages/login", tag:"sportangebot.unisg.ch",
           de:"Direkter Zugang zur Anmelde-App: Mannschaftssport, Gruppenkurse, Fitnessraum und Outdoor-Gym mit qualifizierten Trainern.",
           en:"Direct access to the sign-up app: team sports, group classes, gym and outdoor-gym access with qualified trainers." },
       ]},
     { de:"Studierendenschaft", en:"Student Union",
       subDe:"Deine offizielle Vertretung an der HSG", subEn:"Your official representation at HSG",
       items:[
-        { name:"SHSG", icon:"🏛️", url:"https://shsg.ch", tag:"shsg.ch",
+        { name:"SHSG", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M24,104H48v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16H208V104h24a8,8,0,0,0,4.19-14.81l-104-64a8,8,0,0,0-8.38,0l-104,64A8,8,0,0,0,24,104Zm40,0H96v64H64Zm80,0v64H112V104Zm48,64H160V104h32ZM128,41.39,203.74,88H52.26ZM248,208a8,8,0,0,1-8,8H16a8,8,0,0,1,0-16H240A8,8,0,0,1,248,208Z"/></svg>', url:"https://shsg.ch", tag:"shsg.ch",
           de:"Offizielle Studierendenvertretung der HSG seit 1921 – vertritt studentische Interessen und betreibt Bars, ein Magazin und Austauschprogramme.",
           en:"HSG's official student union since 1921 – represents student interests and runs student bars, a magazine and exchange programmes." },
       ]},
     { de:"Karriere", en:"Career",
       subDe:"Beratung, Events und der Sprung in den Beruf", subEn:"Counselling, events and the step into your career",
       items:[
-        { name:"Career & Corporate Services", icon:"💼", url:"https://csc.unisg.ch/", tag:"csc.unisg.ch",
+        { name:"Career & Corporate Services", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,56H176V48a24,24,0,0,0-24-24H104A24,24,0,0,0,80,48v8H40A16,16,0,0,0,24,72V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V72A16,16,0,0,0,216,56ZM96,48a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96ZM216,72v41.61A184,184,0,0,1,128,136a184.07,184.07,0,0,1-88-22.38V72Zm0,128H40V131.64A200.19,200.19,0,0,0,128,152a200.25,200.25,0,0,0,88-20.37V200ZM104,112a8,8,0,0,1,8-8h32a8,8,0,0,1,0,16H112A8,8,0,0,1,104,112Z"/></svg>', url:"https://csc.unisg.ch/", tag:"csc.unisg.ch",
           de:"Karriereberatung, Workshops, Networking mit Unternehmen und Jobplattform. Buchung auch über hsgcareer.ch.",
           en:"Career counselling, workshops, networking with companies, and a job platform. Booking also via hsgcareer.ch." },
       ]},
@@ -719,16 +826,16 @@
       subDe:"Von Studierenden für Studierende gebaut", subEn:"Built by students, for students",
       cols:2,
       items:[
-        { name:"UniClubs", icon:"🎉", url:"https://uniclubs.ch/", tag:"uniclubs.ch",
+        { name:"UniClubs", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M111.49,52.63a15.8,15.8,0,0,0-26,5.77L33,202.78A15.83,15.83,0,0,0,47.76,224a16,16,0,0,0,5.46-1l144.37-52.5a15.8,15.8,0,0,0,5.78-26Zm-8.33,135.21-35-35,13.16-36.21,58.05,58.05Zm-55,20,14-38.41,24.45,24.45ZM156,168.64,87.36,100l13-35.87,91.43,91.43ZM160,72a37.8,37.8,0,0,1,3.84-15.58C169.14,45.83,179.14,40,192,40c6.7,0,11-2.29,13.65-7.21A22,22,0,0,0,208,23.94,8,8,0,0,1,224,24c0,12.86-8.52,32-32,32-6.7,0-11,2.29-13.65,7.21A22,22,0,0,0,176,72.06,8,8,0,0,1,160,72ZM136,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm101.66,82.34a8,8,0,1,1-11.32,11.31l-16-16a8,8,0,0,1,11.32-11.32Zm4.87-42.75-24,8a8,8,0,0,1-5.06-15.18l24-8a8,8,0,0,1,5.06,15.18Z"/></svg>', url:"https://uniclubs.ch/", tag:"uniclubs.ch",
           de:"All-in-One-Plattform für Studierendenorganisationen: Clubs entdecken, Mitgliedschaften verwalten, Events organisieren, gemeinsamer Kalender.",
           en:"All-in-one platform for student organizations: discover clubs, manage memberships, organize events, shared calendar." },
-        { name:"prisma", icon:"📰", url:"https://prisma-hsg.ch/", tag:"prisma-hsg.ch",
+        { name:"prisma", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M88,112a8,8,0,0,1,8-8h80a8,8,0,0,1,0,16H96A8,8,0,0,1,88,112Zm8,40h80a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16ZM232,64V184a24,24,0,0,1-24,24H32A24,24,0,0,1,8,184.11V88a8,8,0,0,1,16,0v96a8,8,0,0,0,16,0V64A16,16,0,0,1,56,48H216A16,16,0,0,1,232,64Zm-16,0H56V184a23.84,23.84,0,0,1-1.37,8H208a8,8,0,0,0,8-8Z"/></svg>', url:"https://prisma-hsg.ch/", tag:"prisma-hsg.ch",
           de:"Seit rund 65 Jahren das studentisch geführte Magazin der HSG – auf Deutsch und Englisch, Campus-Themen und gesellschaftliche Fragen.",
           en:"HSG's student-run magazine for nearly 65 years – in German and English, covering campus life and broader social topics." },
-        { name:"Studyond", icon:"🤝", url:"https://studyond.com/", tag:"studyond.com",
+        { name:"Studyond", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M254.3,107.91,228.78,56.85a16,16,0,0,0-21.47-7.15L182.44,62.13,130.05,48.27a8.14,8.14,0,0,0-4.1,0L73.56,62.13,48.69,49.7a16,16,0,0,0-21.47,7.15L1.7,107.9a16,16,0,0,0,7.15,21.47l27,13.51,55.49,39.63a8.06,8.06,0,0,0,2.71,1.25l64,16a8,8,0,0,0,7.6-2.1l55.07-55.08,26.42-13.21a16,16,0,0,0,7.15-21.46Zm-54.89,33.37L165,113.72a8,8,0,0,0-10.68.61C136.51,132.27,116.66,130,104,122L147.24,80h31.81l27.21,54.41ZM41.53,64,62,74.22,36.43,125.27,16,115.06Zm116,119.13L99.42,168.61l-49.2-35.14,28-56L128,64.28l9.8,2.59-45,43.68-.08.09a16,16,0,0,0,2.72,24.81c20.56,13.13,45.37,11,64.91-5L188,152.66Zm62-57.87-25.52-51L214.47,64,240,115.06Zm-87.75,92.67a8,8,0,0,1-7.75,6.06,8.13,8.13,0,0,1-1.95-.24L80.41,213.33a7.89,7.89,0,0,1-2.71-1.25L51.35,193.26a8,8,0,0,1,9.3-13l25.11,17.94L126,208.24A8,8,0,0,1,131.82,217.94Z"/></svg>', url:"https://studyond.com/", tag:"studyond.com",
           de:"Bringt Studierende, Hochschulen und Unternehmen zusammen – für Themenfindung bei Abschlussarbeiten, Gastvorträge und Praxisprojekte.",
           en:"Connects students, universities and companies – for thesis-topic matching, guest lectures and real-world projects." },
-        { name:"Podcast", icon:"🎙️", url:"https://www.unisg.ch/en/news/podcasts/hsg-student-podcast/", tag:"unisg.ch/podcast",
+        { name:"Podcast", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M168,16A72.07,72.07,0,0,0,96,88a73.29,73.29,0,0,0,.63,9.42L27.12,192.22A15.93,15.93,0,0,0,28.71,213L43,227.29a15.93,15.93,0,0,0,20.78,1.59l94.81-69.53A73.29,73.29,0,0,0,168,160a72,72,0,1,0,0-144Zm56,72a55.72,55.72,0,0,1-11.16,33.52L134.49,43.16A56,56,0,0,1,224,88ZM54.32,216,40,201.68,102.14,117A72.37,72.37,0,0,0,139,153.86ZM112,88a55.67,55.67,0,0,1,11.16-33.51l78.34,78.34A56,56,0,0,1,112,88Zm-2.35,58.34a8,8,0,0,1,0,11.31l-8,8a8,8,0,1,1-11.31-11.31l8-8A8,8,0,0,1,109.67,146.33Z"/></svg>', url:"https://www.unisg.ch/en/news/podcasts/hsg-student-podcast/", tag:"unisg.ch/podcast",
           de:"Der HSG Student Podcast: eine studentische Reporterin im Gespräch mit Persönlichkeiten des Campus – Studierende, Dozierende, Gründer:innen.",
           en:"The HSG Student Podcast: a student reporter talks to people from campus – students, faculty, and entrepreneurs." },
       ]},
@@ -736,27 +843,27 @@
       subDe:"Die grössten studentisch organisierten Bühnen der HSG", subEn:"HSG's biggest student-run stages",
       cols:3,
       items:[
-        { name:"St. Gallen Symposium", icon:"🌐", url:"https://symposium.org/", tag:"symposium.org",
+        { name:"St. Gallen Symposium", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm88,104a87.61,87.61,0,0,1-3.33,24H174.16a157.44,157.44,0,0,0,0-48h38.51A87.61,87.61,0,0,1,216,128ZM102,168H154a115.11,115.11,0,0,1-26,45A115.27,115.27,0,0,1,102,168Zm-3.9-16a140.84,140.84,0,0,1,0-48h59.88a140.84,140.84,0,0,1,0,48ZM40,128a87.61,87.61,0,0,1,3.33-24H81.84a157.44,157.44,0,0,0,0,48H43.33A87.61,87.61,0,0,1,40,128ZM154,88H102a115.11,115.11,0,0,1,26-45A115.27,115.27,0,0,1,154,88Zm52.33,0H170.71a135.28,135.28,0,0,0-22.3-45.6A88.29,88.29,0,0,1,206.37,88ZM107.59,42.4A135.28,135.28,0,0,0,85.29,88H49.63A88.29,88.29,0,0,1,107.59,42.4ZM49.63,168H85.29a135.28,135.28,0,0,0,22.3,45.6A88.29,88.29,0,0,1,49.63,168Zm98.78,45.6a135.28,135.28,0,0,0,22.3-45.6h35.66A88.29,88.29,0,0,1,148.41,213.6Z"/></svg>', url:"https://symposium.org/", tag:"symposium.org",
           de:"International bekannte Konferenz, von HSG-Studierenden organisiert – bringt jährlich Führungskräfte, Politik und die nächste Generation zusammen.",
           en:"Internationally renowned conference organized by HSG students – brings together leaders, policymakers and the next generation each year." },
-        { name:"START Global", icon:"🚀", url:"https://www.startglobal.org/", tag:"startglobal.org",
+        { name:"START Global", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M223.85,47.12a16,16,0,0,0-15-15c-12.58-.75-44.73.4-71.41,27.07L132.69,64H74.36A15.91,15.91,0,0,0,63,68.68L28.7,103a16,16,0,0,0,9.07,27.16l38.47,5.37,44.21,44.21,5.37,38.49a15.94,15.94,0,0,0,10.78,12.92,16.11,16.11,0,0,0,5.1.83A15.91,15.91,0,0,0,153,227.3L187.32,193A15.91,15.91,0,0,0,192,181.64V123.31l4.77-4.77C223.45,91.86,224.6,59.71,223.85,47.12ZM74.36,80h42.33L77.16,119.52,40,114.34Zm74.41-9.45a76.65,76.65,0,0,1,59.11-22.47,76.46,76.46,0,0,1-22.42,59.16L128,164.68,91.32,128ZM176,181.64,141.67,216l-5.19-37.17L176,139.31Zm-74.16,9.5C97.34,201,82.29,224,40,224a8,8,0,0,1-8-8c0-42.29,23-57.34,32.86-61.85a8,8,0,0,1,6.64,14.56c-6.43,2.93-20.62,12.36-23.12,38.91,26.55-2.5,36-16.69,38.91-23.12a8,8,0,1,1,14.56,6.64Z"/></svg>', url:"https://www.startglobal.org/", tag:"startglobal.org",
           de:"Europas grösste studentisch geführte Entrepreneurship-Initiative – trägt START Summit, START Hack und das START Fellowship.",
           en:"Europe's largest student-run entrepreneurship initiative – runs START Summit, START Hack and the START Fellowship." },
-        { name:"Consulting Club", icon:"💡", url:"https://consultingclub.ch/", tag:"consultingclub.ch",
+        { name:"Consulting Club", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M176,232a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,232Zm40-128a87.55,87.55,0,0,1-33.64,69.21A16.24,16.24,0,0,0,176,186v6a16,16,0,0,1-16,16H96a16,16,0,0,1-16-16v-6a16,16,0,0,0-6.23-12.66A87.59,87.59,0,0,1,40,104.49C39.74,56.83,78.26,17.14,125.88,16A88,88,0,0,1,216,104Zm-16,0a72,72,0,0,0-73.74-72c-39,.92-70.47,33.39-70.26,72.39a71.65,71.65,0,0,0,27.64,56.3A32,32,0,0,1,96,186v6h64v-6a32.15,32.15,0,0,1,12.47-25.35A71.65,71.65,0,0,0,200,104Zm-16.11-9.34a57.6,57.6,0,0,0-46.56-46.55,8,8,0,0,0-2.66,15.78c16.57,2.79,30.63,16.85,33.44,33.45A8,8,0,0,0,176,104a9,9,0,0,0,1.35-.11A8,8,0,0,0,183.89,94.66Z"/></svg>', url:"https://consultingclub.ch/", tag:"consultingclub.ch",
           de:"Über 7'000 Mitglieder seit 2007 – Events mit Beratungsfirmen, Workshops und Networking, u.a. Case Class mit Bain & Company.",
           en:"7,000+ members since 2007 – events with consulting firms, workshops and networking, including a Case Class with Bain & Company." },
       ]},
     { de:"Rabatte & Vergünstigungen", en:"Discounts & Perks",
       subDe:"Mehr Budget für alles andere", subEn:"More budget for everything else",
       items:[
-        { name:"Student Beans", icon:"🛍️", url:"https://www.studentbeans.com/ch", tag:"studentbeans.com/ch",
+        { name:"Student Beans", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"/></svg>', url:"https://www.studentbeans.com/ch", tag:"studentbeans.com/ch",
           de:"Internationale Plattform für Studentenrabatte – nach Verifikation per Hochschul-E-Mail Rabatte bei zahlreichen Marken.",
           en:"International student discount platform – verify with your university email to unlock discounts from numerous brands." },
       ]},
     { de:"Lernen & Prüfungsvorbereitung", en:"Learning & Exam Prep",
       subDe:"Zusätzliche Unterstützung vor der Prüfung", subEn:"Extra support before the exam",
       items:[
-        { name:"Ecoreps", icon:"📝", url:"https://ecoreps.de/home", tag:"ecoreps.de",
+        { name:"Ecoreps", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,58.34l-32-32a8,8,0,0,0-11.32,0l-96,96A8,8,0,0,0,88,128v32a8,8,0,0,0,8,8h32a8,8,0,0,0,5.66-2.34l96-96A8,8,0,0,0,229.66,58.34ZM124.69,152H104V131.31l64-64L188.69,88ZM200,76.69,179.31,56,192,43.31,212.69,64ZM224,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h80a8,8,0,0,1,0,16H48V208H208V128a8,8,0,0,1,16,0Z"/></svg>', url:"https://ecoreps.de/home", tag:"ecoreps.de",
           de:"Kommerzieller Anbieter kostenpflichtiger Repetitorien – kein offizieller Verein, aber unter Studierenden weit verbreitet zur Prüfungsvorbereitung.",
           en:"Commercial provider of paid exam-prep courses – not an official club, but widely used among students to prepare for exams." },
       ]},
@@ -791,12 +898,13 @@
   }
 
   function tileHTML(it){
-    // Emoji instead of a brand logo on purpose: real provider logos are
-    // trademarked and we're not affiliated with any of them, so using their
-    // marks here would risk implying an endorsement. Emoji are free, need no
-    // licence or attribution, and render natively (no icon font/CDN to load).
+    // Phosphor icons instead of a brand logo on purpose: real provider logos
+    // are trademarked and we're not affiliated with any of them, so using
+    // their marks here would risk implying an endorsement. Phosphor Icons
+    // are MIT-licensed (credited in the Impressum), free to use, and render
+    // as inline SVG (no icon font/CDN to load).
     const icon = it.icon
-      ? `<span class="tile-icon tile-icon-emoji" aria-hidden="true">${it.icon}</span>`
+      ? `<span class="tile-icon" aria-hidden="true">${it.icon}</span>`
       : `<span class="tile-icon">${monogram(it.name)}</span>`;
     return `
       <div class="tile">
@@ -1101,7 +1209,7 @@
   menuPanel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 
   // ---------- View routing (Dashboard / Neu an der HSG / Kontakt) ----------
-  const VIEWS = ['dashboard','guide','journey','contact','impressum','datenschutz'];
+  const VIEWS = ['dashboard','guide','journey','business','contact','impressum','datenschutz'];
   function showView(name){
     if(!VIEWS.includes(name)) name = 'dashboard';
     document.querySelectorAll('.view').forEach(v => { v.hidden = v.dataset.view !== name; });
@@ -1125,18 +1233,18 @@
       links:[{ tool:"StudentWeb", url:"https://studentweb.unisg.ch" }] },
     { de:"Kursplanung", en:"Planning your courses",
       titleDe:"Bevor du biddest", titleEn:"Before you bid",
-      bodyDe:"Damit du weisst, worauf du bietest, planst du deinen Stundenplan vorher mit Biddit oder Studienplan – so siehst du Überschneidungen, bevor sie zum Problem werden.",
-      bodyEn:"So you know what to bid on, you plan your timetable beforehand with Biddit or Studienplan – spotting clashes before they become a problem.",
+      bodyDe:"Damit du weisst, worauf du bietest, planst du deinen Stundenplan vorher mit Biddit oder Studienplan – so siehst du Überschneidungen, bevor sie zum Problem werden. Auf Biddit siehst du zudem die Bewertungen anderer Studierender zu den einzelnen Kursen, was dir hilft zu entscheiden, welche Kurse du wählen solltest.",
+      bodyEn:"So you know what to bid on, you plan your timetable beforehand with Biddit or Studienplan – spotting clashes before they become a problem. Biddit also shows you ratings from other students for each course, which helps you decide which courses to pick.",
       links:[{ tool:"Biddit", url:"https://biddit.app/" }, { tool:"Studienplan", url:"https://studienplan.ch" }] },
     { de:"Kursinhalte", en:"Course content",
       titleDe:"Was steckt drin?", titleEn:"What's actually in it?",
-      bodyDe:"Für die genauen Kursmerkblätter – Inhalte, Lernziele, Bewertung, Literatur – schaust du auf Courses nach.",
-      bodyEn:"For the exact course descriptions – content, learning objectives, assessment, reading list – you check Courses.",
+      bodyDe:"Für die genauen Kursmerkblätter – Inhalte, Lernziele, Prüfungsform, Literatur – schaust du auf Courses nach.",
+      bodyEn:"For the exact course descriptions – content, learning objectives, exam format, reading list – you check Courses.",
       links:[{ tool:"Courses", url:"https://courses.unisg.ch/" }] },
     { de:"Bidding", en:"Bidding",
       titleDe:"Rein in die Kurse", titleEn:"Getting into your courses",
-      bodyDe:"Über Compass biddest du dich in deine Kurse ein – mit dem Plan, den du dir vorher zurechtgelegt hast.",
-      bodyEn:"On Compass you bid your way into your courses – using the plan you worked out beforehand.",
+      bodyDe:"Über Compass biddest du dich in deine Kurse ein – mit dem Plan, den du dir vorher zurechtgelegt hast. Compass ist aber nicht nur fürs Bidding da: Dort siehst du später auch deine Noten und deinen aktuellen Stundenplan.",
+      bodyEn:"On Compass you bid your way into your courses – using the plan you worked out beforehand. But Compass isn't just for bidding: it's also where you later check your grades and your current timetable.",
       links:[{ tool:"Compass", url:"https://compass.unisg.ch" }] },
     { de:"Clubs & Events", en:"Clubs & events",
       titleDe:"Neben dem Studium engagieren", titleEn:"Getting involved alongside your studies",
