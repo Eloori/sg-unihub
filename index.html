@@ -339,6 +339,46 @@
   .legal-block p{ margin:0 0 .8rem; font-size:.94rem; line-height:1.6; color:var(--text); }
   .legal-block p:last-child{ margin-bottom:0; }
   .legal-block a{ color:var(--accent); }
+
+  /* A plain-text link styled to match .legal-block a, but as a <button> since
+     it opens an in-page overlay rather than navigating anywhere. */
+  .link-btn{
+    all:unset; cursor:pointer; color:var(--accent); text-decoration:underline;
+    text-underline-offset:2px; font:inherit;
+  }
+  .link-btn:hover, .link-btn:focus-visible{ opacity:.8; outline:none; }
+
+  /* ---------- License text overlay ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(16,24,40,.55); backdrop-filter:blur(2px);
+    display:flex; align-items:center; justify-content:center; padding:1.2rem;
+    z-index:60; opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .modal-overlay.open{ opacity:1; pointer-events:auto; }
+  .modal-box{
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    max-width:640px; width:100%; max-height:min(80vh, 640px); display:flex; flex-direction:column;
+    box-shadow:0 24px 60px -20px rgba(16,24,40,.4);
+    transform:translateY(10px) scale(.98); transition:transform .25s ease;
+  }
+  .modal-overlay.open .modal-box{ transform:none; }
+  .modal-head{
+    display:flex; align-items:center; justify-content:space-between; gap:1rem;
+    padding:1.1rem 1.3rem; border-bottom:1px solid var(--line); flex:none;
+  }
+  .modal-head h2{ font-family:var(--font-display); font-weight:700; font-size:1rem; margin:0; }
+  .modal-close{
+    all:unset; cursor:pointer; width:30px; height:30px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center; color:var(--text-2);
+    font-size:1.1rem; line-height:1;
+  }
+  .modal-close:hover, .modal-close:focus-visible{ background:var(--accent-soft); color:var(--accent); outline:none; }
+  .modal-body{ padding:1.1rem 1.3rem 1.3rem; overflow-y:auto; }
+  .modal-body pre{
+    margin:0; font-family:var(--font-mono); font-size:.78rem; line-height:1.6;
+    color:var(--text); white-space:pre-wrap; word-break:break-word;
+  }
+  @media (prefers-reduced-motion: reduce){ .modal-overlay, .modal-box{ transition:none; } }
   .legal-address{ font-style:normal; line-height:1.6; }
 
   /* ---------- Dashboard CTA into the Journey ---------- */
@@ -610,7 +650,7 @@
           </div>
           <div class="legal-block">
             <h2>Urheberrecht</h2>
-            <p>Design, Text und Code dieser Seite gehören Elija Zemp / Eloori Interactive, soweit nicht anders gekennzeichnet. Die verwendeten Icons stammen von <a href="https://phosphoricons.com" target="_blank" rel="noopener">Phosphor Icons</a>, lizenziert unter der MIT-Lizenz (© Phosphor Icons).</p>
+            <p>Design, Text und Code dieser Seite gehören Elija Zemp / Eloori Interactive, soweit nicht anders gekennzeichnet. Die verwendeten Icons stammen von <a href="https://phosphoricons.com" target="_blank" rel="noopener">Phosphor Icons</a>, lizenziert unter der <button type="button" class="link-btn" data-open-license>MIT-Lizenz</button> (© Phosphor Icons).</p>
           </div>
         </div>
         <div data-lang-block="en" hidden>
@@ -634,7 +674,7 @@
           </div>
           <div class="legal-block">
             <h2>Copyright</h2>
-            <p>Design, text and code on this site belong to Elija Zemp / Eloori Interactive unless otherwise noted. The icons used are from <a href="https://phosphoricons.com" target="_blank" rel="noopener">Phosphor Icons</a>, licensed under the MIT License (© Phosphor Icons).</p>
+            <p>Design, text and code on this site belong to Elija Zemp / Eloori Interactive unless otherwise noted. The icons used are from <a href="https://phosphoricons.com" target="_blank" rel="noopener">Phosphor Icons</a>, licensed under the <button type="button" class="link-btn" data-open-license>MIT License</button> (© Phosphor Icons).</p>
           </div>
         </div>
       </div>
@@ -772,6 +812,16 @@
       <p class="credit">Eloori Interactive · Prototyp</p>
     </div>
   </footer>
+
+  <div class="modal-overlay" id="licenseModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="licenseModalTitle">
+      <div class="modal-head">
+        <h2 id="licenseModalTitle">Phosphor Icons — MIT License</h2>
+        <button type="button" class="modal-close" id="licenseModalClose" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body"><pre id="licenseModalText"></pre></div>
+    </div>
+  </div>
 
 </div>
 
@@ -1210,6 +1260,58 @@
   });
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
   menuPanel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  // ---------- License text overlay (Phosphor Icons attribution) ----------
+  // Phosphor's own licensing guidance asks that the MIT license text be
+  // included alongside attribution. A direct link to GitHub's raw LICENSE
+  // file felt out of place, and a `target="_blank"` link to a data: URL is
+  // silently blocked by Chrome as a top-level navigation (anti-phishing
+  // measure since ~2019) — so the full text is shown in this in-page overlay
+  // instead, which works everywhere and needs no external request.
+  const PHOSPHOR_LICENSE = `MIT License
+
+Copyright (c) 2020 Phosphor Icons
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.`;
+  const licenseModal = document.getElementById('licenseModal');
+  const licenseModalText = document.getElementById('licenseModalText');
+  let licenseOpenerEl = null;
+  function openLicenseModal(opener){
+    licenseModalText.textContent = PHOSPHOR_LICENSE;
+    licenseModal.classList.add('open');
+    licenseModal.setAttribute('aria-hidden', 'false');
+    licenseOpenerEl = opener || null;
+    document.getElementById('licenseModalClose').focus();
+  }
+  function closeLicenseModal(){
+    licenseModal.classList.remove('open');
+    licenseModal.setAttribute('aria-hidden', 'true');
+    if(licenseOpenerEl) licenseOpenerEl.focus();
+  }
+  document.querySelectorAll('[data-open-license]').forEach(btn => {
+    btn.addEventListener('click', () => openLicenseModal(btn));
+  });
+  document.getElementById('licenseModalClose').addEventListener('click', closeLicenseModal);
+  licenseModal.addEventListener('click', (e) => { if(e.target === licenseModal) closeLicenseModal(); });
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && licenseModal.classList.contains('open')) closeLicenseModal();
+  });
 
   // ---------- View routing (Dashboard / Neu an der HSG / Kontakt) ----------
   const VIEWS = ['dashboard','guide','journey','business','contact','impressum','datenschutz'];
