@@ -32,3 +32,5 @@ nach dem Erstellen eines kostenlosen Kontos ersetzen.
 
 Impressum & Datenschutzerklärung sind direkt in der Seite unter `#impressum`
 bzw. `#datenschutz` enthalten (Fusszeile).
+
+<!-- last verified: 2026-09-07 -->
