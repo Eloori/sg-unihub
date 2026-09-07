@@ -341,6 +341,36 @@
 
   .contact-links{ display:flex; flex-wrap:wrap; gap:.6rem; margin:.2rem 0 1.3rem; }
 
+  .contact-partner{ margin:0 0 1.4rem; padding-top:1.2rem; border-top:1px solid var(--line); }
+  .contact-partner-title{
+    font-family:var(--font-display); font-weight:700; font-size:1.05rem; margin:0 0 .6rem;
+  }
+  .contact-partner p{ margin:0; font-size:.94rem; line-height:1.6; color:var(--text); max-width:60em; }
+
+  .contact-form{ display:flex; flex-direction:column; gap:1rem; max-width:34em; margin-top:1.3rem; }
+  .form-row{ display:flex; flex-direction:column; gap:.4rem; }
+  .form-row label{
+    font-family:var(--font-mono); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--text-2);
+  }
+  .contact-form input, .contact-form select, .contact-form textarea{
+    font-family:var(--font-body); font-size:.95rem; color:var(--text);
+    background:var(--surface); border:1px solid var(--line); border-radius:8px;
+    padding:.6rem .75rem; width:100%;
+  }
+  .contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus{
+    outline:2px solid var(--accent); outline-offset:1px;
+  }
+  .contact-form textarea{ resize:vertical; min-height:5.5rem; }
+  .form-submit{
+    align-self:flex-start; font-family:var(--font-mono); font-size:.82rem;
+    color:var(--accent-contrast); background:var(--accent); border:1px solid var(--accent);
+    border-radius:8px; padding:.65rem 1.3rem; cursor:pointer;
+    transition:transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease;
+  }
+  .form-submit:hover{ transform:translateY(-2px); box-shadow:0 10px 22px -10px var(--shadow); }
+  .form-hint{ margin:.7rem 0 0; font-size:.78rem; line-height:1.5; color:var(--text-2); }
+
   /* ---------- Impressum / Datenschutz ---------- */
   .legal-block{ margin-bottom:1.6rem; }
   .legal-block:last-child{ margin-bottom:0; }
@@ -627,11 +657,44 @@
         <p class="guide-intro" data-de="sg/unihub ist ein unabhängiges Projekt von Eloori Interactive, der Indie-Software-Schmiede von Elija Zemp. Für Fragen, Feedback oder Anfragen von Clubs und Unternehmen, die auf sg/unihub gelistet werden möchten, kannst du dich jederzeit direkt melden."
            data-en="sg/unihub is an independent project by Eloori Interactive, Elija Zemp's indie software studio. For questions, feedback, or requests from clubs and companies who'd like to be listed on sg/unihub, feel free to reach out directly."></p>
         <div class="contact-links">
+          <a class="journey-link" href="mailto:contact@sgunihub.ch" data-goatcounter-click="contact-email-sgunihub">→ contact@sgunihub.ch</a>
           <a class="journey-link" href="mailto:contact@eloori-interactive.com" data-goatcounter-click="contact-email">→ contact@eloori-interactive.com</a>
           <a class="journey-link" href="https://eloori-interactive.com" target="_blank" rel="noopener" data-goatcounter-click="contact-eloori">→ eloori-interactive.com</a>
         </div>
-        <p class="guide-footnote" data-de="Ein separates Kontaktformular sowie Pricing-Infos für Club-/Firmen-Listings sind als nächster Ausbauschritt geplant."
-           data-en="A dedicated contact form and pricing info for club/company listings are planned as the next step."></p>
+
+        <div class="contact-partner">
+          <h2 class="contact-partner-title" data-de="Für Clubs &amp; Unternehmen" data-en="For Clubs &amp; Companies"></h2>
+          <p data-de="Du möchtest deinen Club, Verein oder euer Angebot auf sg/unihub gelistet haben, oder überlegst dir eine Partnerschaft bzw. Werbefläche? sg/unihub befindet sich noch im Aufbau, entsprechend gibt es aktuell keine fixen Preise. Schreib uns kurz, worum es geht, dann melden wir uns mit einer passenden Lösung."
+             data-en="Want to get your club, association or offer listed on sg/unihub, or thinking about a partnership or advertising space? sg/unihub is still being built, so there are no fixed prices yet. Send us a short note about what you have in mind and we'll get back to you with a fitting option."></p>
+        </div>
+
+        <form class="contact-form" id="contactForm" novalidate>
+          <div class="form-row">
+            <label for="cf-name" data-de="Name" data-en="Name"></label>
+            <input type="text" id="cf-name" name="name" required autocomplete="name">
+          </div>
+          <div class="form-row">
+            <label for="cf-email" data-de="E-Mail" data-en="Email"></label>
+            <input type="email" id="cf-email" name="email" required autocomplete="email">
+          </div>
+          <div class="form-row">
+            <label for="cf-topic" data-de="Anliegen" data-en="Topic"></label>
+            <select id="cf-topic" name="topic">
+              <option data-de="Allgemeine Frage" data-en="General question"></option>
+              <option data-de="Feedback zur Seite" data-en="Feedback on the site"></option>
+              <option data-de="Club/Verein listen lassen" data-en="List a club/association"></option>
+              <option data-de="Firmen-Partnerschaft &amp; Werbung" data-en="Company partnership &amp; advertising"></option>
+              <option data-de="Sonstiges" data-en="Other"></option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="cf-message" data-de="Nachricht" data-en="Message"></label>
+            <textarea id="cf-message" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="form-submit" data-goatcounter-click="contact-form-submit" data-de="Nachricht senden" data-en="Send message"></button>
+          <p class="form-hint" data-de="Öffnet dein E-Mail-Programm mit einem vorausgefüllten Entwurf an contact@sgunihub.ch."
+             data-en="Opens your email app with a pre-filled draft to contact@sgunihub.ch."></p>
+        </form>
       </div>
     </section>
 
@@ -1430,4 +1493,27 @@ SOFTWARE.`;
     if(e.key === 'ArrowLeft') document.getElementById('journeyPrev').click();
   });
   renderJourney();
+
+  // ---------- Contact form (static hosting: no backend, so we compose a
+  // pre-filled mailto: draft instead of a real server-side submission) ----------
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = contactForm.name.value.trim();
+      const email = contactForm.email.value.trim();
+      const topicEl = contactForm.topic.selectedOptions[0];
+      const topic = topicEl ? topicEl.textContent : '';
+      const message = contactForm.message.value.trim();
+      const lang = document.documentElement.lang === 'en' ? 'en' : 'de';
+      const subject = lang === 'en'
+        ? `sg/unihub contact form: ${topic}`
+        : `sg/unihub Kontaktformular: ${topic}`;
+      const bodyLines = lang === 'en'
+        ? [`Name: ${name}`, `Email: ${email}`, '', message]
+        : [`Name: ${name}`, `E-Mail: ${email}`, '', message];
+      const mailto = `mailto:contact@sgunihub.ch?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+      window.location.href = mailto;
+    });
+  }
 </script>
