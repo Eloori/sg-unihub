@@ -194,7 +194,7 @@
      exactly the same height whether its title wraps to one line or two — so
      the tiles below always start at the same baseline, however long the name. */
   .mini-groups{
-    display:grid; grid-template-columns:repeat(3, 1fr);
+    display:grid; grid-template-columns:repeat(var(--mini-cols, 3), 1fr);
     gap:1.6rem 1.3rem;
   }
   .mini-item{ display:flex; flex-direction:column; }
@@ -937,6 +937,26 @@
           de:"Kostenlose, von HSG-Studierenden gebaute Lösung: bündelt Kursinfos, zeigt Terminüberschneidungen, Kursbewertungen anderer Studierender und erleichtert die Bidding-Vergabe.",
           en:"Free student-built solution: consolidates course info, flags schedule conflicts, shows course ratings from other students, and simplifies course bidding." },
       ]},
+    { de:"Wohnungssuche", en:"Housing Search",
+      subDe:"Zimmer, Wohnungen und mehr für den Umzug nach St.Gallen", subEn:"Rooms, apartments and more for your move to St.Gallen",
+      cols:5,
+      items:[
+        { name:"SHSG Marketplace", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,96a7.89,7.89,0,0,0-.3-2.2L217.35,43.6A16.07,16.07,0,0,0,202,32H54A16.07,16.07,0,0,0,38.65,43.6L24.31,93.8A7.89,7.89,0,0,0,24,96h0v16a40,40,0,0,0,16,32v72a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V144a40,40,0,0,0,16-32V96ZM54,48H202l11.42,40H42.61Zm50,56h48v8a24,24,0,0,1-48,0Zm-16,0v8a24,24,0,0,1-35.12,21.26,7.88,7.88,0,0,0-1.82-1.06A24,24,0,0,1,40,112v-8ZM200,208H56V151.2a40.57,40.57,0,0,0,8,.8,40,40,0,0,0,32-16,40,40,0,0,0,64,0,40,40,0,0,0,32,16,40.57,40.57,0,0,0,8-.8Zm4.93-75.8a8.08,8.08,0,0,0-1.8,1.05A24,24,0,0,1,168,112v-8h48v8A24,24,0,0,1,204.93,132.2Z"/></svg>', url:"https://shsg.ch/de/marketplace", tag:"shsg.ch/marketplace",
+          de:"Marktplatz der Studierendenschaft: Wohnungen und Zimmer, aber auch Bücher, Möbel, Nachhilfe und Praktika – von Studierenden für Studierende.",
+          en:"The student union's marketplace: rooms and apartments, but also books, furniture, tutoring and internships – by students, for students." },
+        { name:"Flatfox", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8H216a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H48V120l80-80,80,80Z"/></svg>', url:"https://flatfox.ch", tag:"flatfox.ch",
+          de:"Bei den meisten HSG-Studierenden der Standard für die Wohnungs- und Zimmersuche in St.Gallen und der ganzen Schweiz.",
+          en:"The go-to platform for most HSG students searching for a room or apartment in St.Gallen and across Switzerland." },
+        { name:"Homegate", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M240,208H224V96a16,16,0,0,0-16-16H144V32a16,16,0,0,0-24.88-13.32L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,32V208H48ZM112,112v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm-32,0v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm0,56v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Zm32,0v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Z"/></svg>', url:"https://www.homegate.ch", tag:"homegate.ch",
+          de:"Grosses Angebot an ganzen Wohnungen – praktisch, wenn du mit anderen eine neue WG gründen möchtest.",
+          en:"A large listing of full apartments – useful if you want to start a new shared flat with others." },
+        { name:"ImmoScout24", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M240,208H224V136l2.34,2.34A8,8,0,0,0,237.66,127L139.31,28.68a16,16,0,0,0-22.62,0L18.34,127a8,8,0,0,0,11.32,11.31L32,136v72H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM48,120l80-80,80,80v88H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48Zm96,88H112V160h32Z"/></svg>', url:"https://www.immoscout24.ch", tag:"immoscout24.ch",
+          de:"Eine der grössten Immobilienplattformen der Schweiz – ebenfalls für ganze Wohnungen bei einer WG-Neugründung.",
+          en:"One of Switzerland's largest real-estate platforms – also useful for full apartments when starting a new shared flat." },
+        { name:"wgzimmer.ch", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z"/></svg>', url:"https://www.wgzimmer.ch", tag:"wgzimmer.ch",
+          de:"Spezialisiert auf einzelne WG-Zimmer – von Zimmer-Inseraten bis zu Mitbewohner-Gesuchen.",
+          en:"Specialized in single rooms in shared flats – from room listings to roommate-wanted ads." },
+      ]},
     { de:"Sport & Gesundheit", en:"Sport & Wellness",
       subDe:"Bewegung neben dem Studium", subEn:"Staying active alongside your studies",
       items:[
@@ -950,13 +970,6 @@
         { name:"Room Booking", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,216H208V40a16,16,0,0,0-16-16H64A16,16,0,0,0,48,40V216H24a8,8,0,0,0,0,16H232a8,8,0,0,0,0-16Zm-40,0H176V40h16ZM64,40h96V216H64Zm80,92a12,12,0,1,1-12-12A12,12,0,0,1,144,132Z"/></svg>', url:"https://apps.unisg.ch/gmr/", tag:"apps.unisg.ch/gmr",
           de:"Kostenlos einen Gruppenraum für Lerngruppen, Projektarbeit oder Präsentationsvorbereitung reservieren.",
           en:"Book a free group room for study groups, project work or presentation prep." },
-      ]},
-    { de:"Karriere", en:"Career",
-      subDe:"Beratung, Events und der Sprung in den Beruf", subEn:"Counselling, events and the step into your career",
-      items:[
-        { name:"Career & Corporate Services", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,56H176V48a24,24,0,0,0-24-24H104A24,24,0,0,0,80,48v8H40A16,16,0,0,0,24,72V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V72A16,16,0,0,0,216,56ZM96,48a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96ZM216,72v41.61A184,184,0,0,1,128,136a184.07,184.07,0,0,1-88-22.38V72Zm0,128H40V131.64A200.19,200.19,0,0,0,128,152a200.25,200.25,0,0,0,88-20.37V200ZM104,112a8,8,0,0,1,8-8h32a8,8,0,0,1,0,16H112A8,8,0,0,1,104,112Z"/></svg>', url:"https://csc.unisg.ch/", tag:"csc.unisg.ch",
-          de:"Karriereberatung, Workshops, Networking mit Unternehmen und Jobplattform. Buchung auch über hsgcareer.ch.",
-          en:"Career counselling, workshops, networking with companies, and a job platform. Booking also via hsgcareer.ch." },
       ]},
     { de:"Bachelorarbeit & Praktika", en:"Thesis & Internships",
       subDe:"Betreuungspersonen, Praxisprojekte und Praktikumsstellen finden", subEn:"Find supervisors, real-world projects and internship listings",
@@ -999,12 +1012,25 @@
           de:"Über 7'000 Mitglieder seit 2007 – Events mit Beratungsfirmen, Workshops und Networking, u.a. Case Class mit Bain & Company.",
           en:"7,000+ members since 2007 – events with consulting firms, workshops and networking, including a Case Class with Bain & Company." },
       ]},
+    { de:"Karriere", en:"Career",
+      subDe:"Beratung, Events und der Sprung in den Beruf", subEn:"Counselling, events and the step into your career",
+      items:[
+        { name:"Career & Corporate Services", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,56H176V48a24,24,0,0,0-24-24H104A24,24,0,0,0,80,48v8H40A16,16,0,0,0,24,72V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V72A16,16,0,0,0,216,56ZM96,48a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96ZM216,72v41.61A184,184,0,0,1,128,136a184.07,184.07,0,0,1-88-22.38V72Zm0,128H40V131.64A200.19,200.19,0,0,0,128,152a200.25,200.25,0,0,0,88-20.37V200ZM104,112a8,8,0,0,1,8-8h32a8,8,0,0,1,0,16H112A8,8,0,0,1,104,112Z"/></svg>', url:"https://csc.unisg.ch/", tag:"csc.unisg.ch",
+          de:"Karriereberatung, Workshops, Networking mit Unternehmen und Jobplattform. Buchung auch über hsgcareer.ch.",
+          en:"Career counselling, workshops, networking with companies, and a job platform. Booking also via hsgcareer.ch." },
+        { name:"Mentoring-Programm", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H53.39a8,8,0,0,0,7.23-4.57,48,48,0,0,1,86.76,0,8,8,0,0,0,7.23,4.57H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM80,144a24,24,0,1,1,24,24A24,24,0,0,1,80,144Zm136,56H159.43a64.39,64.39,0,0,0-28.83-26.16,40,40,0,1,0-53.2,0A64.39,64.39,0,0,0,48.57,200H40V56H216ZM56,96V80a8,8,0,0,1,8-8H192a8,8,0,0,1,8,8v96a8,8,0,0,1-8,8H176a8,8,0,0,1,0-16h8V88H72v8a8,8,0,0,1-16,0Z"/></svg>', url:"https://www.unisg.ch/de/studium/orientierung/beratung-und-support/mentoring-programm/", tag:"unisg.ch/mentoring",
+          de:"1:1-Begleitung durch ehrenamtliche Mentor:innen über 1,5 Jahre, für Bachelor, Master und Doktorat – persönliche, akademische und berufliche Orientierung, plus exklusive Events und Workshops.",
+          en:"1:1 guidance from volunteer mentors over 1.5 years, for Bachelor's, Master's and doctoral students – personal, academic and career orientation, plus exclusive events and workshops." },
+      ]},
     { de:"Rabatte & Vergünstigungen", en:"Discounts & Perks",
       subDe:"Mehr Budget für alles andere", subEn:"More budget for everything else",
       items:[
         { name:"Student Beans", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"/></svg>', url:"https://www.studentbeans.com/ch", tag:"studentbeans.com/ch",
           de:"Internationale Plattform für Studentenrabatte – nach Verifikation per Hochschul-E-Mail Rabatte bei zahlreichen Marken.",
           en:"International student discount platform – verify with your university email to unlock discounts from numerous brands." },
+        { name:"Google AI Plus", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg>', url:"https://gemini.google/students/", tag:"gemini.google/students",
+          de:"12 Monate Google AI Plus gratis für Studierende (mehr Speicherplatz, höhere Nutzungslimits, Zugriff auf Gemini) – einlösbar bis 31.12.2026. Zahlungsmethode nötig, danach automatische Verlängerung zum regulären Preis (jederzeit kündbar).",
+          en:"12 months of Google AI Plus free for students (more storage, higher usage limits, access to Gemini) – redeemable until Dec 31, 2026. Requires a payment method; auto-renews at the regular price afterward (cancel anytime)." },
       ]},
     { de:"Lernen & Prüfungsvorbereitung", en:"Learning & Exam Prep",
       subDe:"Zusätzliche Unterstützung vor der Prüfung", subEn:"Extra support before the exam",
@@ -1124,6 +1150,15 @@
     }
   });
 
+  // How many columns the "Weitere Anlaufstellen" pool uses, keyed by item
+  // count — chosen by hand so the last row is never left with just one lonely
+  // item (e.g. 4 items go 2x2, not 3+1) while still keeping the "one tidy
+  // row" look the pool otherwise aims for.
+  function poolCols(n){
+    const table = { 1:1, 2:2, 3:3, 4:2, 5:3, 6:3, 7:4, 8:4 };
+    return table[n] || 3;
+  }
+
   if(solo.length){
     boxNum++;
     const num = String(boxNum).padStart(2,'0');
@@ -1137,7 +1172,7 @@
           <p class="cat-sub" data-de="Ein Ansprechpartner, eine Plattform pro Bereich" data-en="One go-to platform per area"></p>
         </div>
       </div>
-      <div class="mini-groups">
+      <div class="mini-groups" style="--mini-cols:${poolCols(solo.length)}">
         ${solo.map(({cat, item}, idx) => `
           <div class="mini-item">
             <div class="mini-head">
