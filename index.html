@@ -237,7 +237,14 @@
     grid-template-columns:repeat(var(--cols, 2), 1fr);
   }
 
-  .tile{ position:relative; }
+  /* min-width:0 overrides the grid item's default min-width:auto — without
+     it, a track won't shrink below its content's min-content width, so a
+     tile's own content can force its column wider than the row's actual
+     available space and blow the whole grid past the viewport (exactly what
+     was happening on real phones: the page had to be pinched out to see the
+     right edge). Grid items are always allowed to shrink like this since
+     .tile-name already wraps instead of needing its full width. */
+  .tile{ position:relative; min-width:0; }
 
   /* Only shown on phones (see the mobile breakpoint below) — on wider
      screens the description is already reachable by hovering the tile. */
@@ -657,7 +664,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.1): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -940,7 +947,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.9</p>
+      <p class="credit">Eloori Interactive · v0.9.1</p>
     </div>
   </footer>
 
