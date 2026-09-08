@@ -648,7 +648,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Es ist ein Prototyp: Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -740,9 +740,7 @@
             <textarea id="cf-message" name="message" rows="4" required></textarea>
           </div>
           <button type="submit" class="form-submit" id="cf-submit-btn" data-goatcounter-click="contact-form-submit" data-de="Nachricht senden" data-en="Send message"></button>
-          <p class="form-hint" id="cf-status" role="status"
-             data-de="Wird direkt versendet, ohne dass sich dein E-Mail-Programm öffnet."
-             data-en="Sent directly, without opening your email app."></p>
+          <p class="form-hint" id="cf-status" role="status"></p>
         </form>
       </div>
     </section>
@@ -933,7 +931,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · Prototyp</p>
+      <p class="credit">Eloori Interactive · v0.9</p>
     </div>
   </footer>
 
@@ -1673,8 +1671,6 @@ SOFTWARE.`;
     success: { de:"Danke! Deine Nachricht wurde versendet.", en:"Thanks! Your message has been sent." },
     error: { de:"Senden fehlgeschlagen. Bitte versuch's nochmal oder schreib uns direkt an contact@sgunihub.ch.",
              en:"Sending failed. Please try again, or email us directly at contact@sgunihub.ch." },
-    idle: { de:"Wird direkt versendet, ohne dass sich dein E-Mail-Programm öffnet.",
-            en:"Sent directly, without opening your email app." },
   };
   function setCfStatus(state){
     const lang = document.documentElement.lang === 'en' ? 'en' : 'de';
