@@ -194,7 +194,7 @@
      exactly the same height whether its title wraps to one line or two — so
      the tiles below always start at the same baseline, however long the name. */
   .mini-groups{
-    display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));
+    display:grid; grid-template-columns:repeat(3, 1fr);
     gap:1.6rem 1.3rem;
   }
   .mini-item{ display:flex; flex-direction:column; }
@@ -949,6 +949,13 @@
           de:"Karriereberatung, Workshops, Networking mit Unternehmen und Jobplattform. Buchung auch über hsgcareer.ch.",
           en:"Career counselling, workshops, networking with companies, and a job platform. Booking also via hsgcareer.ch." },
       ]},
+    { de:"Bachelorarbeit & Praktika", en:"Thesis & Internships",
+      subDe:"Betreuungspersonen, Praxisprojekte und Praktikumsstellen finden", subEn:"Find supervisors, real-world projects and internship listings",
+      items:[
+        { name:"Studyond", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M254.3,107.91,228.78,56.85a16,16,0,0,0-21.47-7.15L182.44,62.13,130.05,48.27a8.14,8.14,0,0,0-4.1,0L73.56,62.13,48.69,49.7a16,16,0,0,0-21.47,7.15L1.7,107.9a16,16,0,0,0,7.15,21.47l27,13.51,55.49,39.63a8.06,8.06,0,0,0,2.71,1.25l64,16a8,8,0,0,0,7.6-2.1l55.07-55.08,26.42-13.21a16,16,0,0,0,7.15-21.46Zm-54.89,33.37L165,113.72a8,8,0,0,0-10.68.61C136.51,132.27,116.66,130,104,122L147.24,80h31.81l27.21,54.41ZM41.53,64,62,74.22,36.43,125.27,16,115.06Zm116,119.13L99.42,168.61l-49.2-35.14,28-56L128,64.28l9.8,2.59-45,43.68-.08.09a16,16,0,0,0,2.72,24.81c20.56,13.13,45.37,11,64.91-5L188,152.66Zm62-57.87-25.52-51L214.47,64,240,115.06Zm-87.75,92.67a8,8,0,0,1-7.75,6.06,8.13,8.13,0,0,1-1.95-.24L80.41,213.33a7.89,7.89,0,0,1-2.71-1.25L51.35,193.26a8,8,0,0,1,9.3-13l25.11,17.94L126,208.24A8,8,0,0,1,131.82,217.94Z"/></svg>', url:"https://studyond.com/", tag:"studyond.com",
+          de:"Bringt Studierende, Hochschulen und Unternehmen zusammen – für Themenfindung bei Abschlussarbeiten, Praxisprojekte und unterdessen auch Praktikumsstellen.",
+          en:"Connects students, universities and companies – for thesis-topic matching, real-world projects and, by now, internship listings too." },
+      ]},
     { de:"Community & Medien", en:"Community & Media",
       subDe:"Vernetzung, Austausch und Campus-Content abseits der Verwaltung", subEn:"Networking, exchange and campus content beyond the admin tools",
       cols:2,
@@ -959,23 +966,20 @@
         { name:"prisma", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M88,112a8,8,0,0,1,8-8h80a8,8,0,0,1,0,16H96A8,8,0,0,1,88,112Zm8,40h80a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16ZM232,64V184a24,24,0,0,1-24,24H32A24,24,0,0,1,8,184.11V88a8,8,0,0,1,16,0v96a8,8,0,0,0,16,0V64A16,16,0,0,1,56,48H216A16,16,0,0,1,232,64Zm-16,0H56V184a23.84,23.84,0,0,1-1.37,8H208a8,8,0,0,0,8-8Z"/></svg>', url:"https://prisma-hsg.ch/", tag:"prisma-hsg.ch",
           de:"Seit rund 65 Jahren das studentisch geführte Magazin der HSG – auf Deutsch und Englisch, Campus-Themen und gesellschaftliche Fragen.",
           en:"HSG's student-run magazine for nearly 65 years – in German and English, covering campus life and broader social topics." },
-        { name:"Studyond", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M254.3,107.91,228.78,56.85a16,16,0,0,0-21.47-7.15L182.44,62.13,130.05,48.27a8.14,8.14,0,0,0-4.1,0L73.56,62.13,48.69,49.7a16,16,0,0,0-21.47,7.15L1.7,107.9a16,16,0,0,0,7.15,21.47l27,13.51,55.49,39.63a8.06,8.06,0,0,0,2.71,1.25l64,16a8,8,0,0,0,7.6-2.1l55.07-55.08,26.42-13.21a16,16,0,0,0,7.15-21.46Zm-54.89,33.37L165,113.72a8,8,0,0,0-10.68.61C136.51,132.27,116.66,130,104,122L147.24,80h31.81l27.21,54.41ZM41.53,64,62,74.22,36.43,125.27,16,115.06Zm116,119.13L99.42,168.61l-49.2-35.14,28-56L128,64.28l9.8,2.59-45,43.68-.08.09a16,16,0,0,0,2.72,24.81c20.56,13.13,45.37,11,64.91-5L188,152.66Zm62-57.87-25.52-51L214.47,64,240,115.06Zm-87.75,92.67a8,8,0,0,1-7.75,6.06,8.13,8.13,0,0,1-1.95-.24L80.41,213.33a7.89,7.89,0,0,1-2.71-1.25L51.35,193.26a8,8,0,0,1,9.3-13l25.11,17.94L126,208.24A8,8,0,0,1,131.82,217.94Z"/></svg>', url:"https://studyond.com/", tag:"studyond.com",
-          de:"Bringt Studierende, Hochschulen und Unternehmen zusammen – für Themenfindung bei Abschlussarbeiten, Gastvorträge und Praxisprojekte.",
-          en:"Connects students, universities and companies – for thesis-topic matching, guest lectures and real-world projects." },
+        { name:"SHSG Campus App", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M176,16H80A24,24,0,0,0,56,40V216a24,24,0,0,0,24,24h96a24,24,0,0,0,24-24V40A24,24,0,0,0,176,16ZM72,64H184V192H72Zm8-32h96a8,8,0,0,1,8,8v8H72V40A8,8,0,0,1,80,32Zm96,192H80a8,8,0,0,1-8-8v-8H184v8A8,8,0,0,1,176,224Z"/></svg>', url:"https://shsg.ch/de/services/campus-app", tag:"shsg.ch/campus-app",
+          de:"Die App der Studierendenschaft für iOS und Android – bleib unterwegs auf dem Laufenden über Events und Neuigkeiten von Clubs.",
+          en:"The student union's app for iOS and Android – stay up to date on the go with events and news from clubs." },
         { name:"Podcast", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M168,16A72.07,72.07,0,0,0,96,88a73.29,73.29,0,0,0,.63,9.42L27.12,192.22A15.93,15.93,0,0,0,28.71,213L43,227.29a15.93,15.93,0,0,0,20.78,1.59l94.81-69.53A73.29,73.29,0,0,0,168,160a72,72,0,1,0,0-144Zm56,72a55.72,55.72,0,0,1-11.16,33.52L134.49,43.16A56,56,0,0,1,224,88ZM54.32,216,40,201.68,102.14,117A72.37,72.37,0,0,0,139,153.86ZM112,88a55.67,55.67,0,0,1,11.16-33.51l78.34,78.34A56,56,0,0,1,112,88Zm-2.35,58.34a8,8,0,0,1,0,11.31l-8,8a8,8,0,1,1-11.31-11.31l8-8A8,8,0,0,1,109.67,146.33Z"/></svg>', url:"https://www.unisg.ch/en/news/podcasts/hsg-student-podcast/", tag:"unisg.ch/podcast",
           de:"Der HSG Student Podcast: eine studentische Reporterin im Gespräch mit Persönlichkeiten des Campus – Studierende, Dozierende, Gründer:innen.",
           en:"The HSG Student Podcast: a student reporter talks to people from campus – students, faculty, and entrepreneurs." },
       ]},
     { de:"Events & Grossclubs", en:"Events & Major Clubs",
       subDe:"Die grössten studentisch organisierten Bühnen der HSG", subEn:"HSG's biggest student-run stages",
-      cols:5,
+      cols:2,
       items:[
         { name:"SHSG", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M24,104H48v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16H208V104h24a8,8,0,0,0,4.19-14.81l-104-64a8,8,0,0,0-8.38,0l-104,64A8,8,0,0,0,24,104Zm40,0H96v64H64Zm80,0v64H112V104Zm48,64H160V104h32ZM128,41.39,203.74,88H52.26ZM248,208a8,8,0,0,1-8,8H16a8,8,0,0,1,0-16H240A8,8,0,0,1,248,208Z"/></svg>', url:"https://shsg.ch/de", tag:"shsg.ch",
           de:"Die offizielle Studierendenvertretung organisiert neben der Interessenvertretung auch grosse Events, betreibt Bars und das Magazin prisma.",
           en:"HSG's official student union also runs major events, student bars and the prisma magazine, alongside representing student interests." },
-        { name:"SHSG Campus App", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M176,16H80A24,24,0,0,0,56,40V216a24,24,0,0,0,24,24h96a24,24,0,0,0,24-24V40A24,24,0,0,0,176,16ZM72,64H184V192H72Zm8-32h96a8,8,0,0,1,8,8v8H72V40A8,8,0,0,1,80,32Zm96,192H80a8,8,0,0,1-8-8v-8H184v8A8,8,0,0,1,176,224Z"/></svg>', url:"https://shsg.ch/de/services/campus-app", tag:"shsg.ch/campus-app",
-          de:"Die App der Studierendenschaft für iOS und Android – bleib unterwegs auf dem Laufenden über Events und Neuigkeiten von Clubs.",
-          en:"The student union's app for iOS and Android – stay up to date on the go with events and news from clubs." },
         { name:"St. Gallen Symposium", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm88,104a87.61,87.61,0,0,1-3.33,24H174.16a157.44,157.44,0,0,0,0-48h38.51A87.61,87.61,0,0,1,216,128ZM102,168H154a115.11,115.11,0,0,1-26,45A115.27,115.27,0,0,1,102,168Zm-3.9-16a140.84,140.84,0,0,1,0-48h59.88a140.84,140.84,0,0,1,0,48ZM40,128a87.61,87.61,0,0,1,3.33-24H81.84a157.44,157.44,0,0,0,0,48H43.33A87.61,87.61,0,0,1,40,128ZM154,88H102a115.11,115.11,0,0,1,26-45A115.27,115.27,0,0,1,154,88Zm52.33,0H170.71a135.28,135.28,0,0,0-22.3-45.6A88.29,88.29,0,0,1,206.37,88ZM107.59,42.4A135.28,135.28,0,0,0,85.29,88H49.63A88.29,88.29,0,0,1,107.59,42.4ZM49.63,168H85.29a135.28,135.28,0,0,0,22.3,45.6A88.29,88.29,0,0,1,49.63,168Zm98.78,45.6a135.28,135.28,0,0,0,22.3-45.6h35.66A88.29,88.29,0,0,1,148.41,213.6Z"/></svg>', url:"https://symposium.org/", tag:"symposium.org",
           de:"International bekannte Konferenz, von HSG-Studierenden organisiert – bringt jährlich Führungskräfte, Politik und die nächste Generation zusammen.",
           en:"Internationally renowned conference organized by HSG students – brings together leaders, policymakers and the next generation each year." },
