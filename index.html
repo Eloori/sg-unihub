@@ -330,6 +330,15 @@
     background:var(--accent-soft); border:1px solid var(--line);
     font-size:.88rem; line-height:1.55; color:var(--text-2);
   }
+  /* A row of small "frame" cards for a handful of headline numbers (GPA
+     cutoff, timing, credit range, …) that would otherwise be buried inside
+     a long bullet list — scanning four key figures at a glance beats
+     reading seven sentences to find them. */
+  .guide-stats{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:.7rem; margin:0 0 1.3rem; }
+  .guide-stat{ padding:.85rem 1rem; border-radius:10px; background:var(--accent-soft); border:1px solid var(--line); }
+  .guide-stat-value{ display:block; font-family:var(--font-display); font-weight:800; font-size:1.05rem; color:var(--text); line-height:1.25; margin-bottom:.3rem; }
+  .guide-stat-label{ display:block; font-family:var(--font-mono); font-size:.68rem; letter-spacing:.02em; color:var(--text-2); line-height:1.4; }
+
   .guide-points{ margin:0 0 1.2rem; padding:0; list-style:none; display:flex; flex-direction:column; gap:.65rem; }
   .guide-points li{
     position:relative; padding-left:1.3rem; font-size:.94rem; line-height:1.55; color:var(--text);
@@ -366,7 +375,7 @@
   }
   .contact-partner p{ margin:0; font-size:.94rem; line-height:1.6; color:var(--text); max-width:60em; }
 
-  .contact-form{ display:flex; flex-direction:column; gap:1rem; max-width:34em; margin-top:1.3rem; }
+  .contact-form{ display:flex; flex-direction:column; gap:1rem; max-width:34em; margin:1.3rem auto 0; }
   .form-row{ display:flex; flex-direction:column; gap:.4rem; }
   .form-row label{
     font-family:var(--font-mono); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
@@ -664,7 +673,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.1): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.2): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -944,10 +953,12 @@
        data-en="sg/unihub is an unofficial student project and is not affiliated with the University of St. Gallen."></p>
     <div class="footer-right">
       <div class="footer-legal">
+        <a href="#contact" data-view-link="contact" data-de="Kontakt" data-en="Contact"></a>
+        <a href="mailto:contact@sgunihub.ch" data-goatcounter-click="footer-email">contact@sgunihub.ch</a>
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.9.1</p>
+      <p class="credit">Eloori Interactive · v0.9.2</p>
     </div>
   </footer>
 
@@ -1354,6 +1365,12 @@
     { de:"Austauschsemester", en:"Exchange Semester",
       introDe:"Ein Semester im Ausland ist ab dem Hauptstudium möglich – die Planung beginnt aber deutlich früher.",
       introEn:"A semester abroad becomes possible once you're in your Major phase – but planning starts much earlier.",
+      stats:[
+        { valueDe:"Ab Semester 5", valueEn:"From semester 5", labelDe:"über Partneruniversität (ab Sem. 4 als Freemover)", labelEn:"via partner university (semester 4 as a Freemover)" },
+        { valueDe:"GPA ≥ 4.50", valueEn:"GPA ≥ 4.50", labelDe:"Voraussetzung nach dem Assessmentjahr", labelEn:"requirement after the Assessment Year" },
+        { valueDe:"200+ Partnerunis", valueEn:"200+ partner universities", labelDe:"weltweit, über Student Mobility Services", labelEn:"worldwide, via Student Mobility Services" },
+        { valueDe:"16–32 ECTS", valueEn:"16–32 ECTS", labelDe:"werden angerechnet", labelEn:"get credited" },
+      ],
       points:[
         { de:"Frühestens ab Semester 5 über eine Partneruniversität, ab Semester 4 als Freemover (eigenständig organisiert, ohne HSG-Partnerabkommen).",
           en:"Earliest from semester 5 via a partner university, or semester 4 as a Freemover (self-organized, no HSG partner agreement)." },
@@ -1370,6 +1387,26 @@
         { de:"Tipp: Schau frühzeitig auf StudentWeb vorbei – dort findest du viele weiterführende Infos zum Austausch sowie Erfahrungsberichte von Studierenden, die bereits im Austausch waren.",
           en:"Tip: check StudentWeb early – it has plenty of further information on the exchange programme as well as experience reports from students who've already been on exchange." },
       ],
+      tableNoteDe:"Wie deine im Ausland belegten Kurse konkret angerechnet werden, hängt von der Anrechnungsart ab – 1:1 gegen einen bestimmten Kurs, oder pauschal nach Prioritätenreihenfolge. Als Beispiel die Regeln für den Bachelor BWL (Studienordnung 19BBWL):",
+      tableNoteEn:"How your courses abroad actually get credited depends on the recognition type – matched 1:1 against a specific course, or credited on a flat-rate basis by priority order. As an example, here are the rules for the Bachelor BWL (regulation 19BBWL):",
+      table:{
+        headDe:["Anrechnungsart","Beispiel: Bachelor BWL (19BBWL)"],
+        headEn:["Recognition type","Example: Bachelor BWL (19BBWL)"],
+        rows:[
+          { de:"1:1-Anrechnung – Pflichtkurse", en:"1:1 recognition – compulsory courses",
+            cells:[{ de:"1:1 geprüft möglich*", en:"1:1 review possible*" }] },
+          { de:"1:1-Anrechnung – Vertiefung (Pflichtwahlbereich)", en:"1:1 recognition – specialization (compulsory-elective)",
+            cells:[{ de:"max. 4 ECTS, 1:1 geprüft möglich* (Äquivalenzformular)", en:"max. 4 ECTS, 1:1 review possible* (equivalence form)" }] },
+          { de:"Pauschalanrechnung – 1. Priorität: Wahlbereich", en:"Flat-rate recognition – 1st priority: electives",
+            cells:["max. 16 ECTS"] },
+          { de:"Pauschalanrechnung – 2. Priorität: Fokusbereiche", en:"Flat-rate recognition – 2nd priority: focus areas",
+            cells:["max. 12 ECTS"] },
+          { de:"Pauschalanrechnung – 3. Priorität: Pflichtwahlbereich", en:"Flat-rate recognition – 3rd priority: compulsory-elective",
+            cells:[{ de:"max. 4 ECTS (siehe Vertiefung oben)", en:"max. 4 ECTS (see specialization above)" }] },
+        ]
+      },
+      footnoteDe:"* Anrechnungen an die Pflichtkurse und an einen Vertiefungskurs im Pflichtwahlbereich (max. 4 ECTS) sind möglich, sofern die inhaltliche Passung nachgewiesen ist. Überschüssige ECTS-Credits gehen in den Topf für Pauschalanrechnungen und werden gemäss Prioritätenreihenfolge angerechnet. Die Werte oben sind ein Beispiel für den Bachelor BWL (Studienordnung 19BBWL) – dein Major und dein Jahrgang können abweichende Grenzen haben; die verbindliche Tabelle für deinen Studiengang findest du auf der internen HSG-SharePoint-Seite zum Austausch (Login erforderlich) oder bei den Student Mobility Services.",
+      footnoteEn:"* Recognition of compulsory courses and one specialization course in the compulsory-elective area (max. 4 ECTS) is possible if the content clearly matches. Any leftover ECTS credits go into the pool for flat-rate recognition and are counted in priority order. The figures above are an example for the Bachelor BWL (regulation 19BBWL) – your Major and cohort may have different limits; the binding table for your programme is on the internal HSG SharePoint page for exchange (login required) or from Student Mobility Services.",
       source:{ label:"unisg.ch – Bachelor Partner University Exchange", url:"https://www.unisg.ch/en/studying/exchange-programme/outgoing-hsg-students/bachelor-partner-university-exchange/" }
     },
     { de:"Freiwillige Vertiefung", en:"Elective Specialization",
@@ -1398,6 +1435,21 @@
       ? `<div class="guide-note" data-de="${esc(topic.noteDe)}" data-en="${esc(topic.noteEn)}"></div>` : '';
     const intro = topic.introDe
       ? `<p class="guide-intro" data-de="${esc(topic.introDe)}" data-en="${esc(topic.introEn)}"></p>` : '';
+    const stats = topic.stats ? `
+        <div class="guide-stats">
+          ${topic.stats.map(s => `
+            <div class="guide-stat">
+              <span class="guide-stat-value" data-de="${esc(s.valueDe)}" data-en="${esc(s.valueEn)}"></span>
+              <span class="guide-stat-label" data-de="${esc(s.labelDe)}" data-en="${esc(s.labelEn)}"></span>
+            </div>`).join('')}
+        </div>` : '';
+    const tableNote = topic.tableNoteDe
+      ? `<div class="guide-note" data-de="${esc(topic.tableNoteDe)}" data-en="${esc(topic.tableNoteEn)}"></div>` : '';
+    // A table cell is either a plain string (language-neutral, e.g. "24 ECTS")
+    // or a {de,en} pair when the value itself needs translating.
+    const cellHTML = cell => typeof cell === 'object'
+      ? `<td><span data-de="${esc(cell.de)}" data-en="${esc(cell.en)}"></span></td>`
+      : `<td>${cell}</td>`;
     const table = topic.table ? `
         <div class="guide-table-wrap">
           <table class="guide-table">
@@ -1405,7 +1457,7 @@
               ${topic.table.headDe.map((h,ci) => `<th data-de="${esc(h)}" data-en="${esc(topic.table.headEn[ci])}"></th>`).join('')}
             </tr></thead>
             <tbody>
-              ${topic.table.rows.map(row => `<tr><td><span data-de="${esc(row.de)}" data-en="${esc(row.en)}"></span></td>${row.cells.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}
+              ${topic.table.rows.map(row => `<tr><td><span data-de="${esc(row.de)}" data-en="${esc(row.en)}"></span></td>${row.cells.map(cellHTML).join('')}</tr>`).join('')}
             </tbody>
           </table>
         </div>` : '';
@@ -1421,9 +1473,11 @@
         </div>
         ${intro}
         ${note}
+        ${stats}
         <ul class="guide-points">
           ${topic.points.map(p => `<li data-de="${esc(p.de)}" data-en="${esc(p.en)}"></li>`).join('')}
         </ul>
+        ${tableNote}
         ${table}
         ${footnote}
         <a class="guide-source" href="${topic.source.url}" target="_blank" rel="noopener">
