@@ -529,6 +529,38 @@
   .footer-legal{ display:flex; gap:1rem; }
   .footer-legal a{ color:var(--text-2); text-decoration:none; }
   .footer-legal a:hover{ color:var(--accent); }
+
+  /* ---------- Update toast (Service Worker) ----------
+     Shown when a Service Worker has fetched a newer version of the page in
+     the background. Sits above everything else on screen. */
+  .update-toast{
+    position:fixed; left:50%; bottom:1.4rem; z-index:200;
+    display:flex; align-items:center; gap:.9rem;
+    background:var(--surface); color:var(--text); border:1px solid var(--line);
+    border-radius:999px; padding:.65rem .7rem .65rem 1.1rem;
+    box-shadow:0 16px 30px -10px var(--shadow);
+    transform:translate(-50%, calc(100% + 1.4rem)); opacity:0;
+    transition:transform .35s ease, opacity .35s ease;
+    max-width:calc(100vw - 2.4rem);
+  }
+  .update-toast.visible{ transform:translate(-50%, 0); opacity:1; }
+  .update-toast p{ margin:0; font-size:.85rem; }
+  .update-toast button{
+    flex:none; border:none; border-radius:999px; cursor:pointer;
+    font-family:inherit; font-size:.82rem; font-weight:600;
+    padding:.5rem 1rem;
+    background:var(--accent); color:var(--accent-contrast);
+    transition:opacity .2s ease;
+  }
+  .update-toast button:hover{ opacity:.85; }
+  .update-toast .update-dismiss{
+    background:none; color:var(--text-2); font-weight:500; padding:.5rem .3rem;
+  }
+  .update-toast .update-dismiss:hover{ color:var(--text); opacity:1; }
+  @media (max-width:640px){
+    .update-toast{ left:1.2rem; right:1.2rem; bottom:1rem; transform:translateY(calc(100% + 1.4rem)); max-width:none; }
+    .update-toast.visible{ transform:translateY(0); }
+  }
 </style>
 
 <div class="wrap">
@@ -907,6 +939,12 @@
       </div>
       <div class="modal-body"><pre id="licenseModalText"></pre></div>
     </div>
+  </div>
+
+  <div class="update-toast" id="updateToast" role="status" aria-live="polite">
+    <p data-de="Neue Version verfügbar." data-en="A new version is available."></p>
+    <button type="button" id="updateReloadBtn" data-de="Neu laden" data-en="Reload"></button>
+    <button type="button" class="update-dismiss" id="updateDismissBtn" data-de="Später" data-en="Later"></button>
   </div>
 
 </div>
@@ -1627,5 +1665,55 @@ SOFTWARE.`;
         cfSubmitBtn.disabled = false;
       }
     });
+  }
+
+  // ---------- Offline support (Service Worker) ----------
+  // sw.js precaches the app shell and serves it instantly on repeat visits
+  // and with a bad/no connection, while quietly re-fetching a fresh copy in
+  // the background (stale-while-revalidate). When that background fetch
+  // turns up a newer page than what's cached, the worker posts a message
+  // here and we show a small "reload for the latest version" toast rather
+  // than silently keeping people on stale content indefinitely.
+  // Registered from its own file (not inlined) because a Service Worker
+  // must be served from a real URL to control the page — this only works
+  // on the actual sgunihub.ch deployment, so it harmlessly no-ops anywhere
+  // else (this preview included, and any file:// use).
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    });
+    // Covers a long-open tab: the worker can push this at any time.
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'sgunihub-update-available') {
+        showUpdateToast();
+      }
+    });
+    // Covers the moment right after a reload: a broadcast sent that early
+    // can arrive before the listener above is even attached and get lost,
+    // since the worker's own background check (of the page just served)
+    // often finishes around the same time as this script starts running.
+    // So shortly after load we also just ask the worker directly whether
+    // it already flagged an update we might have missed.
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (!navigator.serviceWorker.controller) return;
+        const channel = new MessageChannel();
+        channel.port1.onmessage = (event) => {
+          if (event.data && event.data.pending) showUpdateToast();
+        };
+        navigator.serviceWorker.controller.postMessage({ type: 'sgunihub-check-update' }, [channel.port2]);
+      }, 2500);
+    });
+  }
+  function showUpdateToast(){
+    const toast = document.getElementById('updateToast');
+    if (!toast || toast.classList.contains('visible')) return;
+    toast.classList.add('visible');
+    document.getElementById('updateReloadBtn').addEventListener('click', () => {
+      window.location.reload();
+    }, { once:true });
+    document.getElementById('updateDismissBtn').addEventListener('click', () => {
+      toast.classList.remove('visible');
+    }, { once:true });
   }
 </script>
