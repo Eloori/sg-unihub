@@ -670,7 +670,17 @@
              data-en="Want to get your club, association or offer listed on sg/unihub, or thinking about a partnership or advertising space? sg/unihub is still being built, so there are no fixed prices yet. Send us a short note about what you have in mind and we'll get back to you with a fitting option."></p>
         </div>
 
+        <!-- Submitted via Web3Forms (web3forms.com) — a free form-backend API,
+             no server of our own needed. Replace WEB3FORMS_ACCESS_KEY below
+             with the real access key from web3forms.com (sign up with
+             contact@sgunihub.ch, confirm the verification email, copy the
+             key it gives you). See the submit handler in the script for the
+             actual fetch() call. -->
         <form class="contact-form" id="contactForm" novalidate>
+          <input type="hidden" name="access_key" value="WEB3FORMS_ACCESS_KEY">
+          <input type="hidden" name="subject" id="cf-subject-field" value="sg/unihub Kontaktformular">
+          <input type="hidden" name="from_name" value="sg/unihub Kontaktformular">
+          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
           <div class="form-row">
             <label for="cf-name" data-de="Name" data-en="Name"></label>
             <input type="text" id="cf-name" name="name" required autocomplete="name">
@@ -693,9 +703,10 @@
             <label for="cf-message" data-de="Nachricht" data-en="Message"></label>
             <textarea id="cf-message" name="message" rows="4" required></textarea>
           </div>
-          <button type="submit" class="form-submit" data-goatcounter-click="contact-form-submit" data-de="Nachricht senden" data-en="Send message"></button>
-          <p class="form-hint" data-de="Öffnet dein E-Mail-Programm mit einem vorausgefüllten Entwurf an contact@sgunihub.ch."
-             data-en="Opens your email app with a pre-filled draft to contact@sgunihub.ch."></p>
+          <button type="submit" class="form-submit" id="cf-submit-btn" data-goatcounter-click="contact-form-submit" data-de="Nachricht senden" data-en="Send message"></button>
+          <p class="form-hint" id="cf-status" role="status"
+             data-de="Wird direkt versendet, ohne dass sich dein E-Mail-Programm öffnet."
+             data-en="Sent directly, without opening your email app."></p>
         </form>
       </div>
     </section>
@@ -1526,26 +1537,62 @@ SOFTWARE.`;
   });
   renderJourney();
 
-  // ---------- Contact form (static hosting: no backend, so we compose a
-  // pre-filled mailto: draft instead of a real server-side submission) ----------
+  // ---------- Contact form (static hosting: submitted via Web3Forms,
+  // https://web3forms.com — a free form-backend API. Nothing to build or
+  // host ourselves: a plain POST with the access key hidden field goes
+  // straight to Web3Forms, which emails the submission to contact@sgunihub.ch.
+  // Needs a real access key in the form's hidden "access_key" field above
+  // (from web3forms.com, tied to contact@sgunihub.ch) before this works. ----------
   const contactForm = document.getElementById('contactForm');
+  const cfStatus = document.getElementById('cf-status');
+  const cfSubmitBtn = document.getElementById('cf-submit-btn');
+  const CF_STATUS_TEXT = {
+    sending: { de:"Wird gesendet …", en:"Sending …" },
+    success: { de:"Danke! Deine Nachricht wurde versendet.", en:"Thanks! Your message has been sent." },
+    error: { de:"Senden fehlgeschlagen. Bitte versuch's nochmal oder schreib uns direkt an contact@sgunihub.ch.",
+             en:"Sending failed. Please try again, or email us directly at contact@sgunihub.ch." },
+    idle: { de:"Wird direkt versendet, ohne dass sich dein E-Mail-Programm öffnet.",
+            en:"Sent directly, without opening your email app." },
+  };
+  function setCfStatus(state){
+    const lang = document.documentElement.lang === 'en' ? 'en' : 'de';
+    cfStatus.textContent = CF_STATUS_TEXT[state][lang];
+    cfStatus.dataset.de = CF_STATUS_TEXT[state].de;
+    cfStatus.dataset.en = CF_STATUS_TEXT[state].en;
+  }
   if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
+    contactForm.addEventListener('submit', async function (e) {
       e.preventDefault();
-      const name = contactForm.name.value.trim();
-      const email = contactForm.email.value.trim();
       const topicEl = contactForm.topic.selectedOptions[0];
       const topic = topicEl ? topicEl.textContent : '';
-      const message = contactForm.message.value.trim();
       const lang = document.documentElement.lang === 'en' ? 'en' : 'de';
-      const subject = lang === 'en'
+      document.getElementById('cf-subject-field').value = lang === 'en'
         ? `sg/unihub contact form: ${topic}`
         : `sg/unihub Kontaktformular: ${topic}`;
-      const bodyLines = lang === 'en'
-        ? [`Name: ${name}`, `Email: ${email}`, '', message]
-        : [`Name: ${name}`, `E-Mail: ${email}`, '', message];
-      const mailto = `mailto:contact@sgunihub.ch?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
-      window.location.href = mailto;
+
+      cfSubmitBtn.disabled = true;
+      setCfStatus('sending');
+
+      try {
+        const formData = new FormData(contactForm);
+        const payload = Object.fromEntries(formData.entries());
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await res.json().catch(() => ({}));
+        if (res.status === 200 && result.success !== false) {
+          setCfStatus('success');
+          contactForm.reset();
+        } else {
+          setCfStatus('error');
+        }
+      } catch (err) {
+        setCfStatus('error');
+      } finally {
+        cfSubmitBtn.disabled = false;
+      }
     });
   }
 </script>
