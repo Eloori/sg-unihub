@@ -175,6 +175,12 @@
   .category-box.revealed{ opacity:1; transform:none; }
   .category-box.wide{ grid-column:1 / -1; }
 
+  /* Two category boxes stacked into one grid cell (currently Karriere with
+     Rabatte & Vergünstigungen beneath it) — see the `stackBelow` render
+     logic in the script below. Same gap as the board's own grid gap, so
+     the vertical spacing inside the stack matches the spacing around it. */
+  .category-stack{ display:flex; flex-direction:column; gap:1.5rem; }
+
   .cat-head{
     display:flex; gap:.8rem; align-items:flex-start;
     margin-bottom:1.3rem; padding-bottom:1.1rem; border-bottom:1px solid var(--line);
@@ -996,6 +1002,13 @@
           de:"Bringt Studierende, Hochschulen und Unternehmen zusammen – für Themenfindung bei Abschlussarbeiten, Praxisprojekte und unterdessen auch Praktikumsstellen.",
           en:"Connects students, universities and companies – for thesis-topic matching, real-world projects and, by now, internship listings too." },
       ]},
+    { de:"Lernen & Prüfungsvorbereitung", en:"Learning & Exam Prep",
+      subDe:"Zusätzliche Unterstützung vor der Prüfung", subEn:"Extra support before the exam",
+      items:[
+        { name:"Ecoreps", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,58.34l-32-32a8,8,0,0,0-11.32,0l-96,96A8,8,0,0,0,88,128v32a8,8,0,0,0,8,8h32a8,8,0,0,0,5.66-2.34l96-96A8,8,0,0,0,229.66,58.34ZM124.69,152H104V131.31l64-64L188.69,88ZM200,76.69,179.31,56,192,43.31,212.69,64ZM224,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h80a8,8,0,0,1,0,16H48V208H208V128a8,8,0,0,1,16,0Z"/></svg>', url:"https://ecoreps.de/home", tag:"ecoreps.de",
+          de:"Kommerzieller Anbieter kostenpflichtiger Repetitorien – kein offizieller Verein, aber unter Studierenden weit verbreitet zur Prüfungsvorbereitung.",
+          en:"Commercial provider of paid exam-prep courses – not an official club, but widely used among students to prepare for exams." },
+      ]},
     { de:"Community & Medien", en:"Community & Media",
       subDe:"Vernetzung, Austausch und Campus-Content abseits der Verwaltung", subEn:"Networking, exchange and campus content beyond the admin tools",
       cols:2,
@@ -1042,6 +1055,10 @@
       ]},
     { de:"Rabatte & Vergünstigungen", en:"Discounts & Perks",
       subDe:"Mehr Budget für alles andere", subEn:"More budget for everything else",
+      // Rendered stacked directly below the previous box (Karriere) instead
+      // of in its own grid cell, with the "Weitere Anlaufstellen" pool box
+      // placed beside that stack — see the render loop below.
+      stackBelow:true, poolHere:true,
       items:[
         { name:"Student Beans", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"/></svg>', url:"https://www.studentbeans.com/ch", tag:"studentbeans.com/ch",
           de:"Internationale Plattform für Studentenrabatte – nach Verifikation per Hochschul-E-Mail Rabatte bei zahlreichen Marken.",
@@ -1049,13 +1066,6 @@
         { name:"Google AI Plus", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg>', url:"https://gemini.google/students/", tag:"gemini.google/students",
           de:"12 Monate Google AI Plus gratis für Studierende (mehr Speicherplatz, höhere Nutzungslimits, Zugriff auf Gemini) – einlösbar bis 31.12.2026. Zahlungsmethode nötig, danach automatische Verlängerung zum regulären Preis (jederzeit kündbar).",
           en:"12 months of Google AI Plus free for students (more storage, higher usage limits, access to Gemini) – redeemable until Dec 31, 2026. Requires a payment method; auto-renews at the regular price afterward (cancel anytime)." },
-      ]},
-    { de:"Lernen & Prüfungsvorbereitung", en:"Learning & Exam Prep",
-      subDe:"Zusätzliche Unterstützung vor der Prüfung", subEn:"Extra support before the exam",
-      items:[
-        { name:"Ecoreps", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,58.34l-32-32a8,8,0,0,0-11.32,0l-96,96A8,8,0,0,0,88,128v32a8,8,0,0,0,8,8h32a8,8,0,0,0,5.66-2.34l96-96A8,8,0,0,0,229.66,58.34ZM124.69,152H104V131.31l64-64L188.69,88ZM200,76.69,179.31,56,192,43.31,212.69,64ZM224,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h80a8,8,0,0,1,0,16H48V208H208V128a8,8,0,0,1,16,0Z"/></svg>', url:"https://ecoreps.de/home", tag:"ecoreps.de",
-          de:"Kommerzieller Anbieter kostenpflichtiger Repetitorien – kein offizieller Verein, aber unter Studierenden weit verbreitet zur Prüfungsvorbereitung.",
-          en:"Commercial provider of paid exam-prep courses – not an official club, but widely used among students to prepare for exams." },
       ]},
     { de:"Wohnungssuche", en:"Housing Search",
       subDe:"Zimmer, Wohnungen und mehr für den Umzug nach St.Gallen", subEn:"Rooms, apartments and more for your move to St.Gallen",
@@ -1164,29 +1174,36 @@
   // with nothing skipped — and inside the shared box, each mini-category
   // gets its own small, independent 1, 2, 3… so that numbering never has
   // to jump either.
+  //
+  // Two categories (currently Karriere + Rabatte & Vergünstigungen) are an
+  // explicit exception to the plain "each multi-item category gets its own
+  // grid cell" rule: the second one is flagged `stackBelow` in DATA, so
+  // instead of getting its own cell it's stacked directly under the box
+  // before it, sharing one grid cell — and that flagged category also
+  // carries `poolHere`, which places the "Weitere Anlaufstellen" pool box
+  // (see poolCols/solo below) right beside that stack, rather than at the
+  // very end of the page.
   const solo = [];
   let boxNum = 0;
-  DATA.forEach((cat) => {
-    if(cat.items.length > 1){
-      boxNum++;
-      const num = String(boxNum).padStart(2,'0');
-      const box = document.createElement('section');
-      box.className = 'category-box' + (cat.items.length >= 5 ? ' wide' : '');
-      box.innerHTML = `
-        <div class="cat-head">
-          <span class="cat-index">${num}</span>
-          <div>
-            <h2 class="cat-title" data-de="${cat.de}" data-en="${cat.en}"></h2>
-            <p class="cat-sub" data-de="${cat.subDe}" data-en="${cat.subEn}"></p>
-          </div>
+  let prevBox = null; // last top-level element appended to main, for stackBelow
+
+  function makeBox(cat, { wide = false } = {}){
+    boxNum++;
+    const num = String(boxNum).padStart(2,'0');
+    const box = document.createElement('section');
+    box.className = 'category-box' + (wide ? ' wide' : '');
+    box.innerHTML = `
+      <div class="cat-head">
+        <span class="cat-index">${num}</span>
+        <div>
+          <h2 class="cat-title" data-de="${cat.de}" data-en="${cat.en}"></h2>
+          <p class="cat-sub" data-de="${cat.subDe}" data-en="${cat.subEn}"></p>
         </div>
-        <div class="tile-row" style="--cols:${cat.cols || cat.items.length}">${cat.items.map(tileHTML).join('')}</div>
-      `;
-      main.appendChild(box);
-    } else {
-      solo.push({ cat, item: cat.items[0] });
-    }
-  });
+      </div>
+      <div class="tile-row" style="--cols:${cat.cols || cat.items.length}">${cat.items.map(tileHTML).join('')}</div>
+    `;
+    return box;
+  }
 
   // How many columns the "Weitere Anlaufstellen" pool uses, keyed by item
   // count — chosen by hand so the last row is never left with just one lonely
@@ -1197,11 +1214,11 @@
     return table[n] || 3;
   }
 
-  if(solo.length){
+  function makePoolBox({ wide = false } = {}){
     boxNum++;
     const num = String(boxNum).padStart(2,'0');
     const box = document.createElement('section');
-    box.className = 'category-box wide';
+    box.className = 'category-box' + (wide ? ' wide' : '');
     box.innerHTML = `
       <div class="cat-head">
         <span class="cat-index">${num}</span>
@@ -1221,7 +1238,41 @@
           </div>`).join('')}
       </div>
     `;
-    main.appendChild(box);
+    return box;
+  }
+
+  DATA.forEach((cat) => {
+    if(cat.items.length <= 1){
+      solo.push({ cat, item: cat.items[0] });
+      return;
+    }
+
+    const box = makeBox(cat, { wide: cat.items.length >= 5 });
+
+    if(cat.stackBelow && prevBox && prevBox.classList.contains('category-box')){
+      const stack = document.createElement('div');
+      stack.className = 'category-stack';
+      main.replaceChild(stack, prevBox);
+      stack.appendChild(prevBox);
+      stack.appendChild(box);
+      prevBox = stack;
+    } else {
+      main.appendChild(box);
+      prevBox = box;
+    }
+
+    if(cat.poolHere && solo.length){
+      const pool = makePoolBox();
+      main.appendChild(pool);
+      prevBox = pool;
+    }
+  });
+
+  // Fallback: if nothing in DATA claimed `poolHere` but there are solo
+  // categories anyway, the pool still needs to render somewhere — put it
+  // at the very end, full-width, same as before this box was made movable.
+  if(solo.length && !DATA.some(cat => cat.poolHere)){
+    main.appendChild(makePoolBox({ wide: true }));
   }
 
   // ---------- "Neu an der HSG" guide page ----------
