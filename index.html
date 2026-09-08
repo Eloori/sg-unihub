@@ -239,6 +239,10 @@
 
   .tile{ position:relative; }
 
+  /* Only shown on phones (see the mobile breakpoint below) — on wider
+     screens the description is already reachable by hovering the tile. */
+  .tile-info-btn{ display:none; }
+
   /* Fixed height (not min-height) so every tile is exactly the same size no
      matter how long its name is — a long name like "Career & Corporate
      Services" wraps and clamps to two lines instead of inflating the box. */
@@ -493,25 +497,62 @@
     .page-title{ margin:.5rem 0 .6rem; }
     .page-sub{ font-size:1.02rem; }
 
-    /* The tile info-card relies on :hover, which touch screens don't reliably
-       have — so below phone width it sits directly under each tile instead
-       of appearing on hover, and tiles collapse into a single-column list
-       (icon + name in a row) instead of a hover-required grid. */
-    .tile-row{ grid-template-columns:1fr; }
+    /* Two columns of compact icon+name cards instead of one long column of
+       icon+name+full-description rows — scanning to find a tool shouldn't
+       require scrolling past every other tool's whole description first.
+       The tile info-card also relies on :hover, which touch screens don't
+       reliably have, so tapping a tile now opens its link right away (the
+       fast path, and the actual point of the grid) and the small "i" button
+       is the one way to read the description — tapping it expands just
+       that tile to full width in place, rather than navigating away. */
+    .tile-row{ grid-template-columns:repeat(2, 1fr); gap:.7rem; }
+    /* The "Weitere Anlaufstellen" pool nests a single-tile .tile-row inside
+       each mini-item — already arranged into columns by .mini-groups below,
+       so forcing 2 columns in there too would just leave an empty cell
+       beside every one of those single tiles. */
+    .mini-item .tile-row{ grid-template-columns:1fr; }
     .tile-inner{
-      flex-direction:row; justify-content:flex-start; text-align:left;
-      height:auto; padding:.85rem 1rem; gap:.85rem;
+      height:108px; padding:.85rem .6rem; gap:.5rem;
     }
-    .tile-icon{ width:42px; height:42px; font-size:1rem; }
-    .tile-icon svg{ width:22px; height:22px; }
+    .tile-icon{ width:36px; height:36px; font-size:.95rem; }
+    .tile-icon svg{ width:20px; height:20px; }
+    .tile-name{ font-size:.86rem; line-height:1.25; }
+
+    .tile-info-btn{
+      display:flex; align-items:center; justify-content:center;
+      position:absolute; top:.5rem; right:.5rem; z-index:1;
+      width:22px; height:22px; border-radius:50%; padding:0;
+      border:1px solid var(--line); background:var(--surface); color:var(--text-2);
+      font-family:var(--font-display); font-weight:700; font-style:italic; font-size:.72rem;
+      cursor:pointer;
+    }
+    .tile-info-btn:hover, .tile-info-btn:focus-visible{ border-color:var(--accent); color:var(--accent); outline:none; }
+    .tile.expanded .tile-info-btn{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
+
+    /* Collapsed by default (every tile's description used to always show,
+       which was the whole problem) — expanding one tile via its "i" button
+       spans it across both columns and switches it back to the roomier
+       icon-left row so the now-longer content has space to breathe. */
     .tile-pop{
-      position:static; opacity:1; transform:none; pointer-events:auto;
-      width:auto; max-width:none; min-width:0;
-      margin:-.35rem 0 0; padding:.7rem .9rem .8rem 1rem;
-      box-shadow:none;
+      position:static; opacity:0; max-height:0; overflow:hidden; pointer-events:none;
+      width:auto; max-width:none; min-width:0; transform:none;
+      margin:0; padding:0 .9rem; box-shadow:none;
+      transition:opacity .25s ease, max-height .3s ease, padding .3s ease, margin .3s ease;
+    }
+    .tile.expanded{ grid-column:1 / -1; }
+    .tile.expanded .tile-inner{
+      flex-direction:row; justify-content:flex-start; text-align:left;
+      height:auto; padding:.85rem 1rem;
+    }
+    .tile.expanded .tile-icon{ width:42px; height:42px; font-size:1rem; }
+    .tile.expanded .tile-icon svg{ width:22px; height:22px; }
+    .tile.expanded .tile-name{ font-size:1rem; }
+    .tile.expanded .tile-pop{
+      opacity:1; max-height:400px; pointer-events:auto;
+      margin:-.35rem 0 0; padding:.7rem 1rem .8rem 1rem;
     }
 
-    .mini-groups{ grid-template-columns:1fr; gap:1.4rem; }
+    .mini-groups{ grid-template-columns:repeat(2, 1fr); gap:1.4rem .9rem; }
 
     .journey-slide{ padding:1.5rem 1.3rem 1.7rem; min-height:0; }
     .journey-controls{ gap:.8rem; }
@@ -1100,6 +1141,22 @@
     if(el) trackEvent(el.dataset.goatcounterClick);
   });
 
+  // Mobile only (the button is hidden above the phone breakpoint in CSS):
+  // tapping a tile's name/icon opens its link straight away — fast access
+  // being the whole point of the grid — while this small "i" button is the
+  // one way to see the description first, by expanding that single tile in
+  // place rather than navigating. stopPropagation keeps the tap from also
+  // triggering the tile-inner link underneath it.
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.tile-info-btn');
+    if(!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const tile = btn.closest('.tile');
+    const expanded = tile.classList.toggle('expanded');
+    btn.setAttribute('aria-expanded', String(expanded));
+  });
+
   function tileHTML(it){
     // Phosphor icons instead of a brand logo on purpose: real provider logos
     // are trademarked and we're not affiliated with any of them, so using
@@ -1115,6 +1172,7 @@
           ${icon}
           <span class="tile-name">${it.name}</span>
         </a>
+        <button type="button" class="tile-info-btn" aria-label="Info" aria-expanded="false">i</button>
         <div class="tile-pop">
           <span class="tile-tag">${it.tag}</span>
           <span class="tile-desc" data-de="${it.de.replace(/"/g,'&quot;')}" data-en="${it.en.replace(/"/g,'&quot;')}"></span>
