@@ -69,10 +69,10 @@
     -webkit-font-smoothing:antialiased;
   }
   a{color:inherit;}
-  .wrap{max-width:1280px; margin:0 auto; padding:3rem 1.75rem 4.5rem;}
+  .wrap{max-width:1280px; margin:0 auto; padding:2rem 1.75rem 4rem;}
 
   /* ---------- Top bar (persistent across every view) ---------- */
-  .topbar{display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.4rem;}
+  .topbar{display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;}
   .topbar-left{position:relative; display:flex; align-items:center; gap:.9rem;}
   .eyebrow{
     font-family:var(--font-mono); font-size:.72rem; letter-spacing:.16em;
@@ -121,14 +121,14 @@
 
   .wordmark{
     font-family:var(--font-display); font-weight:900;
-    font-size:clamp(3.2rem, 9vw, 6.4rem); line-height:1; letter-spacing:-.01em;
-    margin:1.2rem 0 1.1rem; text-wrap:balance;
+    font-size:clamp(2.4rem, 5.2vw, 3.8rem); line-height:1; letter-spacing:-.01em;
+    margin:.5rem 0 .6rem; text-wrap:balance;
   }
   .wordmark .slash{color:var(--accent); display:inline-block; animation:blink 3.2s ease-in-out infinite;}
   @keyframes blink{0%,100%{opacity:1;} 50%{opacity:.35;}}
   .tagline{
     font-family:var(--font-display); font-style:italic; font-weight:500;
-    font-size:1.3rem; color:var(--text-2); max-width:34em; margin:0 0 1.6rem;
+    font-size:1.1rem; color:var(--text-2); max-width:34em; margin:0 0 1rem;
   }
   .stats{
     display:flex; gap:.6rem; align-items:baseline; font-family:var(--font-mono);
@@ -157,12 +157,12 @@
   }
 
   /* ---------- Board of category boxes ---------- */
-  .board{ display:grid; grid-template-columns:repeat(2, 1fr); gap:1.5rem; }
+  .board{ display:grid; grid-template-columns:repeat(2, 1fr); gap:1.1rem; }
   @media (max-width:860px){ .board{ grid-template-columns:1fr; } }
 
   .category-box{
     background:var(--surface); border:1px solid var(--line); border-radius:14px;
-    padding:1.6rem 1.7rem 1.8rem;
+    padding:1.3rem 1.5rem 1.5rem;
     box-shadow:0 2px 10px -4px var(--shadow);
     opacity:0; transform:translateY(18px);
   }
@@ -184,13 +184,13 @@
 
   .cat-head{
     display:flex; gap:.8rem; align-items:flex-start;
-    margin-bottom:1.3rem; padding-bottom:1.1rem; border-bottom:1px solid var(--line);
+    margin-bottom:1rem; padding-bottom:.8rem; border-bottom:1px solid var(--line);
   }
   .cat-index{
-    font-family:var(--font-display); font-weight:900; font-size:1.6rem;
+    font-family:var(--font-display); font-weight:900; font-size:1.4rem;
     color:var(--accent); font-variant-numeric:tabular-nums; line-height:1.15;
   }
-  .cat-title{ font-family:var(--font-display); font-weight:700; font-size:1.4rem; margin:0 0 .2rem; text-wrap:balance;}
+  .cat-title{ font-family:var(--font-display); font-weight:700; font-size:1.25rem; margin:0 0 .2rem; text-wrap:balance;}
   .cat-sub{ margin:0; color:var(--text-2); font-size:.86rem; line-height:1.4;}
 
   /* A handful of categories only have a single link — giving each its own big
@@ -232,7 +232,7 @@
      so nothing in the grid ever reflows and nothing can overlap a neighbour. */
   .tile-row{
     container-type:inline-size;
-    display:grid; gap:1rem;
+    display:grid; gap:.8rem;
     /* --cols is set inline per category (see render code) so each row gets
        exactly as many equal-width columns as its category wants. Written as
        a custom property rather than the grid-template-columns property
@@ -260,8 +260,8 @@
      Services" wraps and clamps to two lines instead of inflating the box. */
   .tile-inner{
     display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
-    gap:.6rem; height:150px;
-    padding:1.1rem 1rem; border-radius:14px; border:1px solid var(--line); background:var(--surface);
+    gap:.5rem; height:128px;
+    padding:.9rem .9rem; border-radius:14px; border:1px solid var(--line); background:var(--surface);
     text-decoration:none; color:inherit;
     transition:border-color .3s ease, box-shadow .3s ease, transform .3s ease;
   }
@@ -272,15 +272,15 @@
   .tile-inner:focus-visible{ box-shadow:0 0 0 2px var(--accent), 0 14px 26px -10px var(--shadow); }
 
   .tile-icon{
-    flex:none; width:56px; height:56px; border-radius:12px;
+    flex:none; width:48px; height:48px; border-radius:11px;
     background:var(--accent-soft); color:var(--accent);
     display:flex; align-items:center; justify-content:center;
-    font-family:var(--font-display); font-weight:700; font-size:1.2rem;
+    font-family:var(--font-display); font-weight:700; font-size:1.1rem;
     transition:background .35s ease, color .35s ease, transform .35s cubic-bezier(.34,1.56,.64,1);
   }
   /* Phosphor icons are inline SVGs using fill="currentColor", so they pick up
      .tile-icon's `color` automatically — only explicit sizing is needed. */
-  .tile-icon svg{ width:28px; height:28px; display:block; }
+  .tile-icon svg{ width:24px; height:24px; display:block; }
   .tile-inner:hover .tile-icon, .tile-inner:focus-visible .tile-icon{
     background:var(--accent); color:var(--accent-contrast);
     transform:scale(1.08) rotate(-4deg);
@@ -288,7 +288,7 @@
 
   .tile-name{
     display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden;
-    font-family:var(--font-display); font-weight:700; font-size:1.15rem;
+    font-family:var(--font-display); font-weight:700; font-size:1.03rem;
     line-height:1.25; overflow-wrap:break-word;
   }
 
@@ -467,9 +467,9 @@
 
   /* ---------- Dashboard CTA into the Journey ---------- */
   .journey-cta{
-    display:inline-flex; align-items:center; gap:.55rem; margin:0 0 2.6rem;
-    font-family:var(--font-body); font-weight:700; font-size:.92rem; color:var(--accent);
-    text-decoration:none; padding:.6rem 1.1rem; border-radius:999px;
+    display:inline-flex; align-items:center; gap:.55rem; margin:0 0 1.6rem;
+    font-family:var(--font-body); font-weight:700; font-size:.88rem; color:var(--accent);
+    text-decoration:none; padding:.55rem 1rem; border-radius:999px;
     border:1px solid var(--accent); background:var(--accent-soft);
     transition:transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease;
   }
@@ -717,7 +717,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.9): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.10): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1002,7 +1002,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.9.9</p>
+      <p class="credit">Eloori Interactive · v0.9.10</p>
     </div>
   </footer>
 
