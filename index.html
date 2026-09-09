@@ -209,15 +209,16 @@
      so the two columns end up uneven widths (and everything inside looks
      off-center) instead of splitting the row evenly. */
   .mini-item{ display:flex; flex-direction:column; min-width:0; }
-  /* Fixed height sized to a single line at the widths where every pool
-     title actually fits on one — keeps the pool box from towering over the
-     boxes beside it and lets its tiles sit closer to tiles in a normal
-     category box. Below 640px, titles can wrap to two lines, so the mobile
-     block below restores the taller, clip-safe value there. */
-  .mini-head{ display:flex; gap:.5rem; align-items:flex-start; height:1.6rem; overflow:hidden; margin-bottom:.45rem; }
+  /* min-height (not a hard-clipped fixed height) sized for a single line —
+     keeps the pool box from towering over the boxes beside it and lets its
+     tiles sit closer to tiles in a normal category box, while still letting
+     the row grow rather than clip if a title ever needs two lines. Below
+     640px, titles regularly wrap to two lines, so the mobile block below
+     raises the min-height there. */
+  .mini-head{ display:flex; gap:.5rem; align-items:flex-start; min-height:1.6rem; margin-bottom:.5rem; }
   .mini-index{
     flex:none;
-    font-family:var(--font-display); font-weight:900; font-size:1rem;
+    font-family:var(--font-display); font-weight:900; font-size:1rem; line-height:1.3;
     color:var(--accent); font-variant-numeric:tabular-nums;
   }
   .mini-title{
@@ -585,9 +586,9 @@
     }
 
     .mini-groups{ grid-template-columns:repeat(2, 1fr); gap:1.4rem .9rem; }
-    /* Titles wrap to two lines at this width, so restore the taller,
-       clip-safe header height from the base styles. */
-    .mini-head{ height:3.5rem; margin-bottom:.7rem; }
+    /* Titles regularly wrap to two lines at this width, so reserve room
+       for that instead of the single-line min-height from the base styles. */
+    .mini-head{ min-height:3.5rem; margin-bottom:.7rem; }
 
     .journey-slide{ padding:1.5rem 1.3rem 1.7rem; min-height:0; }
     .journey-controls{ gap:.8rem; }
@@ -722,7 +723,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.12): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.13): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1007,7 +1008,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.9.12</p>
+      <p class="credit">Eloori Interactive · v0.9.13</p>
     </div>
   </footer>
 
