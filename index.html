@@ -609,7 +609,34 @@
   .footer-legal{ display:flex; flex-wrap:wrap; gap:.5rem 1rem; }
   .footer-legal a{ color:var(--text-2); text-decoration:none; }
   .footer-legal a:hover{ color:var(--accent); }
+
+  /* ---------- Background ambience ---------- */
+  /* Three soft, slow-drifting colour fields behind everything — the site
+     stays the same clean, high-contrast layout, but it's no longer static.
+     Pure radial-gradient (no blur filter) so it's cheap to animate; fixed
+     + clipped to the viewport so it never affects scroll width; every card
+     still sits on its own solid --surface, so the drift only ever shows in
+     the empty space around and between them, never behind text. */
+  .bg-decor{ position:fixed; inset:0; overflow:hidden; z-index:-1; pointer-events:none; }
+  .bg-blob{
+    position:absolute; border-radius:50%;
+    background:radial-gradient(circle at 50% 50%, var(--accent), transparent 70%);
+    will-change:transform;
+  }
+  .bg-blob--a{ width:62vw; height:62vw; top:-20vw; left:-16vw; opacity:.12; animation:drift-a 58s ease-in-out infinite alternate; }
+  .bg-blob--b{ width:52vw; height:52vw; bottom:-18vw; right:-14vw; opacity:.10; animation:drift-b 72s ease-in-out infinite alternate; }
+  .bg-blob--c{ width:38vw; height:38vw; top:38vh; left:58vw; opacity:.08; animation:drift-c 46s ease-in-out infinite alternate; }
+  @keyframes drift-a{ from{ transform:translate(0,0) scale(1); } to{ transform:translate(6vw,8vh) scale(1.1); } }
+  @keyframes drift-b{ from{ transform:translate(0,0) scale(1); } to{ transform:translate(-7vw,-6vh) scale(1.12); } }
+  @keyframes drift-c{ from{ transform:translate(0,0) scale(1); } to{ transform:translate(-5vw,6vh) scale(0.92); } }
+  @media (prefers-reduced-motion: reduce){ .bg-blob{ animation:none; } }
 </style>
+
+<div class="bg-decor" aria-hidden="true">
+  <div class="bg-blob bg-blob--a"></div>
+  <div class="bg-blob bg-blob--b"></div>
+  <div class="bg-blob bg-blob--c"></div>
+</div>
 
 <div class="wrap">
 
@@ -690,7 +717,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.7): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.8): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -975,7 +1002,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.9.7</p>
+      <p class="credit">Eloori Interactive · v0.9.8</p>
     </div>
   </footer>
 
