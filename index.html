@@ -264,9 +264,9 @@
 
   /* Bookmark toggle, top-left on every tile (mirrors the "i" button's circle
      on the opposite corner). Hidden until the tile is hovered/focused so the
-     grid stays clean at rest — except once a tile is pinned, or the 5-pin
-     cap is reached, when it stays visible as a persistent status. On phones
-     there's no hover, so the mobile block below makes it always visible. */
+     grid stays clean at rest — except once a tile is pinned, when it stays
+     visible as a persistent status. On phones there's no hover, so the
+     mobile block below makes it always visible. */
   .tile-pin-btn{
     display:flex; align-items:center; justify-content:center;
     position:absolute; top:.5rem; left:.5rem; z-index:2;
@@ -281,9 +281,13 @@
   }
   .tile-pin-btn:hover, .tile-pin-btn:focus-visible{ border-color:var(--accent); color:var(--accent); outline:none; }
   .tile-pin-btn.pinned{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
-  /* !important so a full board stays visibly dimmed even while hovered/
-     focused — the two rules above would otherwise win on specificity. */
-  .tile-pin-btn:disabled{ opacity:.3 !important; cursor:not-allowed; }
+  .tile-pin-btn:disabled{ cursor:not-allowed; }
+  /* A full board (5 pinned) only dims the OTHER tiles' buttons while you're
+     actually hovering them — same at-rest visibility as always, just capped
+     below the normal hover opacity so hovering still shows "you can't pin
+     this one" instead of looking identical to a pinnable tile. Higher
+     specificity than the plain hover rule above, so no !important needed. */
+  .tile:hover .tile-pin-btn:disabled, .tile:focus-within .tile-pin-btn:disabled{ opacity:.3; }
 
   /* Only shown on phones (see the mobile breakpoint below) — on wider
      screens the description is already reachable by hovering the tile. */
@@ -608,6 +612,7 @@
        matches the "i" button's circle, mirrored onto the opposite corner. */
     .tile-pin-btn{ opacity:1; transform:none; top:.5rem; left:.5rem; width:27px; height:27px; }
     .tile-pin-btn svg{ width:14px; height:14px; }
+    .tile-pin-btn:disabled{ opacity:.3; }
     .tile-ghost .tile-ghost-inner{ height:108px; }
 
     /* Collapsed by default (every tile's description used to always show,
@@ -771,7 +776,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.0): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.1): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1056,7 +1061,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.10.0</p>
+      <p class="credit">Eloori Interactive · v0.10.1</p>
     </div>
   </footer>
 
