@@ -776,7 +776,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.1): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.2): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -786,6 +786,7 @@
               <li data-de="Neu an der HSG – ein kompakter Guide mit den Basics, die man am Anfang des Studiums wissen sollte (Bidding, Vertiefungen, Austausch etc.)." data-en=""></li>
               <li data-de="Deine Studienreise – klick dich chronologisch durch einen typischen Weg durchs Bachelor-Studium und siehst, welches Tool wann relevant wird." data-en=""></li>
             </ul>
+            <p><strong>Tipp:</strong> Auf dem Dashboard kann jede Kachel über die Pinnnadel oben links angepinnt werden (bis zu 5) – deine wichtigsten Tools erscheinen dann ganz oben in einem eigenen Bereich, egal in welcher Kategorie sie sonst stehen.</p>
             <p><strong>Tipp:</strong> Damit du sg/unihub immer griffbereit hast, kannst du die Seite wie eine App auf deinem Homescreen bzw. im Dock installieren – ganz ohne App Store.</p>
             <p>Auf dem iPhone/iPad (Safari): Seite öffnen → auf das Teilen-Symbol tippen → „Zum Home-Bildschirm" auswählen → bestätigen. Danach öffnet sich sg/unihub mit einem Tap direkt vom Homescreen, ganz ohne Browser-Leiste – wie eine echte App.</p>
             <p>Auf dem Mac (Safari, ab macOS Sonoma): Seite öffnen → in der Menüleiste „Ablage" → „Zum Dock hinzufügen" → bestätigen. Danach startet sg/unihub als eigenes Fenster direkt vom Dock aus.</p>
@@ -806,6 +807,7 @@
               <li data-de="" data-en="New to HSG – a compact guide covering the basics you should know at the start of your studies (bidding, specializations, exchange, etc.)."></li>
               <li data-de="" data-en="Your Journey – click chronologically through a typical path through the Bachelor's and see which tool becomes relevant when."></li>
             </ul>
+            <p><strong>Tip:</strong> On the Dashboard, any tile can be pinned via the pin icon in its top-left corner (up to 5) – your most-used tools then show up in their own section right at the top, no matter which category they normally live in.</p>
             <p><strong>Tip:</strong> To always have sg/unihub within reach, you can install the page like an app on your home screen or in your Dock – no App Store needed.</p>
             <p>On iPhone/iPad (Safari): open the page → tap the Share icon → select "Add to Home Screen" → confirm. From then on, sg/unihub opens with a single tap right from your home screen, without any browser bar – just like a real app.</p>
             <p>On Mac (Safari, macOS Sonoma or later): open the page → in the menu bar go to "File" → "Add to Dock" → confirm. sg/unihub then launches as its own window straight from the Dock.</p>
@@ -1061,7 +1063,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.10.1</p>
+      <p class="credit">Eloori Interactive · v0.10.2</p>
     </div>
   </footer>
 
@@ -1361,7 +1363,8 @@
           <span class="tile-name">${it.name}</span>
         </a>
         <button type="button" class="tile-pin-btn${pin ? ' pinned' : ''}" data-pin-id="${id}"
-          aria-label="${pin ? 'Von Angepinnt entfernen' : 'Anpinnen'}" aria-pressed="${pin}"${full ? ' disabled' : ''}>${PIN_ICON}</button>
+          data-de-title="${pin ? 'Von Angepinnt entfernen' : 'Anpinnen'}" data-en-title="${pin ? 'Remove from Pinned' : 'Pin'}"
+          aria-pressed="${pin}"${full ? ' disabled' : ''}>${PIN_ICON}</button>
         <button type="button" class="tile-info-btn" aria-label="Info" aria-expanded="false">i</button>
         <div class="tile-pop">
           <span class="tile-tag">${it.tag}</span>
@@ -1576,9 +1579,13 @@
       const isPin = isPinned(btn.dataset.pinId);
       btn.classList.toggle('pinned', isPin);
       btn.setAttribute('aria-pressed', String(isPin));
-      btn.setAttribute('aria-label', isPin ? 'Von Angepinnt entfernen' : 'Anpinnen');
+      btn.dataset.deTitle = isPin ? 'Von Angepinnt entfernen' : 'Anpinnen';
+      btn.dataset.enTitle = isPin ? 'Remove from Pinned' : 'Pin';
       btn.disabled = !isPin && full;
     });
+    // The applyLang(lang) call right after this in syncPinnedUI() is what
+    // actually turns these data-*-title attributes into a visible title/
+    // aria-label for the current language.
   }
 
   // ---------- "Neu an der HSG" guide page ----------
@@ -1795,6 +1802,14 @@
   function applyLang(lang){
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-de]').forEach(el => { el.textContent = el.dataset[lang] || el.dataset.de; });
+    // Same [data-de]/[data-en] idea, but for a native title/aria-label
+    // tooltip instead of visible text — e.g. the pin button, which explains
+    // itself on hover rather than needing a permanent on-page label.
+    document.querySelectorAll('[data-de-title]').forEach(el => {
+      const t = (lang === 'en' ? el.dataset.enTitle : el.dataset.deTitle) || el.dataset.deTitle;
+      el.title = t;
+      el.setAttribute('aria-label', t);
+    });
     // Impressum/Datenschutz keep each language as a fully separate block (real
     // links + <br> line breaks that a textContent-only swap can't render), so
     // language switching there just toggles which block is visible.
