@@ -666,6 +666,19 @@
        does on mobile (its own tiles in a 2-column grid). */
     .mini-groups{ grid-template-columns:1fr; gap:1.6rem; }
     .mini-item{ grid-column:1 / -1; }
+    /* A single-tile group in that same 2-column grid left its tile stranded
+       on the left with an empty cell beside it — better than the old
+       cross-group gap, but still an odd half-used row. tile-row--solo (set
+       in the render code whenever a group has exactly one tile) switches
+       that one tile to a single full-width column instead, in the same
+       horizontal icon-left layout an expanded tile already uses, so it
+       reads as a deliberate wide row rather than a half-empty card. */
+    .tile-row--solo{ grid-template-columns:1fr; }
+    .tile-row--solo .tile-inner{
+      flex-direction:row; justify-content:flex-start; text-align:left;
+      height:auto; padding:.85rem 1rem; gap:.8rem;
+    }
+    .tile-row--solo .tile-name{ font-size:.95rem; -webkit-line-clamp:1; }
     /* Titles regularly wrap to two lines at this width, so reserve room
        for that instead of the single-line min-height from the base styles. */
     .mini-head{ min-height:3.5rem; margin-bottom:.7rem; }
@@ -803,7 +816,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.4): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.5): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1090,7 +1103,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.10.4</p>
+      <p class="credit">Eloori Interactive · v0.10.5</p>
     </div>
   </footer>
 
@@ -1462,7 +1475,7 @@
               <span class="mini-index">${idx+1}</span>
               <h3 class="mini-title" data-de="${cat.de}" data-en="${cat.en}"></h3>
             </div>
-            <div class="tile-row" style="--cols:${cat.items.length}">${cat.items.map(tileHTML).join('')}</div>
+            <div class="tile-row${cat.items.length === 1 ? ' tile-row--solo' : ''}" style="--cols:${cat.items.length}">${cat.items.map(tileHTML).join('')}</div>
           </div>`).join('')}
       </div>
     `;
