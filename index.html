@@ -176,10 +176,11 @@
   .category-box.revealed{ opacity:1; transform:none; }
   .category-box.wide{ grid-column:1 / -1; }
 
-  /* Two category boxes stacked into one grid cell (currently Karriere with
-     Rabatte & Vergünstigungen beneath it) — see the `stackBelow` render
-     logic in the script below. Same gap as the board's own grid gap, so
-     the vertical spacing inside the stack matches the spacing around it. */
+  /* Two category boxes stacked into one grid cell instead of getting their
+     own — see the `stackBelow` render logic in the script below (not
+     currently used by any category, but kept as an available layout for a
+     future pair of same-size boxes). Same gap as the board's own grid gap,
+     so the vertical spacing inside the stack matches the spacing around it. */
   .category-stack{ display:flex; flex-direction:column; gap:1.5rem; }
 
   .cat-head{
@@ -730,7 +731,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.15): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.16): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1015,7 +1016,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.9.15</p>
+      <p class="credit">Eloori Interactive · v0.9.16</p>
     </div>
   </footer>
 
@@ -1080,14 +1081,13 @@
       ]},
     { de:"Lernen & Prüfungsvorbereitung", en:"Learning & Exam Prep",
       subDe:"Zusätzliche Unterstützung vor der Prüfung", subEn:"Extra support before the exam",
+      // 2 links, but stays in the "Weitere Anlaufstellen" pool instead of
+      // becoming its own board box — see the `pool` flag in the render loop.
+      pool:true,
       items:[
         { name:"Ecoreps", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,58.34l-32-32a8,8,0,0,0-11.32,0l-96,96A8,8,0,0,0,88,128v32a8,8,0,0,0,8,8h32a8,8,0,0,0,5.66-2.34l96-96A8,8,0,0,0,229.66,58.34ZM124.69,152H104V131.31l64-64L188.69,88ZM200,76.69,179.31,56,192,43.31,212.69,64ZM224,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h80a8,8,0,0,1,0,16H48V208H208V128a8,8,0,0,1,16,0Z"/></svg>', url:"https://ecoreps.de/home", tag:"ecoreps.de",
           de:"Kommerzieller Anbieter kostenpflichtiger Repetitorien – kein offizieller Verein, aber unter Studierenden weit verbreitet zur Prüfungsvorbereitung.",
           en:"Commercial provider of paid exam-prep courses – not an official club, but widely used among students to prepare for exams." },
-      ]},
-    { de:"Lernhilfen", en:"Study Aids",
-      subDe:"Lernmaterial pro Kurs, mit Gratis-Vorschau", subEn:"Course-specific study material, previewable for free",
-      items:[
         { name:"ready", url:"https://www.ready.ch/de/courses/?university=2", tag:"ready.ch",
           de:"Kommerzieller Anbieter von Zusammenfassungen, Karteikarten und Musterlösungen zur Prüfungsvorbereitung, teils direkt für einzelne HSG-Kurse zusammengestellt – jeder Kurs lässt sich vor dem Kauf gratis anschauen.",
           en:"Commercial provider of summaries, flashcards and past-exam solutions for exam prep, some put together for specific HSG courses – every course can be previewed for free before you buy it." },
@@ -1138,10 +1138,10 @@
       ]},
     { de:"Rabatte & Vergünstigungen", en:"Discounts & Perks",
       subDe:"Mehr Budget für alles andere", subEn:"More budget for everything else",
-      // Rendered stacked directly below the previous box (Karriere) instead
-      // of in its own grid cell, with the "Weitere Anlaufstellen" pool box
-      // placed beside that stack — see the render loop below.
-      stackBelow:true, poolHere:true,
+      // Sits in its own grid cell right beside Karriere. Flagged poolHere so
+      // the wide "Weitere Anlaufstellen" pool box is inserted as its own
+      // full-width row right after — see the render loop below.
+      poolHere:true,
       items:[
         { name:"Student Beans", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"/></svg>', url:"https://www.studentbeans.com/ch", tag:"studentbeans.com/ch",
           de:"Internationale Plattform für Studentenrabatte – nach Verifikation per Hochschul-E-Mail Rabatte bei zahlreichen Marken.",
@@ -1267,22 +1267,18 @@
   // Categories with several links get their own box, laid out in a fixed
   // column count (not auto-fit) so the rows always split evenly — a 6-item
   // category never ends up as an odd "5 then 1". Categories with just one
-  // link are pooled into a single shared "quick access" box instead, so a
-  // 6-link category is never visually paired against a 1-link one. Box
-  // numbers are assigned in the order boxes actually appear on screen (not
-  // their order in DATA), so the visible sequence always reads 01, 02, 03…
-  // with nothing skipped — and inside the shared box, each mini-category
-  // gets its own small, independent 1, 2, 3… so that numbering never has
-  // to jump either.
+  // link — or flagged `pool:true` regardless of link count — are pooled
+  // into a single shared "quick access" box instead, so a 6-link category
+  // is never visually paired against a 1-link one. Box numbers are assigned
+  // in the order boxes actually appear on screen (not their order in DATA),
+  // so the visible sequence always reads 01, 02, 03… with nothing skipped —
+  // and inside the shared box, each mini-category gets its own small,
+  // independent 1, 2, 3… so that numbering never has to jump either.
   //
-  // Two categories (currently Karriere + Rabatte & Vergünstigungen) are an
-  // explicit exception to the plain "each multi-item category gets its own
-  // grid cell" rule: the second one is flagged `stackBelow` in DATA, so
-  // instead of getting its own cell it's stacked directly under the box
-  // before it, sharing one grid cell — and that flagged category also
-  // carries `poolHere`, which places the "Weitere Anlaufstellen" pool box
-  // (see poolCols/solo below) right beside that stack, rather than at the
-  // very end of the page.
+  // Karriere and Rabatte & Vergünstigungen sit side by side in one row (two
+  // plain, non-wide boxes). Rabatte carries `poolHere`, which places the
+  // "Weitere Anlaufstellen" pool box (see solo below) as its own full-width
+  // row right after, rather than at the very end of the page.
   const solo = [];
   let boxNum = 0;
   let prevBox = null; // last top-level element appended to main, for stackBelow
@@ -1305,20 +1301,15 @@
     return box;
   }
 
-  // How many columns the "Weitere Anlaufstellen" pool uses, keyed by item
-  // count — chosen by hand so the last row is never left with just one lonely
-  // item (e.g. 4 items go 2x2, not 3+1) while still keeping the "one tidy
-  // row" look the pool otherwise aims for.
-  function poolCols(n){
-    const table = { 1:1, 2:2, 3:3, 4:2, 5:3, 6:3, 7:4, 8:4 };
-    return table[n] || 3;
-  }
-
-  function makePoolBox({ wide = false } = {}){
+  // Pooled categories can hold more than one link (e.g. two exam-prep
+  // tools sharing a "Lernen & Prüfungsvorbereitung" slot) — the box is wide
+  // (full page width, one horizontal row of groups, like Wohnungssuche)
+  // so a --mini-cols equal to the group count always fits comfortably.
+  function makePoolBox(){
     boxNum++;
     const num = String(boxNum).padStart(2,'0');
     const box = document.createElement('section');
-    box.className = 'category-box' + (wide ? ' wide' : '');
+    box.className = 'category-box wide';
     box.innerHTML = `
       <div class="cat-head">
         <span class="cat-index">${num}</span>
@@ -1327,14 +1318,14 @@
           <p class="cat-sub" data-de="Ein Ansprechpartner, eine Plattform pro Bereich" data-en="One go-to platform per area"></p>
         </div>
       </div>
-      <div class="mini-groups" style="--mini-cols:${poolCols(solo.length)}">
-        ${solo.map(({cat, item}, idx) => `
+      <div class="mini-groups" style="--mini-cols:${solo.length}">
+        ${solo.map((cat, idx) => `
           <div class="mini-item">
             <div class="mini-head">
               <span class="mini-index">${idx+1}</span>
               <h3 class="mini-title" data-de="${cat.de}" data-en="${cat.en}"></h3>
             </div>
-            <div class="tile-row" style="--cols:1">${tileHTML(item)}</div>
+            <div class="tile-row" style="--cols:${cat.items.length}">${cat.items.map(tileHTML).join('')}</div>
           </div>`).join('')}
       </div>
     `;
@@ -1342,8 +1333,8 @@
   }
 
   DATA.forEach((cat) => {
-    if(cat.items.length <= 1){
-      solo.push({ cat, item: cat.items[0] });
+    if(cat.items.length <= 1 || cat.pool){
+      solo.push(cat);
       return;
     }
 
@@ -1370,9 +1361,9 @@
 
   // Fallback: if nothing in DATA claimed `poolHere` but there are solo
   // categories anyway, the pool still needs to render somewhere — put it
-  // at the very end, full-width, same as before this box was made movable.
+  // at the very end.
   if(solo.length && !DATA.some(cat => cat.poolHere)){
-    main.appendChild(makePoolBox({ wide: true }));
+    main.appendChild(makePoolBox());
   }
 
   // ---------- "Neu an der HSG" guide page ----------
