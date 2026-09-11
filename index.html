@@ -262,6 +262,29 @@
      .tile-name already wraps instead of needing its full width. */
   .tile{ position:relative; min-width:0; }
 
+  /* Bookmark toggle, top-left on every tile (mirrors the "i" button's circle
+     on the opposite corner). Hidden until the tile is hovered/focused so the
+     grid stays clean at rest — except once a tile is pinned, or the 5-pin
+     cap is reached, when it stays visible as a persistent status. On phones
+     there's no hover, so the mobile block below makes it always visible. */
+  .tile-pin-btn{
+    display:flex; align-items:center; justify-content:center;
+    position:absolute; top:.5rem; left:.5rem; z-index:2;
+    width:26px; height:26px; border-radius:50%; padding:0;
+    border:1px solid var(--line); background:var(--surface); color:var(--text-2);
+    cursor:pointer; opacity:0; transform:scale(.9);
+    transition:opacity .2s ease, transform .2s ease, border-color .2s ease, color .2s ease, background .2s ease;
+  }
+  .tile-pin-btn svg{ width:13px; height:13px; display:block; }
+  .tile:hover .tile-pin-btn, .tile:focus-within .tile-pin-btn, .tile-pin-btn.pinned{
+    opacity:1; transform:scale(1);
+  }
+  .tile-pin-btn:hover, .tile-pin-btn:focus-visible{ border-color:var(--accent); color:var(--accent); outline:none; }
+  .tile-pin-btn.pinned{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
+  /* !important so a full board stays visibly dimmed even while hovered/
+     focused — the two rules above would otherwise win on specificity. */
+  .tile-pin-btn:disabled{ opacity:.3 !important; cursor:not-allowed; }
+
   /* Only shown on phones (see the mobile breakpoint below) — on wider
      screens the description is already reachable by hovering the tile. */
   .tile-info-btn{ display:none; }
@@ -324,6 +347,17 @@
     color:var(--accent); white-space:nowrap; margin-bottom:.35rem;
   }
   .tile-desc{ font-size:.9rem; line-height:1.5; color:var(--text-2); }
+
+  /* Empty slots in the "Angepinnt" board, one per unused pin — dashed and
+     muted so they read as background, not content, while still showing the
+     row is meant to hold up to 5. Same height as a real .tile-inner so the
+     row lines up whether it holds tiles, ghosts, or both. */
+  .tile-ghost{ pointer-events:none; }
+  .tile-ghost .tile-ghost-inner{
+    height:128px; display:flex; align-items:center; justify-content:center;
+    border-radius:14px; border:1.5px dashed var(--line); color:var(--text-2); opacity:.45;
+  }
+  .tile-ghost .tile-ghost-inner svg{ width:20px; height:20px; }
 
   /* ---------- Views (Dashboard / Neu an der HSG / Kontakt) ---------- */
   .view[hidden]{ display:none; }
@@ -570,6 +604,12 @@
     .tile-info-btn:hover, .tile-info-btn:focus-visible{ border-color:var(--accent); color:var(--accent); outline:none; }
     .tile.expanded .tile-info-btn{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
 
+    /* No hover on phones, so the pin toggle has to be visible at rest —
+       matches the "i" button's circle, mirrored onto the opposite corner. */
+    .tile-pin-btn{ opacity:1; transform:none; top:.5rem; left:.5rem; width:27px; height:27px; }
+    .tile-pin-btn svg{ width:14px; height:14px; }
+    .tile-ghost .tile-ghost-inner{ height:108px; }
+
     /* Collapsed by default (every tile's description used to always show,
        which was the whole problem) — expanding one tile via its "i" button
        spans it across both columns and switches it back to the roomier
@@ -731,7 +771,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.17): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.18): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1016,7 +1056,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.9.17</p>
+      <p class="credit">Eloori Interactive · v0.9.18</p>
     </div>
   </footer>
 
@@ -1239,6 +1279,68 @@
     btn.setAttribute('aria-expanded', String(expanded));
   });
 
+  // ---------- Pinning ----------
+  // A user can bookmark up to 5 tools; they surface as their own board at
+  // the very top, right under the hero. Persisted in localStorage (a
+  // versioned key, so a future format change can migrate instead of
+  // silently breaking) so it survives closing and reopening the site.
+  const PIN_KEY = 'sgunihub-pinned-v1';
+  const PIN_MAX = 5;
+
+  function loadPins(){
+    try{
+      const raw = JSON.parse(localStorage.getItem(PIN_KEY) || '[]');
+      return Array.isArray(raw) ? raw.filter(id => typeof id === 'string') : [];
+    }catch(e){ return []; }
+  }
+  function savePins(ids){
+    try{ localStorage.setItem(PIN_KEY, JSON.stringify(ids)); }catch(e){}
+  }
+  let pinned = loadPins();
+  function isPinned(id){ return pinned.includes(id); }
+  // Returns false (and changes nothing) if the cap is full and `id` isn't
+  // already pinned — the caller decides how to surface that.
+  function togglePin(id){
+    if(isPinned(id)){
+      pinned = pinned.filter(p => p !== id);
+    } else {
+      if(pinned.length >= PIN_MAX) return false;
+      pinned = [...pinned, id];
+    }
+    savePins(pinned);
+    return true;
+  }
+
+  // Flat name -> item lookup so the pinned board can render full tiles from
+  // stored ids alone, regardless of which category a tool actually lives in.
+  // slug(it.name) doubles as the id (already unique across all of DATA, and
+  // already used for GoatCounter's per-tool event names).
+  const TOOL_REGISTRY = new Map();
+  DATA.forEach(cat => cat.items.forEach(it => TOOL_REGISTRY.set(slug(it.name), it)));
+
+  // A small, original pushpin glyph (two rotated rounded bars) rather than a
+  // borrowed icon-set asset — kept intentionally simple so it reads clearly
+  // at 13-14px.
+  const PIN_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><g transform="rotate(45 12 12)"><rect x="10.4" y="3" width="3.2" height="10.5" rx="1.6"/><rect x="11.1" y="13.5" width="1.8" height="7.5" rx="0.9"/></g></svg>';
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.tile-pin-btn');
+    if(!btn || btn.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if(togglePin(btn.dataset.pinId)){
+      renderCategories();
+      revealBoxes(false);
+      applyLang(lang);
+    }
+  });
+
+  // Placeholder slot inside the pinned board — dashed, muted, purely
+  // decorative (no click target) — just to show 5 spots are available.
+  function ghostTileHTML(){
+    return `<div class="tile tile-ghost" aria-hidden="true"><div class="tile-ghost-inner">${PIN_ICON}</div></div>`;
+  }
+
   function tileHTML(it){
     // Phosphor icons instead of a brand logo on purpose: real provider logos
     // are trademarked and we're not affiliated with any of them, so using
@@ -1248,12 +1350,17 @@
     const icon = it.icon
       ? `<span class="tile-icon" aria-hidden="true">${it.icon}</span>`
       : `<span class="tile-icon">${monogram(it.name)}</span>`;
+    const id = slug(it.name);
+    const pin = isPinned(id);
+    const full = !pin && pinned.length >= PIN_MAX;
     return `
       <div class="tile">
-        <a class="tile-inner" href="${it.url}" target="_blank" rel="noopener" data-goatcounter-click="tool-${slug(it.name)}">
+        <a class="tile-inner" href="${it.url}" target="_blank" rel="noopener" data-goatcounter-click="tool-${id}">
           ${icon}
           <span class="tile-name">${it.name}</span>
         </a>
+        <button type="button" class="tile-pin-btn${pin ? ' pinned' : ''}" data-pin-id="${id}"
+          aria-label="${pin ? 'Von Angepinnt entfernen' : 'Anpinnen'}" aria-pressed="${pin}"${full ? ' disabled' : ''}>${PIN_ICON}</button>
         <button type="button" class="tile-info-btn" aria-label="Info" aria-expanded="false">i</button>
         <div class="tile-pop">
           <span class="tile-tag">${it.tag}</span>
@@ -1279,12 +1386,12 @@
   // plain, non-wide boxes). Rabatte carries `poolHere`, which places the
   // "Weitere Anlaufstellen" pool box (see solo below) as its own full-width
   // row right after, rather than at the very end of the page.
-  const solo = [];
-  let boxNum = 0;
-  let prevBox = null; // last top-level element appended to main, for stackBelow
-
-  function makeBox(cat, { wide = false } = {}){
-    boxNum++;
+  //
+  // The whole board is built by this one function instead of a bare script
+  // block so it can be re-run whenever pin state changes — pinning or
+  // unpinning a tool rebuilds the entire board from scratch, exactly like
+  // the very first render, rather than trying to patch box numbers in place.
+  function makeBox(cat, boxNum, { wide = false } = {}){
     const num = String(boxNum).padStart(2,'0');
     const box = document.createElement('section');
     box.className = 'category-box' + (wide ? ' wide' : '');
@@ -1305,8 +1412,7 @@
   // tools sharing a "Lernen & Prüfungsvorbereitung" slot) — the box is wide
   // (full page width, one horizontal row of groups, like Wohnungssuche)
   // so a --mini-cols equal to the group count always fits comfortably.
-  function makePoolBox(){
-    boxNum++;
+  function makePoolBox(solo, boxNum){
     const num = String(boxNum).padStart(2,'0');
     const box = document.createElement('section');
     box.className = 'category-box wide';
@@ -1332,39 +1438,84 @@
     return box;
   }
 
-  DATA.forEach((cat) => {
-    if(cat.items.length <= 1 || cat.pool){
-      solo.push(cat);
-      return;
-    }
+  // The "Angepinnt" board — box 01, right under the hero, whenever at least
+  // one tool is pinned (never shown otherwise). Horizontal like Wohnungssuche,
+  // always 5 columns wide: real tiles for whatever is pinned, dashed "ghost"
+  // tiles filling the rest so the row always reads as "5 spots available".
+  function makePinnedBox(boxNum){
+    const num = String(boxNum).padStart(2,'0');
+    const items = pinned.map(id => TOOL_REGISTRY.get(id)).filter(Boolean);
+    const ghosts = Math.max(PIN_MAX - items.length, 0);
+    const box = document.createElement('section');
+    box.className = 'category-box wide';
+    box.innerHTML = `
+      <div class="cat-head">
+        <span class="cat-index">${num}</span>
+        <div>
+          <h2 class="cat-title" data-de="Angepinnt" data-en="Pinned"></h2>
+          <p class="cat-sub" data-de="Deine Favoriten auf einen Blick – bis zu 5" data-en="Your favourites at a glance – up to 5"></p>
+        </div>
+      </div>
+      <div class="tile-row" style="--cols:${PIN_MAX}">
+        ${items.map(tileHTML).join('')}
+        ${Array.from({ length: ghosts }).map(ghostTileHTML).join('')}
+      </div>
+    `;
+    return box;
+  }
 
-    const box = makeBox(cat, { wide: cat.items.length >= 5 });
+  function renderCategories(){
+    main.innerHTML = '';
+    const solo = [];
+    let boxNum = 0;
+    let prevBox = null; // last top-level element appended to main, for stackBelow
 
-    if(cat.stackBelow && prevBox && prevBox.classList.contains('category-box')){
-      const stack = document.createElement('div');
-      stack.className = 'category-stack';
-      main.replaceChild(stack, prevBox);
-      stack.appendChild(prevBox);
-      stack.appendChild(box);
-      prevBox = stack;
-    } else {
+    if(pinned.length){
+      boxNum++;
+      const box = makePinnedBox(boxNum);
       main.appendChild(box);
       prevBox = box;
     }
 
-    if(cat.poolHere && solo.length){
-      const pool = makePoolBox();
-      main.appendChild(pool);
-      prevBox = pool;
-    }
-  });
+    DATA.forEach((cat) => {
+      if(cat.items.length <= 1 || cat.pool){
+        solo.push(cat);
+        return;
+      }
 
-  // Fallback: if nothing in DATA claimed `poolHere` but there are solo
-  // categories anyway, the pool still needs to render somewhere — put it
-  // at the very end.
-  if(solo.length && !DATA.some(cat => cat.poolHere)){
-    main.appendChild(makePoolBox());
+      boxNum++;
+      const box = makeBox(cat, boxNum, { wide: cat.items.length >= 5 });
+
+      if(cat.stackBelow && prevBox && prevBox.classList.contains('category-box')){
+        const stack = document.createElement('div');
+        stack.className = 'category-stack';
+        main.replaceChild(stack, prevBox);
+        stack.appendChild(prevBox);
+        stack.appendChild(box);
+        prevBox = stack;
+      } else {
+        main.appendChild(box);
+        prevBox = box;
+      }
+
+      if(cat.poolHere && solo.length){
+        boxNum++;
+        const pool = makePoolBox(solo, boxNum);
+        main.appendChild(pool);
+        prevBox = pool;
+      }
+    });
+
+    // Fallback: if nothing in DATA claimed `poolHere` but there are solo
+    // categories anyway, the pool still needs to render somewhere — put it
+    // at the very end.
+    if(solo.length && !DATA.some(cat => cat.poolHere)){
+      boxNum++;
+      main.appendChild(makePoolBox(solo, boxNum));
+    }
   }
+
+  renderCategories();
 
   // ---------- "Neu an der HSG" guide page ----------
   // Facts researched from official unisg.ch pages (curriculum, exchange
@@ -1543,30 +1694,36 @@
   document.getElementById('guideList').innerHTML = GUIDE.map(guideSectionHTML).join('');
 
   // Gentle staggered entrance for the boards, plus a scroll-reveal for
-  // whichever ones start below the fold — never a jarring pop-in.
+  // whichever ones start below the fold — never a jarring pop-in. Re-run
+  // (with animate:false) after a pin toggle rebuilds the board, so boxes
+  // that were already on screen just reappear as-is instead of replaying
+  // their entrance animation every time a tool gets pinned or unpinned.
   function settleReveal(box){
     box.classList.remove('reveal');
     box.classList.add('revealed');
   }
-  const boxes = Array.from(document.querySelectorAll('.category-box'));
-  if('IntersectionObserver' in window){
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting){
-          const box = entry.target;
-          box.classList.add('reveal');
-          box.addEventListener('animationend', () => settleReveal(box), { once:true });
-          io.unobserve(box);
-        }
+  function revealBoxes(animate){
+    const boxes = Array.from(document.querySelectorAll('.category-box'));
+    if(animate && 'IntersectionObserver' in window){
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            const box = entry.target;
+            box.classList.add('reveal');
+            box.addEventListener('animationend', () => settleReveal(box), { once:true });
+            io.unobserve(box);
+          }
+        });
+      }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+      boxes.forEach((box, i) => {
+        box.style.animationDelay = `${Math.min(i, 4) * 90}ms`;
+        io.observe(box);
       });
-    }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
-    boxes.forEach((box, i) => {
-      box.style.animationDelay = `${Math.min(i, 4) * 90}ms`;
-      io.observe(box);
-    });
-  } else {
-    boxes.forEach(box => box.classList.add('revealed'));
+    } else {
+      boxes.forEach(box => box.classList.add('revealed'));
+    }
   }
+  revealBoxes(true);
 
   const SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
   const MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>';
