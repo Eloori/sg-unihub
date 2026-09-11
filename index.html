@@ -208,8 +208,13 @@
   /* min-width:0 for the same reason as .tile below: without it a mini-item's
      own content keeps its grid column from shrinking to its fair 1fr share,
      so the two columns end up uneven widths (and everything inside looks
-     off-center) instead of splitting the row evenly. */
-  .mini-item{ display:flex; flex-direction:column; min-width:0; }
+     off-center) instead of splitting the row evenly.
+     grid-column reads a --span custom property (set inline per group, see
+     render code) rather than being set as an inline grid-column itself —
+     same reasoning as --cols on .tile-row below: a custom property lets the
+     mobile breakpoint cleanly redefine the layout instead of having to
+     fight an inline style with !important. */
+  .mini-item{ display:flex; flex-direction:column; min-width:0; grid-column: span var(--span, 1); }
   /* min-height (not a hard-clipped fixed height) sized for a single line —
      keeps the pool box from towering over the boxes beside it and lets its
      tiles sit closer to tiles in a normal category box, while still letting
@@ -604,11 +609,6 @@
        is the one way to read the description — tapping it expands just
        that tile to full width in place, rather than navigating away. */
     .tile-row{ grid-template-columns:repeat(2, 1fr); gap:.7rem; }
-    /* The "Weitere Anlaufstellen" pool nests a single-tile .tile-row inside
-       each mini-item — already arranged into columns by .mini-groups below,
-       so forcing 2 columns in there too would just leave an empty cell
-       beside every one of those single tiles. */
-    .mini-item .tile-row{ grid-template-columns:1fr; }
     .tile-inner{
       height:108px; padding:.85rem .6rem; gap:.5rem;
     }
@@ -657,7 +657,15 @@
       margin:-.35rem 0 0; padding:.7rem 1rem .8rem 1rem;
     }
 
-    .mini-groups{ grid-template-columns:repeat(2, 1fr); gap:1.4rem .9rem; }
+    /* Pairing two mini-groups per row (like desktop) broke as soon as a
+       group could hold more than one tile: a 2-tile group can't share a row
+       with a 1-tile neighbour, so it got pushed to its own row anyway,
+       stranding an empty cell next to whichever 1-tile group came before
+       it. One full-width row per group sidesteps that entirely — simpler,
+       and every group now lays out exactly like a normal category box
+       does on mobile (its own tiles in a 2-column grid). */
+    .mini-groups{ grid-template-columns:1fr; gap:1.6rem; }
+    .mini-item{ grid-column:1 / -1; }
     /* Titles regularly wrap to two lines at this width, so reserve room
        for that instead of the single-line min-height from the base styles. */
     .mini-head{ min-height:3.5rem; margin-bottom:.7rem; }
@@ -795,7 +803,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.3): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.4): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1082,7 +1090,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.10.3</p>
+      <p class="credit">Eloori Interactive · v0.10.4</p>
     </div>
   </footer>
 
@@ -1449,7 +1457,7 @@
       </div>
       <div class="mini-groups" style="--mini-cols:${solo.reduce((n, cat) => n + cat.items.length, 0)}">
         ${solo.map((cat, idx) => `
-          <div class="mini-item" style="grid-column:span ${cat.items.length}">
+          <div class="mini-item" style="--span:${cat.items.length}">
             <div class="mini-head">
               <span class="mini-index">${idx+1}</span>
               <h3 class="mini-title" data-de="${cat.de}" data-en="${cat.en}"></h3>
