@@ -175,11 +175,6 @@
      class keeps the same end state without that side effect. */
   .category-box.revealed{ opacity:1; transform:none; }
   .category-box.wide{ grid-column:1 / -1; }
-  /* The board's default grid stretch would otherwise force a short box
-     (fewer items, one tile row) to inflate to match a taller neighbour in
-     the same row, leaving a big visibly-empty lower half. Boxes flagged
-     `compact` in DATA opt out and just sit at their own natural height. */
-  .category-box.compact{ align-self:start; }
 
   /* Two category boxes stacked into one grid cell (currently Karriere with
      Rabatte & Vergünstigungen beneath it) — see the `stackBelow` render
@@ -226,9 +221,16 @@
     font-family:var(--font-display); font-weight:900; font-size:1rem; line-height:1.3;
     color:var(--accent); font-variant-numeric:tabular-nums;
   }
+  /* min-width:0 so a single long word (e.g. "Prüfungsvorbereitung") can't
+     hold this flex child open wider than its column, forcing it to overflow
+     sideways instead of wrapping — same fix as .mini-item/.tile above.
+     overflow-wrap so that a word still too long for one line on its own
+     (narrow pool columns, long German compounds) breaks mid-word instead of
+     silently overflowing past the edge — same as .tile-name below. */
   .mini-title{
     font-family:var(--font-display); font-weight:700; font-size:.95rem; line-height:1.3;
     display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden;
+    min-width:0; overflow-wrap:break-word;
   }
 
   /* ---------- Tiles ---------- */
@@ -728,7 +730,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.14): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.15): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1013,7 +1015,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.9.14</p>
+      <p class="credit">Eloori Interactive · v0.9.15</p>
     </div>
   </footer>
 
@@ -1078,11 +1080,14 @@
       ]},
     { de:"Lernen & Prüfungsvorbereitung", en:"Learning & Exam Prep",
       subDe:"Zusätzliche Unterstützung vor der Prüfung", subEn:"Extra support before the exam",
-      compact:true,
       items:[
         { name:"Ecoreps", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,58.34l-32-32a8,8,0,0,0-11.32,0l-96,96A8,8,0,0,0,88,128v32a8,8,0,0,0,8,8h32a8,8,0,0,0,5.66-2.34l96-96A8,8,0,0,0,229.66,58.34ZM124.69,152H104V131.31l64-64L188.69,88ZM200,76.69,179.31,56,192,43.31,212.69,64ZM224,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h80a8,8,0,0,1,0,16H48V208H208V128a8,8,0,0,1,16,0Z"/></svg>', url:"https://ecoreps.de/home", tag:"ecoreps.de",
           de:"Kommerzieller Anbieter kostenpflichtiger Repetitorien – kein offizieller Verein, aber unter Studierenden weit verbreitet zur Prüfungsvorbereitung.",
           en:"Commercial provider of paid exam-prep courses – not an official club, but widely used among students to prepare for exams." },
+      ]},
+    { de:"Lernhilfen", en:"Study Aids",
+      subDe:"Lernmaterial pro Kurs, mit Gratis-Vorschau", subEn:"Course-specific study material, previewable for free",
+      items:[
         { name:"ready", url:"https://www.ready.ch/de/courses/?university=2", tag:"ready.ch",
           de:"Kommerzieller Anbieter von Zusammenfassungen, Karteikarten und Musterlösungen zur Prüfungsvorbereitung, teils direkt für einzelne HSG-Kurse zusammengestellt – jeder Kurs lässt sich vor dem Kauf gratis anschauen.",
           en:"Commercial provider of summaries, flashcards and past-exam solutions for exam prep, some put together for specific HSG courses – every course can be previewed for free before you buy it." },
@@ -1286,7 +1291,7 @@
     boxNum++;
     const num = String(boxNum).padStart(2,'0');
     const box = document.createElement('section');
-    box.className = 'category-box' + (wide ? ' wide' : '') + (cat.compact ? ' compact' : '');
+    box.className = 'category-box' + (wide ? ' wide' : '');
     box.innerHTML = `
       <div class="cat-head">
         <span class="cat-index">${num}</span>
