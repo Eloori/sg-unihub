@@ -771,7 +771,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.9.18): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.0): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1056,7 +1056,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.9.18</p>
+      <p class="credit">Eloori Interactive · v0.10.0</p>
     </div>
   </footer>
 
@@ -1328,11 +1328,7 @@
     if(!btn || btn.disabled) return;
     e.preventDefault();
     e.stopPropagation();
-    if(togglePin(btn.dataset.pinId)){
-      renderCategories();
-      revealBoxes(false);
-      applyLang(lang);
-    }
+    if(togglePin(btn.dataset.pinId)) syncPinnedUI();
   });
 
   // Placeholder slot inside the pinned board — dashed, muted, purely
@@ -1447,7 +1443,7 @@
     const items = pinned.map(id => TOOL_REGISTRY.get(id)).filter(Boolean);
     const ghosts = Math.max(PIN_MAX - items.length, 0);
     const box = document.createElement('section');
-    box.className = 'category-box wide';
+    box.className = 'category-box wide pinned-section';
     box.innerHTML = `
       <div class="cat-head">
         <span class="cat-index">${num}</span>
@@ -1516,6 +1512,69 @@
   }
 
   renderCategories();
+
+  // Pinning/unpinning after the initial load goes through this instead of a
+  // full renderCategories() rebuild. Replacing every box's DOM node (as a
+  // full rebuild does) destroys whatever the browser was using as a scroll
+  // anchor, which is what made the page visibly jump on every single pin —
+  // not just when the "Angepinnt" board first appears. This only touches
+  // the pinned board itself, so nothing else the user is looking at is ever
+  // torn down, and a `landmark` box we deliberately never touch lets us
+  // measure exactly how far the page shifted (only possible when the board
+  // appears/disappears — its own size is always constant, ghost tiles
+  // included) and cancel that out by scrolling the same amount.
+  function syncPinnedUI(){
+    const landmark = main.querySelector('.category-box:not(.pinned-section)');
+    const before = landmark ? landmark.getBoundingClientRect().top : null;
+
+    const existing = main.querySelector('.category-box.pinned-section');
+    if(pinned.length){
+      const fresh = makePinnedBox(1); // renumbered below regardless
+      if(existing){
+        main.replaceChild(fresh, existing);
+      } else {
+        main.insertBefore(fresh, main.firstChild);
+      }
+      fresh.classList.add('revealed'); // appears instantly, no entrance animation
+    } else if(existing){
+      existing.remove();
+    }
+
+    renumberBoxes();
+    syncPinButtons();
+    applyLang(lang);
+
+    if(landmark && document.body.contains(landmark) && before !== null){
+      window.scrollBy(0, landmark.getBoundingClientRect().top - before);
+    }
+  }
+
+  // Box numbers are assigned by position, so any time a box gets inserted
+  // or removed above others (only the pinned board does this), everything
+  // after it needs to shift by one — cheap text-only update, no rebuild.
+  function renumberBoxes(){
+    Array.from(main.querySelectorAll(':scope > .category-box, :scope > .category-stack > .category-box'))
+      .forEach((box, i) => {
+        const idx = box.querySelector('.cat-index');
+        if(idx) idx.textContent = String(i + 1).padStart(2, '0');
+      });
+  }
+
+  // The tile a user just pinned/unpinned can exist in up to two places at
+  // once (its original category, and now the pinned board) — both get a
+  // fresh element from makePinnedBox/tileHTML already reflecting the new
+  // state, but every OTHER tile's button (for the 5-slot cap) is on an
+  // untouched, preserved element and needs its disabled state refreshed.
+  function syncPinButtons(){
+    const full = pinned.length >= PIN_MAX;
+    main.querySelectorAll('.tile-pin-btn').forEach(btn => {
+      const isPin = isPinned(btn.dataset.pinId);
+      btn.classList.toggle('pinned', isPin);
+      btn.setAttribute('aria-pressed', String(isPin));
+      btn.setAttribute('aria-label', isPin ? 'Von Angepinnt entfernen' : 'Anpinnen');
+      btn.disabled = !isPin && full;
+    });
+  }
 
   // ---------- "Neu an der HSG" guide page ----------
   // Facts researched from official unisg.ch pages (curriculum, exchange
