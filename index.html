@@ -289,6 +289,25 @@
      specificity than the plain hover rule above, so no !important needed. */
   .tile:hover .tile-pin-btn:disabled, .tile:focus-within .tile-pin-btn:disabled{ opacity:.3; }
 
+  /* A tiny custom tooltip instead of the native title="" one — the browser's
+     built-in tooltip needs the cursor to sit still on the button for a good
+     second, which in practice this small, only-appears-on-hover button
+     almost never gets, so it never seemed to show up at all. This shows the
+     same text (still set as title/aria-label too, for accessibility) the
+     instant the button itself is hovered or focused. */
+  .tile-pin-btn::after{
+    content: attr(data-tip);
+    position:absolute; top:calc(100% + .5rem); left:0; z-index:20;
+    background:var(--surface); border:1px solid var(--line); border-radius:8px;
+    padding:.3rem .6rem; font-family:var(--font-mono); font-size:.7rem; color:var(--text-2);
+    white-space:nowrap; box-shadow:0 8px 16px -6px var(--shadow);
+    opacity:0; transform:translateY(-4px); pointer-events:none;
+    transition:opacity .15s ease, transform .15s ease;
+  }
+  .tile-pin-btn:hover::after, .tile-pin-btn:focus-visible::after{
+    opacity:1; transform:translateY(0);
+  }
+
   /* Only shown on phones (see the mobile breakpoint below) — on wider
      screens the description is already reachable by hovering the tile. */
   .tile-info-btn{ display:none; }
@@ -776,7 +795,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.2): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.3): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1063,7 +1082,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.10.2</p>
+      <p class="credit">Eloori Interactive · v0.10.3</p>
     </div>
   </footer>
 
@@ -1802,13 +1821,16 @@
   function applyLang(lang){
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-de]').forEach(el => { el.textContent = el.dataset[lang] || el.dataset.de; });
-    // Same [data-de]/[data-en] idea, but for a native title/aria-label
-    // tooltip instead of visible text — e.g. the pin button, which explains
-    // itself on hover rather than needing a permanent on-page label.
+    // Same [data-de]/[data-en] idea, but for a title/aria-label tooltip
+    // instead of visible text — e.g. the pin button, which explains itself
+    // on hover rather than needing a permanent on-page label. data-tip
+    // feeds the custom CSS tooltip (content: attr(data-tip)); title/
+    // aria-label are kept alongside it for accessibility.
     document.querySelectorAll('[data-de-title]').forEach(el => {
       const t = (lang === 'en' ? el.dataset.enTitle : el.dataset.deTitle) || el.dataset.deTitle;
       el.title = t;
       el.setAttribute('aria-label', t);
+      el.dataset.tip = t;
     });
     // Impressum/Datenschutz keep each language as a fully separate block (real
     // links + <br> line breaks that a textContent-only swap can't render), so
