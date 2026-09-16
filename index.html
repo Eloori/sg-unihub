@@ -466,11 +466,12 @@
     content:''; position:absolute; left:0; top:.55em; width:6px; height:6px; border-radius:50%;
     background:var(--accent);
   }
-  .guide-source{
-    display:inline-flex; align-items:center; gap:.4rem;
+  .guide-sources{
+    display:flex; flex-wrap:wrap; align-items:center; gap:.15rem .5rem;
     font-family:var(--font-mono); font-size:.72rem; color:var(--text-2);
-    text-decoration:none; border-top:1px solid var(--line); padding-top:.9rem; margin-top:.3rem;
+    border-top:1px solid var(--line); padding-top:.9rem; margin-top:.3rem;
   }
+  .guide-source{ color:var(--text-2); text-decoration:none; }
   .guide-source:hover{ color:var(--accent); }
 
   .guide-table{ width:100%; border-collapse:collapse; margin:0 0 1.2rem; font-size:.86rem; }
@@ -876,7 +877,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.8): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v0.10.9): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1163,7 +1164,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v0.10.8</p>
+      <p class="credit">Eloori Interactive · v0.10.9</p>
     </div>
   </footer>
 
@@ -1909,7 +1910,10 @@
       },
       footnoteDe:"* Kernfächer im Detail: Bei BWL u. a. Accounting/Controlling/Auditing, Wirtschafts- & Steuerrecht, Corporate Finance, Grundlagen der Informatik, Operations Management, Makro-/Mikroökonomik II, Marketing, Leadership & HR, Statistik sowie Strategic Management. Bei VWL u. a. Mikro-/Makroökonomik II+III, Data Analytics I+II, Mathematical Tools for Economists und Programmierung. Die vollständige, verbindliche Kursliste für jeden Major findest du auf courses.unisg.ch. Angaben zur Sprachregel (Mindestcredits je Unterrichtssprache, Englisch-C2-Anforderung) gemäss den Prüfungsordnungen der einzelnen Studienschwerpunkte auf erlasse.unisg.ch (Stand 1. August 2026).",
       footnoteEn:"* For Law (BLaw) and Computer Science, unisg.ch doesn't break out electives separately – they sit inside the overall core area. For Law (BLaw) no official figures for a Capstone/thesis could be found; for specifics it's worth contacting that programme office directly. Core courses in detail: BWL includes Accounting/Controlling/Auditing, Business & Tax Law, Corporate Finance, Fundamentals of Computer Science, Operations Management, Macro-/Microeconomics II, Marketing, Leadership & HR, Statistics and Strategic Management. VWL includes Micro-/Macroeconomics II+III, Data Analytics I+II, Mathematical Tools for Economists and Programming. The full, binding course list for each Major is on courses.unisg.ch. Figures on the language-credit rule (minimum credits per teaching language, English C2 requirement) are based on the examination regulations for each Major, published on erlasse.unisg.ch (as of 1 August 2026).",
-      source:{ label:"unisg.ch – Assessmentjahr StO O26 & Major-Curricula", url:"https://www.unisg.ch/en/studying/programmes/bachelor/major-in-business-administration-bwl/curriculum/" }
+      sources:[
+        { label:"unisg.ch – Assessmentjahr StO O26 & Major-Curricula", url:"https://www.unisg.ch/en/studying/programmes/bachelor/major-in-business-administration-bwl/curriculum/" },
+        { label:"erlasse.unisg.ch – Prüfungsordnungen der Studienschwerpunkte", url:"https://erlasse.unisg.ch/lexoverview-home/lex-II_C_11?effective-from=20260801" },
+      ]
     },
     { de:"Bidding: Wie du an Kursplätze kommst", en:"Bidding: how you get into courses",
       points:[
@@ -2046,9 +2050,10 @@
         ${tableNote}
         ${table}
         ${footnote}
-        <a class="guide-source" href="${topic.source.url}" target="_blank" rel="noopener">
-          <span data-de="Quelle" data-en="Source"></span>: ${topic.source.label}
-        </a>
+        <div class="guide-sources">
+          <span data-de="Quelle" data-en="Source"></span>:
+          ${(topic.sources || [topic.source]).map((s,si) => `${si > 0 ? ' · ' : ' '}<a class="guide-source" href="${s.url}" target="_blank" rel="noopener">${s.label}</a>`).join('')}
+        </div>
       </section>`;
   }
   document.getElementById('guideList').innerHTML = GUIDE.map(guideSectionHTML).join('');
