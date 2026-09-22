@@ -488,6 +488,23 @@
   .guide-source{ color:var(--text-2); text-decoration:none; }
   .guide-source:hover{ color:var(--accent); }
 
+  /* ---------- Bachelorarbeit step-by-step guide ---------- */
+  .thesis-steps{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.9rem; }
+  .thesis-step{
+    display:flex; gap:1rem; align-items:flex-start; padding:1.1rem 1.2rem;
+    border-radius:12px; background:var(--accent-soft); border:1px solid var(--line);
+  }
+  .thesis-step-num{
+    flex:0 0 auto; width:2.1rem; height:2.1rem; border-radius:50%;
+    background:var(--accent); color:var(--accent-contrast);
+    font-family:var(--font-display); font-weight:800; font-size:.92rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .thesis-step-body{ min-width:0; }
+  .thesis-step-body h3{ margin:0 0 .35rem; font-family:var(--font-display); font-weight:700; font-size:1rem; color:var(--text); }
+  .thesis-step-body p{ margin:0 0 .8rem; font-size:.9rem; line-height:1.55; color:var(--text); }
+  .thesis-step-links{ display:flex; flex-wrap:wrap; gap:.5rem; }
+
   .guide-table{ width:100%; border-collapse:collapse; margin:0 0 1.2rem; font-size:.86rem; }
   .guide-table th, .guide-table td{
     text-align:left; padding:.6rem .7rem; border-bottom:1px solid var(--line);
@@ -588,9 +605,10 @@
   @media (prefers-reduced-motion: reduce){ .modal-overlay, .modal-box{ transition:none; } }
   .legal-address{ font-style:normal; line-height:1.6; }
 
-  /* ---------- Dashboard CTA into the Journey ---------- */
+  /* ---------- Dashboard CTAs into the Journey / Bachelorarbeit guide ---------- */
+  .hero-ctas{ display:flex; flex-wrap:wrap; gap:.7rem; margin:0 0 1.6rem; }
   .journey-cta{
-    display:inline-flex; align-items:center; gap:.55rem; margin:0 0 1.6rem;
+    display:inline-flex; align-items:center; gap:.55rem; margin:0;
     font-family:var(--font-body); font-weight:700; font-size:.88rem; color:var(--accent);
     text-decoration:none; padding:.55rem 1rem; border-radius:999px;
     border:1px solid var(--accent); background:var(--accent-soft);
@@ -644,7 +662,8 @@
     .topbar{ gap:.7rem; }
     .wordmark{ font-size:clamp(2.3rem, 11vw, 6.4rem); margin:.9rem 0 .8rem; }
     .tagline{ font-size:1.05rem; margin-bottom:1.3rem; }
-    .journey-cta{ margin-bottom:2rem; font-size:.86rem; padding:.55rem 1rem; }
+    .hero-ctas{ margin-bottom:2rem; }
+    .journey-cta{ font-size:.86rem; padding:.55rem 1rem; }
     .category-box{ padding:1.3rem 1.2rem 1.5rem; border-radius:12px; }
     .cat-title{ font-size:1.2rem; }
     .page-title{ margin:.5rem 0 .6rem; }
@@ -823,6 +842,7 @@
         <a href="#dashboard" data-view-link="dashboard" data-de="Dashboard" data-en="Dashboard"></a>
         <a href="#guide" data-view-link="guide" data-de="Neu an der HSG" data-en="New to HSG"></a>
         <a href="#journey" data-view-link="journey" data-de="Studienreise" data-en="Your Journey"></a>
+        <a href="#bachelorarbeit" data-view-link="bachelorarbeit" data-de="Bachelorarbeit" data-en="Bachelor's Thesis"></a>
         <a href="#business" data-view-link="business" data-de="Business Case" data-en="Business Case"></a>
         <a href="#contact" data-view-link="contact" data-de="Kontakt" data-en="Contact"></a>
       </nav>
@@ -843,10 +863,16 @@
         <p class="tagline" data-de="Alle wichtigen Tools, Clubs und Angebote der HSG – an einem Ort."
            data-en="Every essential HSG tool, club and offer – in one place."></p>
 
-        <a class="journey-cta" href="#journey" data-view-link="journey">
-          <span class="journey-cta-icon">▶</span>
-          <span data-de="Studienreise ansehen" data-en="Watch the Journey"></span>
-        </a>
+        <div class="hero-ctas">
+          <a class="journey-cta" href="#journey" data-view-link="journey">
+            <span class="journey-cta-icon">▶</span>
+            <span data-de="Studienreise ansehen" data-en="Watch the Journey"></span>
+          </a>
+          <a class="journey-cta" href="#bachelorarbeit" data-view-link="bachelorarbeit">
+            <span class="journey-cta-icon">✎</span>
+            <span data-de="Bachelorarbeit-Guide" data-en="Bachelor's Thesis Guide"></span>
+          </a>
+        </div>
       </header>
 
       <div class="board" id="categories"></div>
@@ -879,6 +905,127 @@
       </div>
     </section>
 
+    <section class="view" id="view-bachelorarbeit" data-view="bachelorarbeit" hidden>
+      <header class="page-head">
+        <span class="eyebrow" data-de="Abschlussarbeit" data-en="Final thesis"></span>
+        <h1 class="page-title" data-de="Bachelorarbeit" data-en="Bachelor's Thesis"></h1>
+        <p class="page-sub" data-de="Von der Themensuche bis zur Verteidigung – die wichtigsten Fakten, Fristen und Quellen für deine Bachelorarbeit."
+           data-en="From finding a topic to your defence – the key facts, deadlines and sources for your Bachelor's thesis."></p>
+      </header>
+
+      <div class="category-box guide-section">
+        <div class="contact-links">
+          <a class="journey-link" href="https://universitaetstgallen.sharepoint.com/sites/BBWL/SitePages/en/Bachelor's%20Thesis.aspx?locale=en" target="_blank" rel="noopener" data-goatcounter-click="ba-source-myhsg">→ MyHSG</a>
+          <a class="journey-link" href="https://universitaetstgallen.sharepoint.com/sites/BachelorDE/Freigegebene%20Dokumente/BWL/2026_%20BA%20Thesis%20Info_BBWL%20Bachelorarbeitsinformationstag_EN.pdf?web=1" target="_blank" rel="noopener" data-goatcounter-click="ba-source-pdf" data-de="→ Infopräsentation (PDF)" data-en="→ Info presentation (PDF)"></a>
+          <a class="journey-link" href="https://prisma-hsg.ch/articles/das-grosse-finale-die-bachelorarbeit-an-der-hsg/" target="_blank" rel="noopener" data-goatcounter-click="ba-source-prisma" data-de="→ prisma-Artikel" data-en="→ prisma article"></a>
+        </div>
+
+        <p class="guide-intro" data-de="Die Bachelorarbeit ist neben dem Capstone-Projekt der zweite grosse Abschlussbaustein des Bachelors BWL – eine eigenständige wissenschaftliche Arbeit mit Bezug zur Betriebswirtschaftslehre, wahlweise geschrieben innerhalb einer deiner Vertiefungen."
+           data-en="Alongside the Capstone Project, the Bachelor's thesis is the second major final component of the BWL Bachelor's – an independent piece of academic work with a business-administration focus, optionally written within one of your specializations."></p>
+
+        <div class="guide-note" data-de="prisma hat einen lesenswerten Erfahrungsbericht über die Bachelorarbeit an der HSG veröffentlicht – ein guter Einstieg, bevor du selbst loslegst. Du findest ihn oben bei den Quellen."
+             data-en="prisma has published a great read on what writing a Bachelor's thesis at HSG is actually like – a good starting point before you dive in yourself. You'll find it above under the source links."></div>
+
+        <div class="guide-stats">
+          <div class="guide-stat">
+            <span class="guide-stat-value" data-de="12 ECTS" data-en="12 ECTS"></span>
+            <span class="guide-stat-label" data-de="entspricht ca. 360 Stunden Arbeitsaufwand" data-en="roughly 360 hours of work"></span>
+          </div>
+          <div class="guide-stat">
+            <span class="guide-stat-value" data-de="Max. 40 Seiten" data-en="Max. 40 pages"></span>
+            <span class="guide-stat-label" data-de="ohne Anhang und Literaturverzeichnis" data-en="excluding appendices and bibliography"></span>
+          </div>
+          <div class="guide-stat">
+            <span class="guide-stat-value" data-de="Ab Semester 5" data-en="From semester 5"></span>
+            <span class="guide-stat-label" data-de="empfohlen, nach dem Assessmentjahr Pflicht" data-en="recommended; the Assessment Year must be completed first"></span>
+          </div>
+          <div class="guide-stat">
+            <span class="guide-stat-value" data-de="4× pro Jahr" data-en="4× a year"></span>
+            <span class="guide-stat-label" data-de="feste Einreichungstermine, Anmeldung jederzeit möglich" data-en="fixed submission windows; registration is possible any time"></span>
+          </div>
+        </div>
+
+        <ul class="guide-points">
+          <li data-de="Anmeldung jederzeit über My Thesis – dabei legst du auch Sprache, Betreuung und Form deiner Verteidigung fest."
+              data-en="Register any time via My Thesis – this is also where you set the language, supervisor and format of your defence."></li>
+          <li data-de="Die mündliche Verteidigung ist obligatorisch: als Zwischen- oder Schlusspräsentation, vor Ort oder online, benotet oder unbenotet – der Entscheid liegt bei deiner Betreuungsperson."
+              data-en="The oral defence is mandatory: as an interim or final presentation, on campus or online, graded or ungraded – your supervisor decides the exact format."></li>
+          <li data-de="Für eine bestandene Arbeit brauchst du mindestens die Note 4.0; eine Wiederholung mit neuem Thema ist einmalig möglich."
+              data-en="You need a grade of at least 4.0 to pass; if you don't get there, one repeat attempt with a new topic is possible."></li>
+          <li data-de="Die Schreibphase beginnt mit dem ersten Tag deiner Anmeldeperiode und dauert maximal 12 Monate; eine Fristverlängerung (max. 2× 3 Monate) ist bei triftigem Grund und mit Zustimmung deiner Betreuung möglich."
+              data-en="Your writing period starts on the first day of your registration window and runs for a maximum of 12 months; an extension (up to 2× 3 months) is possible for a valid reason and with your supervisor's consent."></li>
+          <li data-de="KI-Tools wie ChatGPT darfst du unterstützend nutzen, musst sie aber sauber zitieren – sie ersetzen keine wissenschaftliche Literatur. Undokumentierter Einsatz kann zu Notenabzug oder als wissenschaftliches Fehlverhalten gewertet werden."
+              data-en="You may use AI tools like ChatGPT to support your writing, but you must cite them properly – they're not a substitute for academic literature. Undocumented use can lead to a grade deduction or count as academic misconduct."></li>
+          <li data-de="Schreibst du innerhalb einer Vertiefung, reichst du bei der Anmeldung zusätzlich ein Exposé ein (1–3 Seiten): Titel, Forschungsfrage, Vertiefung, methodisches Vorgehen und Literatur."
+              data-en="If you're writing within a specialization, you also submit a short exposé at registration (1–3 pages): title, research question, specialization, methodology and literature."></li>
+        </ul>
+      </div>
+
+      <div class="category-box guide-section">
+        <h2 class="contact-partner-title" data-de="Schritt für Schritt" data-en="Step by step"></h2>
+        <ol class="thesis-steps">
+          <li class="thesis-step">
+            <div class="thesis-step-num">1</div>
+            <div class="thesis-step-body">
+              <h3 data-de="Thema &amp; Betreuung finden" data-en="Find a topic &amp; supervisor"></h3>
+              <p data-de="Ob du ein eigenes Thema mitbringst oder eines vorgeschlagen bekommst – die Suche lohnt sich früh zu starten, sie kann einiges an Zeit in Anspruch nehmen. Betreuen dürfen dich grundsätzlich alle promovierten Dozierenden der HSG. Am einfachsten kommst du über Dozierende rein, mit denen du bereits nach der Vorlesung gesprochen hast – sonst helfen dir Studyond oder der Topic Marketplace weiter."
+                 data-en="Whether you bring your own topic or pick up a proposed one, start the search early – it can take a while. In principle, any HSG faculty member with a completed doctorate can supervise you. The easiest way in is through a lecturer you've already talked to after class – otherwise Studyond or the Topic Marketplace can point you in the right direction."></p>
+              <div class="thesis-step-links">
+                <a class="journey-link" href="https://studyond.com/" target="_blank" rel="noopener" data-goatcounter-click="ba-step-studyond">→ Studyond</a>
+                <a class="journey-link" href="https://businessplatform.unisg.ch/csp?id=ww_topic_marketplace" target="_blank" rel="noopener" data-goatcounter-click="ba-step-marketplace" data-de="→ Topic Marketplace" data-en="→ Topic Marketplace"></a>
+              </div>
+            </div>
+          </li>
+          <li class="thesis-step">
+            <div class="thesis-step-num">2</div>
+            <div class="thesis-step-body">
+              <h3 data-de="Bei My Thesis anmelden" data-en="Register on My Thesis"></h3>
+              <p data-de="Sobald deine Betreuung steht, meldest du deine Bachelorarbeit über My Thesis an. Dabei legst du unter anderem Titel, Sprache und die Form deiner mündlichen Verteidigung fest – überleg dir diese Angaben gut, nachträglich lassen sie sich nicht mehr ändern."
+                 data-en="Once you have a supervisor, register your Bachelor's thesis via My Thesis. This is where you set your title, language and the format of your oral defence – think them through, since they can't be changed afterwards."></p>
+              <div class="thesis-step-links">
+                <a class="journey-link" href="https://businessplatform.unisg.ch/csp?id=ww_my_thesis" target="_blank" rel="noopener" data-goatcounter-click="ba-step-mythesis" data-de="→ My Thesis" data-en="→ My Thesis"></a>
+              </div>
+            </div>
+          </li>
+          <li class="thesis-step">
+            <div class="thesis-step-num">3</div>
+            <div class="thesis-step-body">
+              <h3 data-de="Schreiben" data-en="Write your thesis"></h3>
+              <p data-de="Für den formalen Aufbau gibt es offizielle Vorlagen auf Deutsch und Englisch – daran hältst du dich am besten von Anfang an, statt später alles umzuformatieren."
+                 data-en="There are official formatting templates in German and English – best to use one from day one instead of reformatting everything later."></p>
+              <div class="thesis-step-links">
+                <a class="journey-link" href="https://universitaetstgallen.sharepoint.com/sites/PruefungenDE/Freigegebene%20Dokumente/Schriftliche%20Arbeiten_Written%20examinations/Vorlage%20Abschlussarbeiten%20DE.docx?web=1" target="_blank" rel="noopener" data-goatcounter-click="ba-step-template-de" data-de="→ Vorlage DE" data-en="→ Template DE"></a>
+                <a class="journey-link" href="https://universitaetstgallen.sharepoint.com/sites/PruefungenDE/Freigegebene%20Dokumente/Schriftliche%20Arbeiten_Written%20examinations/Vorlage%20Abschlussarbeiten%20EN.docx?web=1" target="_blank" rel="noopener" data-goatcounter-click="ba-step-template-en" data-de="→ Vorlage EN" data-en="→ Template EN"></a>
+              </div>
+            </div>
+          </li>
+          <li class="thesis-step">
+            <div class="thesis-step-num">4</div>
+            <div class="thesis-step-body">
+              <h3 data-de="Richtig zitieren" data-en="Cite correctly"></h3>
+              <p data-de="Für die Literaturverwaltung kannst du dir als HSG-Studierende:r kostenlos eine EndNote-Lizenz sichern – das spart dir gerade bei einer längeren Arbeit viel manuelle Formatierarbeit."
+                 data-en="As an HSG student you can get a free EndNote licence for managing your references – a real time-saver on manual formatting, especially for a longer piece of work."></p>
+              <div class="thesis-step-links">
+                <a class="journey-link" href="https://www.unisg.ch/en/university/library/research-and-publishing/academic-research-and-writing/reference-management-with-endnote/" target="_blank" rel="noopener" data-goatcounter-click="ba-step-endnote" data-de="→ EndNote beantragen" data-en="→ Get EndNote"></a>
+              </div>
+            </div>
+          </li>
+          <li class="thesis-step">
+            <div class="thesis-step-num">5</div>
+            <div class="thesis-step-body">
+              <h3 data-de="Quellen finden" data-en="Find your sources"></h3>
+              <p data-de="Wissenschaftliche Literatur findest du über HSG Swisscovery – für den kostenlosen PDF-Download brauchst du eine Verbindung über das Uni-VPN oder mindestens Eduroam. Um schnell relevante, peer-reviewte Quellen zu einem Thema zu finden, eignet sich Consensus."
+                 data-en="HSG Swisscovery is where you find academic literature – for free PDF downloads you need to be connected via the university VPN or at least Eduroam. To quickly surface relevant, peer-reviewed sources on a topic, Consensus is a handy tool."></p>
+              <div class="thesis-step-links">
+                <a class="journey-link" href="https://hsg.swisscovery.slsp.ch/discovery/search?vid=41SLSP_HSG:HSGswisscovery" target="_blank" rel="noopener" data-goatcounter-click="ba-step-swisscovery" data-de="→ Swisscovery" data-en="→ Swisscovery"></a>
+                <a class="journey-link" href="https://consensus.app" target="_blank" rel="noopener" data-goatcounter-click="ba-step-consensus" data-de="→ Consensus" data-en="→ Consensus"></a>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
     <section class="view" id="view-business" data-view="business" hidden>
       <header class="page-head">
         <span class="eyebrow" data-de="Hintergrund" data-en="Background"></span>
@@ -892,7 +1039,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.0.0): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.0): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1179,7 +1326,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.0.0</p>
+      <p class="credit">Eloori Interactive · v1.1.0</p>
     </div>
   </footer>
 
@@ -2241,7 +2388,7 @@ SOFTWARE.`;
   });
 
   // ---------- View routing (Dashboard / Neu an der HSG / Kontakt) ----------
-  const VIEWS = ['dashboard','guide','journey','business','contact','impressum','datenschutz'];
+  const VIEWS = ['dashboard','guide','journey','bachelorarbeit','business','contact','impressum','datenschutz'];
   function showView(name){
     if(!VIEWS.includes(name)) name = 'dashboard';
     document.querySelectorAll('.view').forEach(v => { v.hidden = v.dataset.view !== name; });
@@ -2300,9 +2447,9 @@ SOFTWARE.`;
       links:[{ tool:"CSC", url:"https://csc.unisg.ch/" }] },
     { de:"Bachelorarbeit", en:"Bachelor's thesis",
       titleDe:"Der krönende Abschluss", titleEn:"The final milestone",
-      bodyDe:"Zum Abschluss steht die Bachelorarbeit an. Suchst du eine Betreuungsperson oder möchtest mit einem Unternehmen zusammenarbeiten, bietet Studyond ein umfassendes Netzwerk.",
-      bodyEn:"At the end comes your Bachelor's thesis. If you're looking for a supervisor or want to work with a company, Studyond offers an extensive network.",
-      links:[{ tool:"Studyond", url:"https://studyond.com/" }] },
+      bodyDe:"Zum Abschluss steht die Bachelorarbeit an. Suchst du eine Betreuungsperson oder möchtest mit einem Unternehmen zusammenarbeiten, bietet Studyond ein umfassendes Netzwerk. Alles Wichtige zu Ablauf, Fristen und Quellen findest du im eigenen Bachelorarbeit-Guide.",
+      bodyEn:"At the end comes your Bachelor's thesis. If you're looking for a supervisor or want to work with a company, Studyond offers an extensive network. For everything on process, deadlines and sources, check out the dedicated Bachelor's Thesis guide.",
+      links:[{ tool:"Studyond", url:"https://studyond.com/" }, { labelDe:"Bachelorarbeit-Guide", labelEn:"Bachelor's Thesis guide", url:"#bachelorarbeit" }] },
   ];
 
   let journeyIndex = 0;
@@ -2314,7 +2461,17 @@ SOFTWARE.`;
       <h2 class="journey-title" data-de="${step.titleDe}" data-en="${step.titleEn}"></h2>
       <p class="journey-body" data-de="${step.bodyDe}" data-en="${step.bodyEn}"></p>
       <div class="journey-links">
-        ${step.links.map(l => `<a class="journey-link" href="${l.url}" target="_blank" rel="noopener" data-goatcounter-click="journey-${slug(l.tool)}">→ ${l.tool}</a>`).join('')}
+        ${step.links.map(l => {
+          // A link into another in-page view (e.g. the Bachelorarbeit guide, "#bachelorarbeit")
+          // navigates within the SPA rather than opening a new tab, and its label
+          // needs translating since it's descriptive text, not a tool's proper name.
+          const internal = l.url.startsWith('#');
+          const targetAttrs = internal ? '' : ' target="_blank" rel="noopener"';
+          if(l.labelDe){
+            return `<a class="journey-link" href="${l.url}"${targetAttrs} data-de="→ ${l.labelDe}" data-en="→ ${l.labelEn}" data-goatcounter-click="journey-${slug(l.labelDe)}"></a>`;
+          }
+          return `<a class="journey-link" href="${l.url}"${targetAttrs} data-goatcounter-click="journey-${slug(l.tool)}">→ ${l.tool}</a>`;
+        }).join('')}
       </div>
     `;
     slide.classList.remove('enter');
