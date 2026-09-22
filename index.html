@@ -166,7 +166,7 @@
   @media (prefers-reduced-motion: reduce){
     .hero, .wordmark .slash, .ctrl-btn svg.spin{animation:none !important;}
     .tile-inner, .tile-pop, .ctrl-btn, .tile-icon, .cat-index{transition:none !important;}
-    .category-box{opacity:1 !important; transform:none !important; animation:none !important;}
+    .category-box, .thesis-step{opacity:1 !important; transform:none !important; animation:none !important;}
     html.theme-transition, html.theme-transition *{transition:none !important;}
   }
 
@@ -493,7 +493,13 @@
   .thesis-step{
     display:flex; gap:1rem; align-items:flex-start; padding:1.1rem 1.2rem;
     border-radius:12px; background:var(--accent-soft); border:1px solid var(--line);
+    opacity:0; transform:translateY(18px);
   }
+  .thesis-step.reveal{ animation:riseIn .5s cubic-bezier(.22,.61,.36,1) forwards; }
+  /* Same finished-animation-class swap as .category-box.revealed, and for the
+     same reason: a still-assigned CSS animation opens a permanent stacking
+     context, which would trap a step's hover/focus state behind the next one. */
+  .thesis-step.revealed{ opacity:1; transform:none; }
   .thesis-step-num{
     flex:0 0 auto; width:2.1rem; height:2.1rem; border-radius:50%;
     background:var(--accent); color:var(--accent-contrast);
@@ -909,8 +915,8 @@
       <header class="page-head">
         <span class="eyebrow" data-de="Abschlussarbeit" data-en="Final thesis"></span>
         <h1 class="page-title" data-de="Bachelorarbeit" data-en="Bachelor's Thesis"></h1>
-        <p class="page-sub" data-de="Von der Themensuche bis zur Verteidigung – die wichtigsten Fakten, Fristen und Quellen für deine Bachelorarbeit."
-           data-en="From finding a topic to your defence – the key facts, deadlines and sources for your Bachelor's thesis."></p>
+        <p class="page-sub" data-de="Von der Themensuche bis zur Verteidigung: die wichtigsten Fakten, Fristen und Quellen für deine Bachelorarbeit."
+           data-en="From finding a topic to your defence: the key facts, deadlines and sources for your Bachelor's thesis."></p>
       </header>
 
       <div class="category-box guide-section">
@@ -920,11 +926,16 @@
           <a class="journey-link" href="https://prisma-hsg.ch/articles/das-grosse-finale-die-bachelorarbeit-an-der-hsg/" target="_blank" rel="noopener" data-goatcounter-click="ba-source-prisma" data-de="→ prisma-Artikel" data-en="→ prisma article"></a>
         </div>
 
-        <p class="guide-intro" data-de="Die Bachelorarbeit ist neben dem Capstone-Projekt der zweite grosse Abschlussbaustein des Bachelors BWL – eine eigenständige wissenschaftliche Arbeit mit Bezug zur Betriebswirtschaftslehre, wahlweise geschrieben innerhalb einer deiner Vertiefungen."
-           data-en="Alongside the Capstone Project, the Bachelor's thesis is the second major final component of the BWL Bachelor's – an independent piece of academic work with a business-administration focus, optionally written within one of your specializations."></p>
+        <p class="guide-intro" data-de="Die Bachelorarbeit ist neben dem Capstone-Projekt der zweite grosse Abschlussbaustein des Bachelors BWL: eine eigenständige wissenschaftliche Arbeit mit Bezug zur Betriebswirtschaftslehre, wahlweise geschrieben innerhalb einer deiner Vertiefungen."
+           data-en="Alongside the Capstone Project, the Bachelor's thesis is the second major final component of the BWL Bachelor's: an independent piece of academic work with a business-administration focus, optionally written within one of your specializations."></p>
 
-        <div class="guide-note" data-de="prisma hat einen lesenswerten Erfahrungsbericht über die Bachelorarbeit an der HSG veröffentlicht – ein guter Einstieg, bevor du selbst loslegst. Du findest ihn oben bei den Quellen."
-             data-en="prisma has published a great read on what writing a Bachelor's thesis at HSG is actually like – a good starting point before you dive in yourself. You'll find it above under the source links."></div>
+        <p class="guide-footnote">
+          <span data-de="Nicht sicher, was eine Vertiefung ist?" data-en="Not sure what a specialization is?"></span>
+          <a class="guide-source" href="#guide" data-view-link="guide" data-de="→ Neu an der HSG" data-en="→ New to HSG"></a>
+        </p>
+
+        <div class="guide-note" data-de="prisma hat einen lesenswerten Erfahrungsbericht über die Bachelorarbeit an der HSG veröffentlicht: ein guter Einstieg, bevor du selbst loslegst. Du findest ihn oben bei den Quellen."
+             data-en="prisma has published a great read on what writing a Bachelor's thesis at HSG is actually like: a good starting point before you dive in yourself. You'll find it above under the source links."></div>
 
         <div class="guide-stats">
           <div class="guide-stat">
@@ -945,19 +956,36 @@
           </div>
         </div>
 
+        <div class="guide-table-wrap">
+          <table class="guide-table">
+            <thead><tr>
+              <th data-de="Semester" data-en="Term"></th>
+              <th data-de="Ungefährer Einreichungstermin" data-en="Approximate submission window"></th>
+            </tr></thead>
+            <tbody>
+              <tr><td data-de="Frühlingssemester" data-en="Spring semester"></td><td data-de="Mitte Februar" data-en="Mid-February"></td></tr>
+              <tr><td data-de="Sommersemester" data-en="Summer semester"></td><td data-de="Mitte Mai" data-en="Mid-May"></td></tr>
+              <tr><td data-de="Herbstsemester" data-en="Autumn semester"></td><td data-de="Mitte August" data-en="Mid-August"></td></tr>
+              <tr><td data-de="Wintersemester" data-en="Winter semester"></td><td data-de="Mitte November" data-en="Mid-November"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="guide-footnote" data-de="Die genauen Tagesdaten verschieben sich von Jahr zu Jahr leicht. Die verbindliche, aktuelle Übersicht findest du auf My Thesis."
+           data-en="The exact dates shift slightly from year to year. Check My Thesis for the current, binding overview."></p>
+
         <ul class="guide-points">
-          <li data-de="Anmeldung jederzeit über My Thesis – dabei legst du auch Sprache, Betreuung und Form deiner Verteidigung fest."
-              data-en="Register any time via My Thesis – this is also where you set the language, supervisor and format of your defence."></li>
-          <li data-de="Die mündliche Verteidigung ist obligatorisch: als Zwischen- oder Schlusspräsentation, vor Ort oder online, benotet oder unbenotet – der Entscheid liegt bei deiner Betreuungsperson."
-              data-en="The oral defence is mandatory: as an interim or final presentation, on campus or online, graded or ungraded – your supervisor decides the exact format."></li>
+          <li data-de="Anmeldung jederzeit über My Thesis: Dabei legst du auch Sprache, Betreuung und Form deiner Verteidigung fest."
+              data-en="Register any time via My Thesis: this is also where you set the language, supervisor and format of your defence."></li>
+          <li data-de="Die mündliche Verteidigung ist obligatorisch: als Zwischen- oder Schlusspräsentation, vor Ort oder online, benotet oder unbenotet. Der Entscheid liegt bei deiner Betreuungsperson."
+              data-en="The oral defence is mandatory: as an interim or final presentation, on campus or online, graded or ungraded. Your supervisor decides the exact format."></li>
           <li data-de="Für eine bestandene Arbeit brauchst du mindestens die Note 4.0; eine Wiederholung mit neuem Thema ist einmalig möglich."
               data-en="You need a grade of at least 4.0 to pass; if you don't get there, one repeat attempt with a new topic is possible."></li>
           <li data-de="Die Schreibphase beginnt mit dem ersten Tag deiner Anmeldeperiode und dauert maximal 12 Monate; eine Fristverlängerung (max. 2× 3 Monate) ist bei triftigem Grund und mit Zustimmung deiner Betreuung möglich."
               data-en="Your writing period starts on the first day of your registration window and runs for a maximum of 12 months; an extension (up to 2× 3 months) is possible for a valid reason and with your supervisor's consent."></li>
-          <li data-de="KI-Tools wie ChatGPT darfst du unterstützend nutzen, musst sie aber sauber zitieren – sie ersetzen keine wissenschaftliche Literatur. Undokumentierter Einsatz kann zu Notenabzug oder als wissenschaftliches Fehlverhalten gewertet werden."
-              data-en="You may use AI tools like ChatGPT to support your writing, but you must cite them properly – they're not a substitute for academic literature. Undocumented use can lead to a grade deduction or count as academic misconduct."></li>
-          <li data-de="Schreibst du innerhalb einer Vertiefung, reichst du bei der Anmeldung zusätzlich ein Exposé ein (1–3 Seiten): Titel, Forschungsfrage, Vertiefung, methodisches Vorgehen und Literatur."
-              data-en="If you're writing within a specialization, you also submit a short exposé at registration (1–3 pages): title, research question, specialization, methodology and literature."></li>
+          <li data-de="KI-Tools wie ChatGPT darfst du unterstützend nutzen, musst sie aber sauber zitieren. Sie ersetzen keine wissenschaftliche Literatur, und undokumentierter Einsatz kann zu Notenabzug oder als wissenschaftliches Fehlverhalten gewertet werden."
+              data-en="You may use AI tools like ChatGPT to support your writing, but you must cite them properly. They're not a substitute for academic literature, and undocumented use can lead to a grade deduction or count as academic misconduct."></li>
+          <li data-de="Schreibst du innerhalb einer Vertiefung, reichst du bei der Anmeldung zusätzlich ein Exposé ein (1 bis 3 Seiten): Titel, Forschungsfrage, Vertiefung, methodisches Vorgehen und Literatur."
+              data-en="If you're writing within a specialization, you also submit a short exposé at registration (1 to 3 pages): title, research question, specialization, methodology and literature."></li>
         </ul>
       </div>
 
@@ -968,8 +996,8 @@
             <div class="thesis-step-num">1</div>
             <div class="thesis-step-body">
               <h3 data-de="Thema &amp; Betreuung finden" data-en="Find a topic &amp; supervisor"></h3>
-              <p data-de="Ob du ein eigenes Thema mitbringst oder eines vorgeschlagen bekommst – die Suche lohnt sich früh zu starten, sie kann einiges an Zeit in Anspruch nehmen. Betreuen dürfen dich grundsätzlich alle promovierten Dozierenden der HSG. Am einfachsten kommst du über Dozierende rein, mit denen du bereits nach der Vorlesung gesprochen hast – sonst helfen dir Studyond oder der Topic Marketplace weiter."
-                 data-en="Whether you bring your own topic or pick up a proposed one, start the search early – it can take a while. In principle, any HSG faculty member with a completed doctorate can supervise you. The easiest way in is through a lecturer you've already talked to after class – otherwise Studyond or the Topic Marketplace can point you in the right direction."></p>
+              <p data-de="Ob du ein eigenes Thema mitbringst oder eines vorgeschlagen bekommst: Die Suche lohnt sich früh zu starten, sie kann einiges an Zeit in Anspruch nehmen. Betreuen dürfen dich grundsätzlich alle promovierten Dozierenden der HSG. Am einfachsten kommst du über Dozierende rein, mit denen du bereits nach der Vorlesung gesprochen hast. Sonst helfen dir Studyond oder der Topic Marketplace weiter."
+                 data-en="Whether you bring your own topic or pick up a proposed one, start the search early: it can take a while. In principle, any HSG faculty member with a completed doctorate can supervise you. The easiest way in is through a lecturer you've already talked to after class. Otherwise, Studyond or the Topic Marketplace can point you in the right direction."></p>
               <div class="thesis-step-links">
                 <a class="journey-link" href="https://studyond.com/" target="_blank" rel="noopener" data-goatcounter-click="ba-step-studyond">→ Studyond</a>
                 <a class="journey-link" href="https://businessplatform.unisg.ch/csp?id=ww_topic_marketplace" target="_blank" rel="noopener" data-goatcounter-click="ba-step-marketplace" data-de="→ Topic Marketplace" data-en="→ Topic Marketplace"></a>
@@ -980,8 +1008,8 @@
             <div class="thesis-step-num">2</div>
             <div class="thesis-step-body">
               <h3 data-de="Bei My Thesis anmelden" data-en="Register on My Thesis"></h3>
-              <p data-de="Sobald deine Betreuung steht, meldest du deine Bachelorarbeit über My Thesis an. Dabei legst du unter anderem Titel, Sprache und die Form deiner mündlichen Verteidigung fest – überleg dir diese Angaben gut, nachträglich lassen sie sich nicht mehr ändern."
-                 data-en="Once you have a supervisor, register your Bachelor's thesis via My Thesis. This is where you set your title, language and the format of your oral defence – think them through, since they can't be changed afterwards."></p>
+              <p data-de="Sobald deine Betreuung steht, meldest du deine Bachelorarbeit über My Thesis an. Dabei legst du unter anderem Titel, Sprache und die Form deiner mündlichen Verteidigung fest. Überleg dir diese Angaben gut, denn nachträglich lassen sie sich nicht mehr ändern."
+                 data-en="Once you have a supervisor, register your Bachelor's thesis via My Thesis. This is where you set your title, language and the format of your oral defence. Think them through, since they can't be changed afterwards."></p>
               <div class="thesis-step-links">
                 <a class="journey-link" href="https://businessplatform.unisg.ch/csp?id=ww_my_thesis" target="_blank" rel="noopener" data-goatcounter-click="ba-step-mythesis" data-de="→ My Thesis" data-en="→ My Thesis"></a>
               </div>
@@ -991,8 +1019,8 @@
             <div class="thesis-step-num">3</div>
             <div class="thesis-step-body">
               <h3 data-de="Schreiben" data-en="Write your thesis"></h3>
-              <p data-de="Für den formalen Aufbau gibt es offizielle Vorlagen auf Deutsch und Englisch – daran hältst du dich am besten von Anfang an, statt später alles umzuformatieren."
-                 data-en="There are official formatting templates in German and English – best to use one from day one instead of reformatting everything later."></p>
+              <p data-de="Für den formalen Aufbau gibt es offizielle Vorlagen auf Deutsch und Englisch. Daran hältst du dich am besten von Anfang an, statt später alles umzuformatieren."
+                 data-en="There are official formatting templates in German and English. It's best to use one from day one instead of reformatting everything later."></p>
               <div class="thesis-step-links">
                 <a class="journey-link" href="https://universitaetstgallen.sharepoint.com/sites/PruefungenDE/Freigegebene%20Dokumente/Schriftliche%20Arbeiten_Written%20examinations/Vorlage%20Abschlussarbeiten%20DE.docx?web=1" target="_blank" rel="noopener" data-goatcounter-click="ba-step-template-de" data-de="→ Vorlage DE" data-en="→ Template DE"></a>
                 <a class="journey-link" href="https://universitaetstgallen.sharepoint.com/sites/PruefungenDE/Freigegebene%20Dokumente/Schriftliche%20Arbeiten_Written%20examinations/Vorlage%20Abschlussarbeiten%20EN.docx?web=1" target="_blank" rel="noopener" data-goatcounter-click="ba-step-template-en" data-de="→ Vorlage EN" data-en="→ Template EN"></a>
@@ -1003,8 +1031,8 @@
             <div class="thesis-step-num">4</div>
             <div class="thesis-step-body">
               <h3 data-de="Richtig zitieren" data-en="Cite correctly"></h3>
-              <p data-de="Für die Literaturverwaltung kannst du dir als HSG-Studierende:r kostenlos eine EndNote-Lizenz sichern – das spart dir gerade bei einer längeren Arbeit viel manuelle Formatierarbeit."
-                 data-en="As an HSG student you can get a free EndNote licence for managing your references – a real time-saver on manual formatting, especially for a longer piece of work."></p>
+              <p data-de="Für die Literaturverwaltung kannst du dir als HSG-Studierende:r kostenlos eine EndNote-Lizenz sichern. Das spart dir gerade bei einer längeren Arbeit viel manuelle Formatierarbeit."
+                 data-en="As an HSG student you can get a free EndNote licence for managing your references. It's a real time-saver on manual formatting, especially for a longer piece of work."></p>
               <div class="thesis-step-links">
                 <a class="journey-link" href="https://www.unisg.ch/en/university/library/research-and-publishing/academic-research-and-writing/reference-management-with-endnote/" target="_blank" rel="noopener" data-goatcounter-click="ba-step-endnote" data-de="→ EndNote beantragen" data-en="→ Get EndNote"></a>
               </div>
@@ -1014,8 +1042,8 @@
             <div class="thesis-step-num">5</div>
             <div class="thesis-step-body">
               <h3 data-de="Quellen finden" data-en="Find your sources"></h3>
-              <p data-de="Wissenschaftliche Literatur findest du über HSG Swisscovery – für den kostenlosen PDF-Download brauchst du eine Verbindung über das Uni-VPN oder mindestens Eduroam. Um schnell relevante, peer-reviewte Quellen zu einem Thema zu finden, eignet sich Consensus."
-                 data-en="HSG Swisscovery is where you find academic literature – for free PDF downloads you need to be connected via the university VPN or at least Eduroam. To quickly surface relevant, peer-reviewed sources on a topic, Consensus is a handy tool."></p>
+              <p data-de="Wissenschaftliche Literatur findest du über HSG Swisscovery. Für den kostenlosen PDF-Download brauchst du eine Verbindung über das Uni-VPN oder mindestens Eduroam. Um schnell relevante, peer-reviewte Quellen zu einem Thema zu finden, eignet sich Consensus."
+                 data-en="HSG Swisscovery is where you find academic literature. For free PDF downloads you need to be connected via the university VPN or at least Eduroam. To quickly surface relevant, peer-reviewed sources on a topic, Consensus is a handy tool."></p>
               <div class="thesis-step-links">
                 <a class="journey-link" href="https://hsg.swisscovery.slsp.ch/discovery/search?vid=41SLSP_HSG:HSGswisscovery" target="_blank" rel="noopener" data-goatcounter-click="ba-step-swisscovery" data-de="→ Swisscovery" data-en="→ Swisscovery"></a>
                 <a class="journey-link" href="https://consensus.app" target="_blank" rel="noopener" data-goatcounter-click="ba-step-consensus" data-de="→ Consensus" data-en="→ Consensus"></a>
@@ -2256,6 +2284,36 @@
     }
   }
   revealBoxes(true);
+
+  // Same idea as revealBoxes(), but for the numbered Bachelorarbeit steps —
+  // each card fades in as it scrolls into view, staggered a bit more than the
+  // category boxes since there are more of them in a row.
+  function revealSteps(){
+    const steps = Array.from(document.querySelectorAll('.thesis-step'));
+    if(!steps.length) return;
+    if('IntersectionObserver' in window){
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            const step = entry.target;
+            step.classList.add('reveal');
+            step.addEventListener('animationend', () => {
+              step.classList.remove('reveal');
+              step.classList.add('revealed');
+            }, { once:true });
+            io.unobserve(step);
+          }
+        });
+      }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+      steps.forEach((step, i) => {
+        step.style.animationDelay = `${Math.min(i, 4) * 90}ms`;
+        io.observe(step);
+      });
+    } else {
+      steps.forEach(step => step.classList.add('revealed'));
+    }
+  }
+  revealSteps();
 
   const SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
   const MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>';
