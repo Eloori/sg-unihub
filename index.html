@@ -208,6 +208,16 @@
   .cat-title{ font-family:var(--font-display); font-weight:700; font-size:1.25rem; margin:0 0 .2rem; text-wrap:balance;}
   .cat-sub{ margin:0; color:var(--text-2); font-size:.86rem; line-height:1.4;}
 
+  /* Small pill in the top-right corner of a category box's header — used by
+     the Studi-Deals box to flag itself at a glance without labelling every
+     single tile "Partner" (the box subtitle already explains what it is). */
+  .cat-badge{
+    margin-left:auto; align-self:flex-start; white-space:nowrap;
+    font-family:var(--font-mono); font-weight:600; font-size:.68rem; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--accent); background:var(--accent-soft); border:1px solid var(--line);
+    border-radius:999px; padding:.3rem .75rem; line-height:1;
+  }
+
   /* A handful of categories only have a single link — giving each its own big
      box looked unbalanced next to the categories with several. They're grouped
      into one shared "quick access" strip instead, each keeping its own number
@@ -366,6 +376,18 @@
     display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden;
     font-family:var(--font-display); font-weight:700; font-size:1.03rem;
     line-height:1.25; overflow-wrap:break-word;
+  }
+
+  /* Studi-Deals tiles swap the usual icon+name for a big value + the
+     company's name underneath — same clickable card, popover and hover
+     behaviour as every other tile, just a different inner layout. */
+  .deal-value{
+    font-family:var(--font-display); font-weight:800; font-size:1.5rem; color:var(--accent);
+    line-height:1.15;
+  }
+  .tile-inner--deal .tile-name{
+    font-family:var(--font-mono); font-weight:600; font-size:.76rem; color:var(--text-2);
+    letter-spacing:.01em;
   }
 
   /* The floating info card: anchored to the tile, clamped to the row's own
@@ -1050,7 +1072,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.7): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.8): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1363,7 +1385,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.1.7</p>
+      <p class="credit">Eloori Interactive · v1.1.8</p>
     </div>
   </footer>
 
@@ -1410,6 +1432,31 @@
         { name:"Room Booking", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,216H208V40a16,16,0,0,0-16-16H64A16,16,0,0,0,48,40V216H24a8,8,0,0,0,0,16H232a8,8,0,0,0,0-16Zm-40,0H176V40h16ZM64,40h96V216H64Zm80,92a12,12,0,1,1-12-12A12,12,0,0,1,144,132Z"/></svg>', url:"https://apps.unisg.ch/gmr/", tag:"apps.unisg.ch/gmr",
           de:"Kostenlos einen Gruppenraum für Lerngruppen, Projektarbeit oder Präsentationsvorbereitung reservieren.",
           en:"Book a free group room for study groups, project work or presentation prep." },
+      ]},
+    // Not a normal tool list — real, named discount partners, each with a
+    // big value + the company name as the label (see `special` handling in
+    // renderCategories / makeDealsBox below) instead of the usual icon+name
+    // tile. Deliberately not labelled "Partner" anywhere in the UI; the
+    // small "Deals" badge in the corner is the only marker.
+    { special:'deals', de:"Studi-Deals St. Gallen", en:"Student Deals St.Gallen",
+      subDe:"Vergünstigungen für Studierende in der Stadt St.Gallen", subEn:"Discounts for students in the city of St.Gallen",
+      badgeDe:"Deals", badgeEn:"Deals",
+      items:[
+        { name:"Orell Füssli", valueDe:"-20%", valueEn:"-20%", url:"https://www.orellfuessli.ch/bonusprogramme/uebersicht/education-card", tag:"orellfuessli.ch",
+          de:"Mit der kostenlosen Education Card gibt's dauerhaft 20% Rabatt auf fast das gesamte Sortiment plus Gratis-Lieferung in der Schweiz – für Studierende und Lernende ab 6 Monaten Ausbildungsdauer.",
+          en:"The free Education Card gives students and trainees (6+ months) a permanent 20% discount on almost the entire range, plus free delivery within Switzerland." },
+        { name:"Activ Fitness", valueDe:"–CHF 100", valueEn:"–CHF 100", url:"https://www.activfitness.ch/abofinder/", tag:"activfitness.ch",
+          de:"Studierenden-Abo mit einem Vorteil von CHF 100 – gültig bis 29 Jahre bei einem Studienpensum von mindestens 50%, mit gültigem Ausweis.",
+          en:"Student subscription with a CHF 100 advantage – valid up to age 29 with a study load of at least 50%, with a valid student ID." },
+        { name:"Konzert und Theater", valueDe:"CHF 20", valueEn:"CHF 20", url:"https://www.konzertundtheater.ch/tickets-und-abos/u30-club/", tag:"konzertundtheater.ch",
+          de:"U30 Club: Tickets für Konzerte und Theater für CHF 20 pro Vorstellung (inkl. Vorverkauf ab Kategorie 2) – kostenlose Anmeldung pro Saison, Ausweis bei der Vorstellung mitbringen.",
+          en:"U30 Club: tickets to concerts and theatre for CHF 20 per show (including advance sales from price category 2) – free seasonal registration, bring your ID to the show." },
+        { name:"UBS", valueDe:"+CHF 50", valueEn:"+CHF 50", url:"https://www.ubs.com/ch/de/services/accounts-and-cards/young.html", tag:"ubs.com",
+          de:"Kostenloses Jugend- und Studierendenkonto (bis 26, als Studierende:r bis 30 Jahre) mit allen Vorteilen eines normalen UBS-Kontos – inkl. CHF 50 Willkommensbonus in KeyClub-Punkten.",
+          en:"Free youth and student account (under 26, or students up to 30) with all the benefits of a regular UBS account – plus a CHF 50 welcome bonus in KeyClub points." },
+        { name:"Printwerk", valueDe:"ab CHF 0.15", valueEn:"from CHF 0.15", url:"https://www.print-werk.ch/en/preise-fur-druck-und-ausrustarbeiten", tag:"print-werk.ch",
+          de:"Spezielle Studierendenpreise für Bachelor- und Masterarbeiten: Druck s/w ab CHF 0.15 pro Seite, farbig ab CHF 0.50 pro Seite.",
+          en:"Special student pricing for Bachelor's and Master's theses: black/white printing from CHF 0.15 per page, colour from CHF 0.50 per page." },
       ]},
     { de:"Sport & Gesundheit", en:"Sport & Wellness",
       subDe:"Bewegung neben dem Studium", subEn:"Staying active alongside your studies",
@@ -1698,6 +1745,46 @@
       </div>`;
   }
 
+  // Studi-Deals tile: same clickable card + info popover as tileHTML, but a
+  // big value and the company name instead of an icon+name — see the
+  // `.deal-value`/`.tile-inner--deal` CSS above. Not pinnable (no pin
+  // button): these aren't "tools" in the Dashboard sense.
+  function dealTileHTML(it){
+    const id = slug(it.name);
+    return `
+      <div class="tile" data-pin-id="${id}">
+        <a class="tile-inner tile-inner--deal" href="${it.url}" target="_blank" rel="noopener" data-goatcounter-click="deal-${id}">
+          <span class="deal-value" data-de="${it.valueDe}" data-en="${it.valueEn}"></span>
+          <span class="tile-name">${it.name}</span>
+        </a>
+        <button type="button" class="tile-info-btn" aria-label="Info" aria-expanded="false">i</button>
+        <div class="tile-pop">
+          <span class="tile-tag">${it.tag}</span>
+          <span class="tile-desc" data-de="${it.de.replace(/"/g,'&quot;')}" data-en="${it.en.replace(/"/g,'&quot;')}"></span>
+        </div>
+      </div>`;
+  }
+
+  // Studi-Deals box: same category-box shell as makeBox, plus the small
+  // corner badge and the deal-tile layout instead of the usual tile grid.
+  function makeDealsBox(cat, boxNum){
+    const num = String(boxNum).padStart(2,'0');
+    const box = document.createElement('section');
+    box.className = 'category-box wide';
+    box.innerHTML = `
+      <div class="cat-head">
+        <span class="cat-index">${num}</span>
+        <div>
+          <h2 class="cat-title" data-de="${cat.de}" data-en="${cat.en}"></h2>
+          <p class="cat-sub" data-de="${cat.subDe}" data-en="${cat.subEn}"></p>
+        </div>
+        <span class="cat-badge" data-de="${cat.badgeDe}" data-en="${cat.badgeEn}"></span>
+      </div>
+      <div class="tile-row" style="--cols:${cat.items.length}">${cat.items.map(dealTileHTML).join('')}</div>
+    `;
+    return box;
+  }
+
   const main = document.getElementById('categories');
 
   // Categories with several links get their own box, laid out in a fixed
@@ -1807,6 +1894,14 @@
     }
 
     DATA.forEach((cat) => {
+      if(cat.special === 'deals'){
+        boxNum++;
+        const box = makeDealsBox(cat, boxNum);
+        main.appendChild(box);
+        prevBox = box;
+        return;
+      }
+
       if(cat.items.length <= 1 || cat.pool){
         solo.push(cat);
         return;
