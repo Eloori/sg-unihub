@@ -1116,7 +1116,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.20): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.21): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1437,7 +1437,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.1.20</p>
+      <p class="credit">Eloori Interactive · v1.1.21</p>
     </div>
   </footer>
 
@@ -1495,8 +1495,8 @@
         // Card placement here, test period 02.11.2026-31.03.2027 — revisit
         // with them around then to confirm whether it continues.
         { name:"Orell Füssli", group:"partner", valueDe:"-20%", valueEn:"-20%", url:"https://www.orellfuessli.ch/education-card/anmelden?utm_source=sg_unihub&utm_medium=digital&utm_campaign=fs27", tag:"orellfuessli.ch",
-          de:"Ob Bücher fürs Studium oder Unterhaltung für die Semesterferien: Mit der kostenlosen Education Card profitierst du bei Orell Füssli von 20% Dauerrabatt, portofreier Lieferung und weiteren Vorteilen.",
-          en:"Whether it's books for your studies or entertainment for the semester break: with the free Education Card, you get a permanent 20% discount at Orell Füssli, free shipping, and other benefits." },
+          de:"Ob Bücher fürs Studium oder Unterhaltung für die Semesterferien: Mit der kostenlosen <strong>Education Card</strong> profitierst du bei Orell Füssli von 20% Dauerrabatt, portofreier Lieferung und weiteren Vorteilen.",
+          en:"Whether it's books for your studies or entertainment for the semester break: with the free <strong>Education Card</strong>, you get a permanent 20% discount at Orell Füssli, free shipping, and other benefits." },
         { name:"Activ Fitness", group:"deals", valueDe:"–CHF 100", valueEn:"–CHF 100", url:"https://www.activfitness.ch/abofinder/", tag:"activfitness.ch",
           de:"Studierenden-Abo mit einem Vorteil von CHF 100 – gültig bis 29 Jahre bei einem Studienpensum von mindestens 50%, mit gültigem Ausweis.",
           en:"Student subscription with a CHF 100 advantage – valid up to age 29 with a study load of at least 50%, with a valid student ID." },
@@ -1775,6 +1775,16 @@
     return `<div class="tile tile-ghost" aria-hidden="true"><div class="tile-ghost-inner">${PIN_ICON}</div></div>`;
   }
 
+  // .tile-desc is rendered via innerHTML (see applyLang) so a description can
+  // deliberately include a hardcoded <strong> (e.g. Orell Füssli's "Education
+  // Card"). Escaping & and " here, but not < / >, keeps that intentional
+  // markup working while still making plain text safe to parse as HTML —
+  // a bare "&" in a description (e.g. "Prüfungen & Noten") would otherwise
+  // read as the start of an HTML entity once it's no longer just textContent.
+  function escDesc(s){
+    return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+  }
+
   function tileHTML(it){
     // Phosphor icons instead of a brand logo on purpose: real provider logos
     // are trademarked and we're not affiliated with any of them, so using
@@ -1799,7 +1809,7 @@
         <button type="button" class="tile-info-btn" aria-label="Info" aria-expanded="false">i</button>
         <div class="tile-pop">
           <span class="tile-tag">${it.tag}</span>
-          <span class="tile-desc" data-de="${it.de.replace(/"/g,'&quot;')}" data-en="${it.en.replace(/"/g,'&quot;')}"></span>
+          <span class="tile-desc" data-de="${escDesc(it.de)}" data-en="${escDesc(it.en)}"></span>
         </div>
       </div>`;
   }
@@ -1819,7 +1829,7 @@
         <button type="button" class="tile-info-btn" aria-label="Info" aria-expanded="false">i</button>
         <div class="tile-pop">
           <span class="tile-tag">${it.tag}</span>
-          <span class="tile-desc" data-de="${it.de.replace(/"/g,'&quot;')}" data-en="${it.en.replace(/"/g,'&quot;')}"></span>
+          <span class="tile-desc" data-de="${escDesc(it.de)}" data-en="${escDesc(it.en)}"></span>
         </div>
       </div>`;
   }
@@ -2540,7 +2550,16 @@
 
   function applyLang(lang){
     document.documentElement.lang = lang;
-    document.querySelectorAll('[data-de]').forEach(el => { el.textContent = el.dataset[lang] || el.dataset.de; });
+    // Every [data-de] text comes from this file, not from anything a user
+    // types, so textContent is the safe default throughout. The one
+    // exception is .tile-desc (a tool/deal's popover description): those
+    // strings may contain a hardcoded <strong> (e.g. to bold "Education
+    // Card" in the Orell Füssli text) and are rendered via innerHTML so
+    // that markup actually shows as bold instead of literal angle brackets.
+    document.querySelectorAll('[data-de]').forEach(el => {
+      const text = el.dataset[lang] || el.dataset.de;
+      if(el.classList.contains('tile-desc')) el.innerHTML = text; else el.textContent = text;
+    });
     // Same [data-de]/[data-en] idea, but for a title/aria-label tooltip
     // instead of visible text — e.g. the pin button, which explains itself
     // on hover rather than needing a permanent on-page label. data-tip
