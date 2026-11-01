@@ -1116,7 +1116,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.19): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.20): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1437,7 +1437,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.1.19</p>
+      <p class="credit">Eloori Interactive · v1.1.20</p>
     </div>
   </footer>
 
@@ -1490,9 +1490,13 @@
       // back from, "deals" for the rest. groupLabels holds that frame text.
       groupLabels:{ partner:{de:"Partner", en:"Partner"}, deals:{de:"Deals", en:"Deals"} },
       items:[
-        { name:"Orell Füssli", group:"partner", valueDe:"-20%", valueEn:"-20%", url:"https://www.orellfuessli.ch/bonusprogramme/uebersicht/education-card", tag:"orellfuessli.ch",
-          de:"Mit der kostenlosen Education Card gibt's dauerhaft 20% Rabatt auf fast das gesamte Sortiment plus Gratis-Lieferung in der Schweiz – für Studierende und Lernende ab 6 Monaten Ausbildungsdauer.",
-          en:"The free Education Card gives students and trainees (6+ months) a permanent 20% discount on almost the entire range, plus free delivery within Switzerland." },
+        // Copy, link and tracking params straight from Orell Füssli's own
+        // content briefing (30.10.2026, Chiara Vissa) for the pilot Education
+        // Card placement here, test period 02.11.2026-31.03.2027 — revisit
+        // with them around then to confirm whether it continues.
+        { name:"Orell Füssli", group:"partner", valueDe:"-20%", valueEn:"-20%", url:"https://www.orellfuessli.ch/education-card/anmelden?utm_source=sg_unihub&utm_medium=digital&utm_campaign=fs27", tag:"orellfuessli.ch",
+          de:"Ob Bücher fürs Studium oder Unterhaltung für die Semesterferien: Mit der kostenlosen Education Card profitierst du bei Orell Füssli von 20% Dauerrabatt, portofreier Lieferung und weiteren Vorteilen.",
+          en:"Whether it's books for your studies or entertainment for the semester break: with the free Education Card, you get a permanent 20% discount at Orell Füssli, free shipping, and other benefits." },
         { name:"Activ Fitness", group:"deals", valueDe:"–CHF 100", valueEn:"–CHF 100", url:"https://www.activfitness.ch/abofinder/", tag:"activfitness.ch",
           de:"Studierenden-Abo mit einem Vorteil von CHF 100 – gültig bis 29 Jahre bei einem Studienpensum von mindestens 50%, mit gültigem Ausweis.",
           en:"Student subscription with a CHF 100 advantage – valid up to age 29 with a study load of at least 50%, with a valid student ID." },
