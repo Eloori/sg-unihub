@@ -208,34 +208,6 @@
   .cat-title{ font-family:var(--font-display); font-weight:700; font-size:1.25rem; margin:0 0 .2rem; text-wrap:balance;}
   .cat-sub{ margin:0; color:var(--text-2); font-size:.86rem; line-height:1.4;}
 
-  /* Studi-Deals groups its tiles into labelled frames (one around the
-     partner we've actually heard back from, one around the rest) instead of
-     a single badge for the whole box. Each frame borrows the exact border/
-     radius language of a tile, and its label sits on the border like a
-     fieldset legend — same small-pill typography as everywhere else on the
-     board, just positioned to read as "this is what's inside this frame"
-     rather than "this is what's inside this box". --cols-template is set
-     inline per box (see makeDealsBox) so the two frames are proportional to
-     how many tiles they actually hold; the mobile rule below stacks them. */
-  .deal-groups{
-    display:grid; gap:1.1rem; align-items:stretch;
-    grid-template-columns:var(--cols-template, 1fr 4fr);
-  }
-  .deal-frame{
-    position:relative; min-width:0;
-    border:1px solid var(--line); border-radius:14px;
-    padding:1.6rem .9rem .9rem;
-  }
-  .deal-frame-label{
-    position:absolute; top:-.62rem; left:.9rem; z-index:1;
-    background:var(--surface);
-    font-family:var(--font-mono); font-weight:600; font-size:.68rem; letter-spacing:.04em; text-transform:uppercase;
-    color:var(--accent); padding:0 .5rem; line-height:1.2;
-  }
-  /* A frame holding just one tile keeps that tile at its natural width
-     instead of reserving a second (empty) grid column for it. */
-  .deal-frame--single .tile-row{ grid-template-columns:1fr; }
-
   /* A handful of categories only have a single link — giving each its own big
      box looked unbalanced next to the categories with several. They're grouped
      into one shared "quick access" strip instead, each keeping its own number
@@ -820,13 +792,6 @@
        (1 for a solo group, 2 for a wide one) instead of always assuming 2. */
     .mini-item .tile-row{ grid-template-columns:repeat(var(--cols, 1), 1fr); }
 
-    /* Studi-Deals: the two frames stack instead of sitting side by side —
-       the 4-tile frame keeps the normal 2-column phone grid (nothing to
-       override there), only the 1-tile frame needs .deal-frame--single
-       above to stay single-column. */
-    .deal-groups{ grid-template-columns:1fr; gap:1.3rem; }
-    .deal-frame{ padding:1.5rem .8rem .8rem; }
-
     .journey-slide{ padding:1.5rem 1.3rem 1.7rem; min-height:0; }
     .journey-controls{ gap:.8rem; }
     .journey-links{ flex-direction:column; align-items:flex-start; }
@@ -1116,7 +1081,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.21): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.22): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1437,7 +1402,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.1.21</p>
+      <p class="credit">Eloori Interactive · v1.1.22</p>
     </div>
   </footer>
 
@@ -1482,31 +1447,30 @@
     // Not a normal tool list — real, named discount partners, each with a
     // big value + the company name as the label (see `special` handling in
     // renderCategories / makeDealsBox below) instead of the usual icon+name
-    // tile, grouped into labelled frames by `group` ("partner" vs "deals").
+    // tile. One flat row, in order of appearance — Orell Füssli (the one
+    // company we're actually partnered with) goes first: the natural
+    // first-glance spot in a left-to-right row of equal-size tiles, on both
+    // desktop (a single row) and mobile (top-left of the 2-column wrap).
     { special:'deals', de:"Studi-Deals St. Gallen", en:"Student Deals St.Gallen",
       subDe:"Vergünstigungen für Studierende in der Stadt St.Gallen", subEn:"Discounts for students in the city of St.Gallen",
-      // Each item's `group` picks which labelled frame it lands in (see
-      // makeDealsBox) — "partner" for the one company we've actually heard
-      // back from, "deals" for the rest. groupLabels holds that frame text.
-      groupLabels:{ partner:{de:"Partner", en:"Partner"}, deals:{de:"Deals", en:"Deals"} },
       items:[
         // Copy, link and tracking params straight from Orell Füssli's own
         // content briefing (30.10.2026, Chiara Vissa) for the pilot Education
         // Card placement here, test period 02.11.2026-31.03.2027 — revisit
         // with them around then to confirm whether it continues.
-        { name:"Orell Füssli", group:"partner", valueDe:"-20%", valueEn:"-20%", url:"https://www.orellfuessli.ch/education-card/anmelden?utm_source=sg_unihub&utm_medium=digital&utm_campaign=fs27", tag:"orellfuessli.ch",
+        { name:"Orell Füssli", valueDe:"-20%", valueEn:"-20%", url:"https://www.orellfuessli.ch/education-card/anmelden?utm_source=sg_unihub&utm_medium=digital&utm_campaign=fs27", tag:"orellfuessli.ch",
           de:"Ob Bücher fürs Studium oder Unterhaltung für die Semesterferien: Mit der kostenlosen <strong>Education Card</strong> profitierst du bei Orell Füssli von 20% Dauerrabatt, portofreier Lieferung und weiteren Vorteilen.",
           en:"Whether it's books for your studies or entertainment for the semester break: with the free <strong>Education Card</strong>, you get a permanent 20% discount at Orell Füssli, free shipping, and other benefits." },
-        { name:"Activ Fitness", group:"deals", valueDe:"–CHF 100", valueEn:"–CHF 100", url:"https://www.activfitness.ch/abofinder/", tag:"activfitness.ch",
+        { name:"Activ Fitness", valueDe:"–CHF 100", valueEn:"–CHF 100", url:"https://www.activfitness.ch/abofinder/", tag:"activfitness.ch",
           de:"Studierenden-Abo mit einem Vorteil von CHF 100 – gültig bis 29 Jahre bei einem Studienpensum von mindestens 50%, mit gültigem Ausweis.",
           en:"Student subscription with a CHF 100 advantage – valid up to age 29 with a study load of at least 50%, with a valid student ID." },
-        { name:"Konzert und Theater", group:"deals", valueDe:"CHF 20", valueEn:"CHF 20", url:"https://www.konzertundtheater.ch/tickets-und-abos/u30-club/", tag:"konzertundtheater.ch",
+        { name:"Konzert und Theater", valueDe:"CHF 20", valueEn:"CHF 20", url:"https://www.konzertundtheater.ch/tickets-und-abos/u30-club/", tag:"konzertundtheater.ch",
           de:"U30 Club: Tickets für Konzerte und Theater für CHF 20 pro Vorstellung (inkl. Vorverkauf ab Kategorie 2) – kostenlose Anmeldung pro Saison, Ausweis bei der Vorstellung mitbringen.",
           en:"U30 Club: tickets to concerts and theatre for CHF 20 per show (including advance sales from price category 2) – free seasonal registration, bring your ID to the show." },
-        { name:"UBS", group:"deals", valueDe:"+CHF 50", valueEn:"+CHF 50", url:"https://www.ubs.com/ch/de/services/accounts-and-cards/young.html", tag:"ubs.com",
+        { name:"UBS", valueDe:"+CHF 50", valueEn:"+CHF 50", url:"https://www.ubs.com/ch/de/services/accounts-and-cards/young.html", tag:"ubs.com",
           de:"Kostenloses Jugend- und Studierendenkonto (bis 26, als Studierende:r bis 30 Jahre) mit allen Vorteilen eines normalen UBS-Kontos – inkl. CHF 50 Willkommensbonus in KeyClub-Punkten.",
           en:"Free youth and student account (under 26, or students up to 30) with all the benefits of a regular UBS account – plus a CHF 50 welcome bonus in KeyClub points." },
-        { name:"Printwerk", group:"deals", valueDe:"ab CHF 0.15", valueEn:"from CHF 0.15", url:"https://www.print-werk.ch/en/preise-fur-druck-und-ausrustarbeiten", tag:"print-werk.ch",
+        { name:"Printwerk", valueDe:"ab CHF 0.15", valueEn:"from CHF 0.15", url:"https://www.print-werk.ch/en/preise-fur-druck-und-ausrustarbeiten", tag:"print-werk.ch",
           de:"Spezielle Studierendenpreise für Bachelor- und Masterarbeiten: Druck s/w ab CHF 0.15 pro Seite, farbig ab CHF 0.50 pro Seite.",
           en:"Special student pricing for Bachelor's and Master's theses: black/white printing from CHF 0.15 per page, colour from CHF 0.50 per page." },
       ]},
@@ -1834,23 +1798,19 @@
       </div>`;
   }
 
-  // Studi-Deals box: same category-box shell as makeBox, but the tiles sit
-  // inside one labelled frame per `group` (see the DATA comment above)
-  // instead of one flat row — order of first appearance in `items` decides
-  // frame order, so "partner" (Orell Füssli) stays first.
+  // Studi-Deals box: same category-box shell as makeBox, just with the deal
+  // tile variant (big value instead of icon+name — see dealTileHTML) in one
+  // flat row. Used to group tiles into a labelled "Partner"/"Deals" frame
+  // pair, but the extra border/padding of a frame actually shrank the tile
+  // inside it compared to a plain tile in a shared row, which worked against
+  // the point of the one company we're actually partnered with (Orell
+  // Füssli) standing out — so it's back to one flat row, and `items` simply
+  // puts Orell Füssli first, the natural first-glance spot in a left-to-right
+  // row of equal-size tiles.
   function makeDealsBox(cat, boxNum){
     const num = String(boxNum).padStart(2,'0');
     const box = document.createElement('section');
     box.className = 'category-box wide';
-
-    const groups = [];
-    cat.items.forEach(it => {
-      let g = groups.find(g => g.key === it.group);
-      if(!g){ g = { key: it.group, items: [] }; groups.push(g); }
-      g.items.push(it);
-    });
-    const colsTemplate = groups.map(g => `${g.items.length}fr`).join(' ');
-
     box.innerHTML = `
       <div class="cat-head">
         <span class="cat-index">${num}</span>
@@ -1859,16 +1819,7 @@
           <p class="cat-sub" data-de="${cat.subDe}" data-en="${cat.subEn}"></p>
         </div>
       </div>
-      <div class="deal-groups" style="--cols-template:${colsTemplate}">
-        ${groups.map(g => {
-          const label = cat.groupLabels[g.key] || { de:'', en:'' };
-          return `
-          <div class="deal-frame${g.items.length === 1 ? ' deal-frame--single' : ''}">
-            <span class="deal-frame-label" data-de="${label.de}" data-en="${label.en}"></span>
-            <div class="tile-row" style="--cols:${g.items.length}">${g.items.map(dealTileHTML).join('')}</div>
-          </div>`;
-        }).join('')}
-      </div>
+      <div class="tile-row" style="--cols:${cat.items.length}">${cat.items.map(dealTileHTML).join('')}</div>
     `;
     return box;
   }
