@@ -1081,7 +1081,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.23): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.24): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1288,8 +1288,9 @@
           </div>
           <div class="legal-block">
             <h2>Lokale Speicherung im Browser</h2>
-            <p>Deine Sprachwahl (Deutsch/Englisch), dein Farbmodus (Hell/Dunkel) und die Kacheln, die du auf dem Dashboard angepinnt hast, werden ausschliesslich lokal in deinem Browser gespeichert (localStorage), nicht an uns übermittelt und jederzeit über deine Browser-Einstellungen löschbar.</p>
+            <p>Deine Sprachwahl (Deutsch/Englisch), dein Farbmodus (Hell/Dunkel), die Kacheln, die du auf dem Dashboard angepinnt hast, sowie eine kleine technische Markierung, ob dein Browser eine neue Version der Seite bereits automatisch geladen hat, werden ausschliesslich lokal in deinem Browser gespeichert (localStorage), nicht an uns übermittelt und jederzeit über deine Browser-Einstellungen löschbar.</p>
             <p>Damit die Seite schneller lädt und auch offline funktioniert, legt ein sogenannter Service Worker eine Kopie der Website-Dateien im Cache deines Browsers ab. Dabei werden keine personenbezogenen Daten gespeichert oder an uns übermittelt; auch dieser Cache lässt sich über die Browser-Einstellungen löschen.</p>
+            <p>Ausserdem prüft die Seite kurz nach dem Laden im Hintergrund, ob bereits eine neuere Version im Cache liegt, und lädt die Seite in diesem Fall automatisch einmal neu, damit du nicht selbst aktualisieren musst. Dabei werden keine zusätzlichen Daten an uns übermittelt.</p>
           </div>
           <div class="legal-block">
             <h2>Externe Links</h2>
@@ -1355,8 +1356,9 @@
           </div>
           <div class="legal-block">
             <h2>Local browser storage</h2>
-            <p>Your language choice (German/English), colour mode (light/dark) and the tiles you've pinned on the Dashboard are stored only locally in your browser (localStorage), never sent to us, and can be cleared any time via your browser settings.</p>
+            <p>Your language choice (German/English), colour mode (light/dark), the tiles you've pinned on the Dashboard, and a small technical marker noting whether your browser has already auto-loaded a given version of the page are stored only locally in your browser (localStorage), never sent to us, and can be cleared any time via your browser settings.</p>
             <p>To load faster and work offline, a so-called service worker keeps a copy of the website's files in your browser's cache. No personal data is stored or sent to us in the process; this cache can also be cleared via your browser settings.</p>
+            <p>The page also briefly checks in the background shortly after loading whether a newer version is already sitting in the cache, and if so reloads automatically once so you don't have to refresh yourself. No additional data is sent to us in the process.</p>
           </div>
           <div class="legal-block">
             <h2>External links</h2>
@@ -1404,7 +1406,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.1.23</p>
+      <p class="credit">Eloori Interactive · v1.1.24</p>
     </div>
   </footer>
 
@@ -2819,14 +2821,52 @@ SOFTWARE.`;
   // on the actual sgunihub.ch deployment, so it harmlessly no-ops anywhere
   // else (this preview included, and any file:// use).
   //
-  // Deliberately no "new version available, reload?" prompt here anymore —
-  // an earlier version of this had one, but the background check it relied
-  // on kept firing false positives on the real deployment (nagging with a
+  // Deliberately no "new version available, reload?" prompt here — an
+  // earlier version of this had one, but the background check it relied on
+  // kept firing false positives on the real deployment (nagging with a
   // reload prompt even when nothing had actually changed), so it was
   // removed rather than shipped broken.
+  //
+  // What IS here: because the cache above is stale-while-revalidate, a
+  // returning visitor's first load after a deploy is served the OLD cached
+  // page while the SW quietly fetches the new one in the background for
+  // next time — so something genuinely new (a new Studi-Deals tile, say)
+  // stays invisible until they happen to reload. A couple of seconds after
+  // load — enough time for that background refetch to land — this
+  // re-fetches './' (still through the SW, so still instant/offline-safe)
+  // and compares its footer version string against the one actually on
+  // screen. Only a real mismatch triggers a reload, and only once per
+  // version: the target version is recorded in localStorage first, so even
+  // if this code somehow ran again before the two caught up, it can't
+  // reload a second time or loop. Comparing one exact, already-trusted
+  // string (the version already bumped on every release) avoids the
+  // earlier approach's false positives, which came from diffing whole
+  // responses instead.
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js').catch(() => {});
+
+      if (navigator.serviceWorker.controller) {
+        setTimeout(() => {
+          const versionIn = (text) => (text.match(/Eloori Interactive · (v[\d.]+)/) || [])[1];
+          const creditEl = document.querySelector('.credit');
+          const shown = creditEl && versionIn(creditEl.textContent);
+          if (!shown) return;
+          fetch('./', { cache: 'default' })
+            .then((r) => r.text())
+            .then((html) => {
+              const latest = versionIn(html);
+              if (!latest || latest === shown) return;
+              const key = 'sgunihub-autoreloaded-' + latest;
+              try {
+                if (localStorage.getItem(key)) return;
+                localStorage.setItem(key, '1');
+              } catch (e) { /* localStorage unavailable — skip rather than risk a reload loop */ return; }
+              window.location.reload();
+            })
+            .catch(() => {});
+        }, 2500);
+      }
     });
   }
 </script>
