@@ -385,6 +385,14 @@
     font-family:var(--font-mono); font-weight:600; font-size:.76rem; color:var(--text-2);
     letter-spacing:.01em;
   }
+  /* Optional small line under the company name, for a deal tied to a
+     specific card/program (e.g. Orell Füssli's "Education Card") rather
+     than a blanket discount — without it, the company name alone could
+     read as "20% off everything here", which isn't accurate. */
+  .deal-sub{
+    display:block; font-family:var(--font-mono); font-size:.64rem; font-weight:500;
+    color:var(--text-2); opacity:.75; margin-top:-.15rem; letter-spacing:.01em;
+  }
   /* .tile-inner's base rule above fixes height:128px, sized for an icon plus
      a two-line name — enough for every regular tile, but not always for a
      deal tile's value line (e.g. "ab CHF 0.15"), which has no line-clamp and
@@ -1083,7 +1091,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.27): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.28): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1408,7 +1416,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.1.27</p>
+      <p class="credit">Eloori Interactive · v1.1.28</p>
     </div>
   </footer>
 
@@ -1464,7 +1472,7 @@
         // content briefing (30.10.2026, Chiara Vissa) for the pilot Education
         // Card placement here, test period 02.11.2026-31.03.2027 — revisit
         // with them around then to confirm whether it continues.
-        { name:"Orell Füssli", valueDe:"-20%", valueEn:"-20%", url:"https://www.orellfuessli.ch/education-card/anmelden?utm_source=sg_unihub&utm_medium=digital&utm_campaign=fs27", tag:"orellfuessli.ch",
+        { name:"Orell Füssli", sub:"Education Card", valueDe:"-20%", valueEn:"-20%", url:"https://www.orellfuessli.ch/education-card/anmelden?utm_source=sg_unihub&utm_medium=digital&utm_campaign=fs27", tag:"orellfuessli.ch",
           de:"Ob Bücher fürs Studium oder Unterhaltung für die Semesterferien: Mit der kostenlosen <strong>Education Card</strong> profitierst du bei Orell Füssli von 20% Dauerrabatt, portofreier Lieferung und weiteren Vorteilen.",
           en:"Whether it's books for your studies or entertainment for the semester break: with the free <strong>Education Card</strong>, you get a permanent 20% discount at Orell Füssli, free shipping, and other benefits." },
         { name:"Activ Fitness", valueDe:"–CHF 100", valueEn:"–CHF 100", url:"https://www.activfitness.ch/abofinder/", tag:"activfitness.ch",
@@ -1801,6 +1809,7 @@
         <a class="tile-inner tile-inner--deal" href="${it.url}" target="_blank" rel="noopener" data-goatcounter-click="deal-${id}">
           <span class="deal-value" data-de="${it.valueDe}" data-en="${it.valueEn}"></span>
           <span class="tile-name">${it.name}</span>
+          ${it.sub ? `<span class="deal-sub">${it.sub}</span>` : ''}
         </a>
         <button type="button" class="tile-info-btn" aria-label="Info" aria-expanded="false">i</button>
         <div class="tile-pop">
