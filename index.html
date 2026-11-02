@@ -1083,7 +1083,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.26): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.1.27): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1408,7 +1408,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.1.26</p>
+      <p class="credit">Eloori Interactive · v1.1.27</p>
     </div>
   </footer>
 
@@ -2841,39 +2841,51 @@ SOFTWARE.`;
   // returning visitor's first load after a deploy is served the OLD cached
   // page while the SW quietly fetches the new one in the background for
   // next time — so something genuinely new (a new Studi-Deals tile, say)
-  // stays invisible until they happen to reload. A couple of seconds after
-  // load — enough time for that background refetch to land — this
-  // re-fetches './' (still through the SW, so still instant/offline-safe)
-  // and compares its footer version string against the one actually on
-  // screen. Only a real mismatch triggers a reload, and only once per
-  // version: the target version is recorded in localStorage first, so even
-  // if this code somehow ran again before the two caught up, it can't
-  // reload a second time or loop. Comparing one exact, already-trusted
-  // string (the version already bumped on every release) avoids the
-  // earlier approach's false positives, which came from diffing whole
-  // responses instead.
+  // stays invisible until they happen to reload. Only a real version
+  // mismatch triggers a reload, and only once per version: the target
+  // version is recorded in localStorage first, so this can't reload a
+  // second time or loop. Comparing one exact, already-trusted string (the
+  // version already bumped on every release) avoids an earlier approach's
+  // false positives, which came from diffing whole responses instead.
+  //
+  // Two checks, because a cache that's been stale for a while (a visitor
+  // who hasn't been back in weeks) can take longer than a couple of
+  // seconds to actually refetch over the network:
+  // 1. A couple of seconds after load, re-fetch './' (through the SW, so
+  //    still instant/offline-safe) and compare — catches the common case
+  //    where the cache was already refreshed by an earlier visit.
+  // 2. sw.js itself now posts a message to every open tab the moment its
+  //    own background refetch actually lands with a different version —
+  //    catches the slow case above, however long that refetch takes,
+  //    instead of giving up after one fixed-length check.
   if ('serviceWorker' in navigator) {
+    const versionIn = (text) => (text.match(/Eloori Interactive · (v[\d.]+)/) || [])[1];
+    const reloadOnceFor = (latest) => {
+      const creditEl = document.querySelector('.credit');
+      const shown = creditEl && versionIn(creditEl.textContent);
+      if (!shown || !latest || latest === shown) return;
+      const key = 'sgunihub-autoreloaded-' + latest;
+      try {
+        if (localStorage.getItem(key)) return;
+        localStorage.setItem(key, '1');
+      } catch (e) { /* localStorage unavailable — skip rather than risk a reload loop */ return; }
+      window.location.reload();
+    };
+
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'sgunihub-new-version') {
+        reloadOnceFor(event.data.version);
+      }
+    });
+
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js').catch(() => {});
 
       if (navigator.serviceWorker.controller) {
         setTimeout(() => {
-          const versionIn = (text) => (text.match(/Eloori Interactive · (v[\d.]+)/) || [])[1];
-          const creditEl = document.querySelector('.credit');
-          const shown = creditEl && versionIn(creditEl.textContent);
-          if (!shown) return;
           fetch('./', { cache: 'default' })
             .then((r) => r.text())
-            .then((html) => {
-              const latest = versionIn(html);
-              if (!latest || latest === shown) return;
-              const key = 'sgunihub-autoreloaded-' + latest;
-              try {
-                if (localStorage.getItem(key)) return;
-                localStorage.setItem(key, '1');
-              } catch (e) { /* localStorage unavailable — skip rather than risk a reload loop */ return; }
-              window.location.reload();
-            })
+            .then((html) => reloadOnceFor(versionIn(html)))
             .catch(() => {});
         }, 2500);
       }
