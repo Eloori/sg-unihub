@@ -344,7 +344,7 @@ footer a{color:var(--muted)}
           <div class="step"><b>01</b><div><strong>Browse without an account</strong><span>Filter by semester, rent and furnishing.</span></div></div>
           <div class="step"><b>02</b><div><strong>Message the lister</strong><span>Through our form. Your email stays hidden until they reply.</span></div></div>
           <div class="step"><b>03</b><div><strong>View it, even from abroad</strong><span>Video call, or book someone to view it for you via Outvisit.</span></div></div>
-          <div class="step"><b>04</b><div><strong>Sign the sublease</strong><span>Use our <a href="#" id="templateLink" style="color:var(--accent);font-weight:600">free contract template</a>. Pay only after the viewing.</span></div></div>
+          <div class="step"><b>04</b><div><strong>Sign the sublease</strong><span>Use our <a href="untermietvertrag-sgunihub.pdf" download data-contract style="color:var(--accent);font-weight:600">free contract template (PDF)</a>. Pay only after the viewing.</span></div></div>
         </div>
       </div>
     </div>
@@ -450,8 +450,9 @@ footer a{color:var(--muted)}
       <details><summary>How do exchange students find a room in St. Gallen?</summary><p>Many HSG students go abroad for a semester themselves and sublet their furnished room in the meantime, which fits an exchange semester perfectly. Browse these sublets <a href="#housing" style="color:var(--accent)">here</a> for free and message the lister directly.</p></details>
       <details><summary>How do I know a listing is real?</summary><p>Every lister has to verify an active HSG student email address before they can post. On top of that: never pay before you've viewed the room (in person, by video call, or via Outvisit), and always sign a written sublease.</p></details>
       <details><summary>Does it cost anything to find a room?</summary><p>No. Browsing and messaging listers is free, and we never charge to see contact details. Listers can optionally pay to feature their listing; that's how the platform pays for itself.</p></details>
-      <details><summary>Is subletting allowed in Switzerland?</summary><p>Generally yes, but the main tenant needs the landlord's consent. Listers confirm this when they post, and our contract template includes it.</p></details>
+      <details><summary>Is subletting allowed in Switzerland?</summary><p>Generally yes, but the main tenant needs the landlord's consent. Listers confirm this when they post, and our <a href="untermietvertrag-sgunihub.pdf" download data-contract style="color:var(--accent)">fillable sublease template</a> (German/English) includes it.</p></details>
       <details><summary>Do exchange students need Swiss health insurance?</summary><p>Health insurance is compulsory for stays longer than three months, unless you're granted an exemption (for example with a valid European Health Insurance Card). HSG's <a href="#partners" style="color:var(--accent)">fact sheet for incoming students</a> explains the process.</p></details>
+      <details><summary>How do I remove my listing once the room is taken?</summary><p>Click <a href="#manage" style="color:var(--accent)">My listing</a> on the housing board and verify with the same HSG email you used to post. You can then mark the room as rented (it disappears from the board) or delete the listing completely. The link is also in every email you get about your room.</p></details>
       <details><summary>Is this an official HSG offering?</summary><p>No. sg/unihub is an independent project by HSG students and isn't operated by the University of St. Gallen.</p></details>
     </div>
   </section>
@@ -463,6 +464,7 @@ footer a{color:var(--muted)}
         <h2>Going abroad yourself?</h2>
         <p>Don't pay rent for an empty room. List it in two minutes and reach exchange students coming to St. Gallen.</p>
         <button class="btn" data-open-list>Sublet your room</button>
+        <p style="margin:18px 0 0;font-size:.9rem;opacity:.85">Already listed? <a href="#manage" style="color:inherit;font-weight:700">Manage or remove your listing →</a></p>
       </div>
     </div>
   </section>
@@ -477,7 +479,7 @@ footer a{color:var(--muted)}
         <h2 class="board-title">Find your room.</h2>
         <p>Furnished rooms from verified HSG students, for exactly the semester you need.</p>
       </div>
-      <button class="btn btn-primary" data-open-list>+ Sublet your room</button>
+      <div class="cta-row"><button class="btn btn-ghost" data-open-manage>My listing</button><button class="btn btn-primary" data-open-list>+ Sublet your room</button></div>
     </div>
 
     <div class="filters">
@@ -520,9 +522,9 @@ footer a{color:var(--muted)}
 
     <!-- step 1: email -->
     <div class="lstep" data-step="1">
-      <div class="eyebrow">Step 1 of 4 · Verify</div>
-      <h3>Verify you're an HSG student</h3>
-      <p class="sub">Only verified HSG students can post. That's what makes listings here trustworthy.</p>
+      <div class="eyebrow" id="s1Eyebrow">Step 1 of 4 · Verify</div>
+      <h3 id="s1Title">Verify you're an HSG student</h3>
+      <p class="sub" id="s1Sub">Only verified HSG students can post. That's what makes listings here trustworthy.</p>
       <div class="field">
         <label for="email">HSG email address</label>
         <input id="email" type="email" placeholder="firstname.lastname@student.unisg.ch" autocomplete="email">
@@ -594,8 +596,8 @@ footer a{color:var(--muted)}
     <!-- step 5: manage my listing -->
     <div class="lstep" data-step="5">
       <div class="eyebrow">Your listing</div>
-      <h3>You already have a listing</h3>
-      <p class="sub">Each HSG email can have one listing. You can mark it as rented (it disappears from the board) or delete it to post a new one.</p>
+      <h3 id="s5Title">Your listing</h3>
+      <p class="sub" id="s5Sub">Mark it as rented once the room is taken (it disappears from the board), or delete it. Each HSG email can have one listing at a time.</p>
       <div id="myListing"></div>
       <div class="err" id="manageErr"></div>
       <div class="actions"><button class="btn btn-ghost btn-sm" id="signOut2">Sign out</button><span></span></div>
@@ -776,9 +778,10 @@ CONFIG.SEMESTERS.forEach(s => { $("#fSem").add(new Option(s, s)); $("#lSem").add
 /* ---------- routing ---------- */
 function route() {
   const h = location.hash.slice(1) || "arriving";
-  const view = h === "housing" ? "housing" : "arriving";
+  const view = (h === "housing" || h === "manage") ? "housing" : "arriving";
   $$(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + view));
   $$(".nav a[data-view]").forEach(a => a.classList.toggle("active", a.dataset.view === view));
+  if (h === "manage") { window.scrollTo(0, 0); history.replaceState(null, "", "#housing"); track("/arriving/manage-start"); setTimeout(() => startListingFlow("manage"), 50); return; }
   if (h === "housing" || h === "arriving") { window.scrollTo(0, 0); track("/arriving#" + view); }
   else { const el = document.getElementById(h); if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 30); }
 }
@@ -900,11 +903,10 @@ $("#grid").addEventListener("click", e => {
       <div class="field"><label for="cMsg">Message</label><textarea rows="4" id="cMsg" maxlength="2000">Hi! I'm coming to HSG for my exchange semester (${esc(l.semester)}) and I'm interested in your room. Could we arrange a video call?</textarea>
       <span class="hint">The lister gets your message by email and replies to you directly. Never pay before a viewing.</span></div>
       <div class="err" id="cErr"></div>
-      <div class="actions"><button type="button" class="btn btn-ghost btn-sm" id="contractBtn"><svg class="ic" style="width:16px;height:16px"><use href="#i-doc"/></svg>Sublease template</button><button class="btn btn-primary" type="submit" id="cSend">Send message</button></div>
+      <div class="actions"><a class="btn btn-ghost btn-sm" href="${CONTRACT_PDF}" download data-contract><svg class="ic" style="width:16px;height:16px"><use href="#i-doc"/></svg>Sublease template (PDF)</a><button class="btn btn-primary" type="submit" id="cSend">Send message</button></div>
     </form>`;
   openOv("#detailOv");
   if (photos.length) initGallery(photos.length);
-  $("#contractBtn").onclick = () => { openContract(l); track("/arriving/contract"); };
   $("#contactForm").onsubmit = ev => {
     ev.preventDefault();
     const name = $("#cName").value.trim(), email = $("#cMail").value.trim(), message = $("#cMsg").value.trim();
@@ -920,87 +922,9 @@ $("#grid").addEventListener("click", e => {
   };
 });
 
-/* ---------- sublease contract template ---------- */
-function contractHTML(l) {
-  const v = (x, w = 220) => x ? `<b>${esc(x)}</b>` : `<span class="blank" style="min-width:${w}px"></span>`;
-  const today = new Date().toLocaleDateString("de-CH");
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Sublease agreement · ${esc(l?.title || "Room")}</title>
-<style>
-  body{font:14px/1.6 Georgia,serif;color:#111;max-width:760px;margin:40px auto;padding:0 28px}
-  h1{font-size:26px;margin:0 0 4px} h2{font-size:15px;margin:26px 0 6px;font-family:Arial,sans-serif;letter-spacing:.02em}
-  .de{color:#666;font-style:italic;font-size:12.5px}
-  .blank{display:inline-block;border-bottom:1px solid #333;height:1.1em;vertical-align:bottom}
-  .row{margin:6px 0} .grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
-  .box{border:1px solid #ccc;border-radius:6px;padding:12px 14px;margin-top:6px}
-  .sig{margin-top:56px;display:grid;grid-template-columns:1fr 1fr;gap:40px}
-  .sig div{border-top:1px solid #333;padding-top:6px;font-size:12.5px}
-  .note{font-size:11.5px;color:#666;margin-top:40px;border-top:1px solid #ddd;padding-top:12px}
-  .bar{position:sticky;top:0;background:#17395E;color:#fff;padding:10px 16px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;font-family:Arial,sans-serif;font-size:13px;margin-bottom:26px}
-  .bar button{background:#fff;color:#17395E;border:0;border-radius:999px;padding:8px 16px;font-weight:700;cursor:pointer}
-  @media print{.bar{display:none} body{margin:0}}
-</style></head><body>
-<div class="bar"><span>Fill in the blanks, then print or save as PDF.</span><button onclick="print()">Print / Save PDF</button></div>
-<h1>Sublease Agreement</h1><div class="de">Untermietvertrag für ein möbliertes/unmöbliertes Zimmer</div>
-
-<h2>1. Parties <span class="de">· Vertragsparteien</span></h2>
-<div class="grid">
-  <div><b>Main tenant</b> <span class="de">(Hauptmieter·in)</span>
-    <div class="row">Name: ${v("", 230)}</div><div class="row">Address: ${v("", 220)}</div>
-    <div class="row">Email: ${v("", 230)}</div><div class="row">Phone: ${v("", 228)}</div></div>
-  <div><b>Subtenant</b> <span class="de">(Untermieter·in)</span>
-    <div class="row">Name: ${v("", 230)}</div><div class="row">Home address: ${v("", 180)}</div>
-    <div class="row">Email: ${v("", 230)}</div><div class="row">Phone: ${v("", 228)}</div></div>
-</div>
-
-<h2>2. Room <span class="de">· Mietobjekt</span></h2>
-<div class="row">Address of the flat: ${v("", 380)}</div>
-<div class="row">Neighborhood: ${v(l?.area)} · Room: ${v(l?.title, 260)}${l?.size ? ` · approx. <b>${esc(l.size)} m²</b>` : ""}</div>
-<div class="row">The subtenant may also use: ☐ kitchen ☐ bathroom ☐ living room ☐ balcony ☐ laundry ☐ other: ${v("", 140)}</div>
-<div class="row">Furnished: ${l ? (l.furnished ? "<b>yes</b>, according to the inventory list (annex)" : "<b>no</b>") : "☐ yes, according to the inventory list (annex) ☐ no"}</div>
-
-<h2>3. Duration <span class="de">· Mietdauer</span></h2>
-<div class="row">From ${v("", 150)} to ${v("", 150)} ${l?.dates ? `<span class="de">(listed as available: ${esc(l.dates)}, ${esc(l.semester)})</span>` : ""}</div>
-<div class="row">This is a fixed-term sublease. It ends on the date above without notice. Early termination is only possible by mutual written agreement.</div>
-
-<h2>4. Rent <span class="de">· Mietzins</span></h2>
-<div class="row">Monthly rent incl. utilities (Nebenkosten): CHF ${v(l?.price, 90)} · utilities included: ☐ heating ☐ electricity ☐ internet ☐ other: ${v("", 90)}</div>
-<div class="row">Due in advance by the ${v("", 40)} of each month, to: ☐ IBAN ${v("", 230)} ☐ TWINT ${v("", 110)}</div>
-
-<h2>5. Deposit <span class="de">· Kaution</span></h2>
-<div class="row">Deposit: CHF ${v("", 90)} (Swiss law limits deposits for residential leases to max. 3 monthly rents). It is returned within ${v("", 40)} days after the handover, minus documented costs for damage or missing items.</div>
-
-<h2>6. Landlord's consent <span class="de">· Zustimmung der Vermieterschaft (Art. 262 OR)</span></h2>
-<div class="row">The main tenant confirms that the landlord has consented to this sublease in writing on ${v("", 130)}. A copy of the consent is attached. The main tenant's own lease remains in force; the subtenant must respect its terms and the house rules.</div>
-
-<h2>7. Use of the room <span class="de">· Gebrauch</span></h2>
-<div class="row">The room is used for residential purposes by the subtenant only. Further subletting is not allowed. The subtenant treats the room, furniture and shared areas with care and follows the house rules (Hausordnung), including quiet hours and waste separation.</div>
-
-<h2>8. Handover <span class="de">· Übergabe</span></h2>
-<div class="row">Keys handed over: ${v("", 50)} · A short handover protocol (photos of the room and furniture) is made at move-in and move-out. The room is returned clean and in the same condition, apart from normal wear and tear.</div>
-
-<h2>9. Liability & registration <span class="de">· Haftung & Anmeldung</span></h2>
-<div class="row">The subtenant is liable for damage they cause. A personal liability insurance is recommended. The subtenant registers with the residents' office (Einwohneramt) of the city of St. Gallen themselves.</div>
-
-<h2>10. Other agreements <span class="de">· Weitere Vereinbarungen</span></h2>
-<div class="box">${v("", 660)}<br><br>${v("", 660)}<br><br>${v("", 660)}</div>
-<div class="row" style="margin-top:12px">Annexes: ☐ landlord's written consent ☐ inventory list ☐ house rules ☐ handover protocol</div>
-
-<p class="row" style="margin-top:22px">Swiss law applies, in particular the tenancy law of the Swiss Code of Obligations (Art. 253 ff. OR). Place of jurisdiction is the location of the room.</p>
-
-<div class="sig">
-  <div>Place, date · Main tenant</div>
-  <div>Place, date · Subtenant</div>
-</div>
-
-<p class="note">Template provided by sg/unihub (sgunihub.ch) on ${today}. This is a simple template for semester sublets between students, not legal advice. For questions, contact the Swiss tenants' association (Mieterinnen- und Mieterverband) or a lawyer. sg/unihub is not a party to this agreement.</p>
-</body></html>`;
-}
-function openContract(l) {
-  const url = URL.createObjectURL(new Blob([contractHTML(l)], { type: "text/html" }));
-  const w = window.open(url, "_blank");
-  if (!w) { const a = document.createElement("a"); a.href = url; a.download = "sublease-agreement-sgunihub.html"; document.body.appendChild(a); a.click(); a.remove(); toast("Template downloaded. Open it to print or save as PDF."); }
-}
-$("#templateLink") && ($("#templateLink").onclick = e => { e.preventDefault(); openContract(null); track("/arriving/contract"); });
+/* ---------- sublease contract template (fillable PDF next to this page) ---------- */
+const CONTRACT_PDF = "untermietvertrag-sgunihub.pdf";
+document.addEventListener("click", e => { if (e.target.closest("[data-contract]")) track("/arriving/contract"); });
 
 /* ---------- photo upload (resized in the browser) ---------- */
 let photos = [];
@@ -1044,15 +968,30 @@ function goto(n) {
   $$(".progress i").forEach((i, k) => i.classList.toggle("on", k < n));
   if (n === 2) setTimeout(() => boxes[0].focus(), 50);
 }
-async function startListingFlow() {
+let flowMode = "create";
+function setFlowMode(mode) {
+  flowMode = mode;
+  const m = mode === "manage";
+  $("#s1Eyebrow").textContent = m ? "My listing · Verify" : "Step 1 of 4 · Verify";
+  $("#s1Title").textContent = m ? "Manage your listing" : "Verify you're an HSG student";
+  $("#s1Sub").textContent = m ? "Enter the HSG email you used for your listing. We'll send you a code to confirm it's you." : "Only verified HSG students can post. That's what makes listings here trustworthy.";
+}
+async function afterSignIn() {
+  const mine = await api.myListing().catch(() => null);
+  if (mine) { renderMyListing(mine); goto(5); return; }
+  if (flowMode === "manage") toast("No listing found for this email. You can create one now.", 4000);
+  goto(3);
+}
+async function startListingFlow(mode = "create") {
+  setFlowMode(mode);
   openOv("#listOv");
   const email = await api.email().catch(() => null);
   if (!email) return goto(1);
   $("#whoami").textContent = email;
-  const mine = await api.myListing().catch(() => null);
-  if (mine) { renderMyListing(mine); goto(5); } else goto(3);
+  await afterSignIn();
 }
-$$("[data-open-list]").forEach(b => b.onclick = () => { track("/arriving/list-start"); startListingFlow(); });
+$$("[data-open-list]").forEach(b => b.onclick = () => { track("/arriving/list-start"); startListingFlow("create"); });
+$$("[data-open-manage]").forEach(b => b.onclick = () => { track("/arriving/manage-start"); startListingFlow("manage"); });
 $$("[data-goto]").forEach(b => b.onclick = () => goto(+b.dataset.goto));
 
 async function signOut(e) { e && e.preventDefault(); await api.signOut(); toast("Signed out"); goto(1); }
@@ -1110,8 +1049,7 @@ $("#verifyCode").onclick = () => {
       $("#whoami").textContent = pendingEmail;
       toast("Email verified ✓");
       track("/arriving/verified");
-      const mine = await api.myListing();
-      if (mine) { renderMyListing(mine); goto(5); } else goto(3);
+      await afterSignIn();
     } catch (e) {
       $("#codeErr").textContent = /expired|invalid/i.test(e.message) ? "That code is wrong or expired. Check your inbox or request a new one." : e.message;
       boxes.forEach(b => b.value = ""); boxes[0].focus();
