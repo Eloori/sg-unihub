@@ -162,7 +162,8 @@ section.block{padding:72px 0}
 .pcard .foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .tag{font-family:"IBM Plex Mono",monospace;font-size:.68rem;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--accent);white-space:nowrap}
 .tag.gold{background:var(--gold-soft);color:var(--gold)}
-.pcard a.go{font-weight:700;font-size:.88rem;color:var(--accent);text-decoration:none}
+.pcard a.go{font-weight:700;font-size:.88rem;color:var(--accent);text-decoration:none;white-space:nowrap;flex-shrink:0}
+.tag.stack{white-space:normal;border-radius:10px;line-height:1.35;padding:5px 10px}
 .disclose{font-size:.8rem;color:var(--muted);margin-top:18px}
 
 /* feature housing band */
@@ -402,7 +403,7 @@ footer a{color:var(--muted)}
           <div class="pic"><svg class="ic"><use href="#i-eye"/></svg></div>
           <h4>Remote room viewing</h4>
           <p>Can't come to St. Gallen before signing? Someone local views the room for you and reports back.</p>
-          <div class="foot"><span class="tag">Outvisit · from CHF 7.50</span><a class="go" href="https://outvisit.ch" data-affiliate="outvisit">Book a viewing →</a></div>
+          <div class="foot"><span class="tag stack">Outvisit<br>from CHF 7.50</span><a class="go" href="https://outvisit.ch" data-affiliate="outvisit">Book a viewing →</a></div>
         </div>
         <div class="pcard">
           <div class="pic"><svg class="ic"><use href="#i-sim"/></svg></div>
