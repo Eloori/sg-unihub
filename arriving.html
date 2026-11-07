@@ -620,7 +620,7 @@ const CONFIG = {
   SUPABASE_ANON_KEY: "sb_publishable_2HCC0yDvzz7rA-MBEmNH4g_okQIYULN", // publishable key (safe to be public)
   STRIPE_BOOST_LINK: "https://buy.stripe.com/4gM8wR1Hd7Ed0G4cEB2Ry00", // CHF 9.99 boost
   ALLOWED_DOMAINS: ["student.unisg.ch", "unisg.ch"],
-  SEMESTERS: ["Spring 2027", "Fall 2027", "Spring 2028"],
+  SEMESTERS_AHEAD: 6,        // how many semesters (from the current one) listers can pick; updates itself
   MAX_PHOTOS: 8,
   OTP_LENGTH: 6,             // must match Supabase → Auth → "Email OTP Length"
   CONTACT_EMAIL: "contact@sgunihub.ch"
@@ -636,6 +636,23 @@ const LINKS = {
 
 const CONFIGURED = !!(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
 const LIVE = CONFIGURED; // once configured, never fall back to sample data
+
+/* Semesters are generated from today's date, so the list never runs out.
+   HSG rhythm: Spring semester (FS) Feb–Jul, Fall semester (HS) Aug–Jan. */
+function upcomingSemesters(n = CONFIG.SEMESTERS_AHEAD, today = new Date()) {
+  const m = today.getMonth(); // 0 = Jan
+  let year = today.getFullYear(), spring;
+  if (m === 0) { spring = false; year -= 1; }   // January still belongs to the fall semester
+  else spring = m <= 6;                          // Feb–Jul spring, Aug–Dec fall
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    out.push({ value: `${spring ? "Spring" : "Fall"} ${year}`, label: `${spring ? "Spring" : "Fall"} ${year} · ${spring ? "FS" : "HS"}${String(year).slice(2)}` });
+    if (!spring) year += 1;
+    spring = !spring;
+  }
+  return out;
+}
+CONFIG.SEMESTERS = upcomingSemesters().map(s => s.value);
 const ONE_LISTING_MSG = "This HSG email already has a listing. Each email can have one listing at a time.";
 
 /* ---------- helpers ---------- */
@@ -773,7 +790,12 @@ $("#themeBtn").onclick = () => setTheme(document.documentElement.dataset.theme =
 
 /* ---------- mode tag + semester selects ---------- */
 if (!LIVE) { $("#modeTag").textContent = "arriving · v1.0 · demo mode"; document.body.classList.add("is-demo"); }
-CONFIG.SEMESTERS.forEach(s => { $("#fSem").add(new Option(s, s)); $("#lSem").add(new Option(s, s)); });
+upcomingSemesters().forEach(s => { $("#fSem").add(new Option(s.label, s.value)); $("#lSem").add(new Option(s.label, s.value)); });
+$("#lSem").selectedIndex = 1; // most listers sublet for the next semester
+function syncSemesterFilter() { // keep older semesters that still have listings selectable in the filter
+  const have = new Set([...$("#fSem").options].map(o => o.value));
+  [...new Set(listings.map(l => l.semester))].filter(v => v && !have.has(v)).sort().forEach(v => $("#fSem").add(new Option(v, v)));
+}
 
 /* ---------- routing ---------- */
 function route() {
@@ -805,7 +827,7 @@ const shade = i => { const h = [210, 190, 160, 230, 200, 175][Math.abs([...Strin
 
 async function loadListings() {
   $("#grid").innerHTML = '<div class="empty">Loading rooms…</div>';
-  try { listings = await api.list(); renderGrid(); }
+  try { listings = await api.list(); syncSemesterFilter(); renderGrid(); }
   catch (e) { console.error(e); $("#grid").innerHTML = '<div class="empty">Rooms couldn\'t be loaded. Please refresh the page.</div>'; $("#count").textContent = ""; }
 }
 function renderGrid() {
