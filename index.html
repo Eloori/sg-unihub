@@ -214,6 +214,18 @@
   .cat-title{ font-family:var(--font-display); font-weight:700; font-size:1.25rem; margin:0 0 .2rem; text-wrap:balance;}
   .cat-sub{ margin:0; color:var(--text-2); font-size:.86rem; line-height:1.4;}
 
+  /* A small, optional one-line cross-link under a category's tile row (e.g.
+     pointing Wohnungssuche visitors who are themselves going abroad to the
+     Arriving & Housing page instead) — same modest weight as .guide-footnote,
+     just with a subtle top divider since it follows a full tile grid rather
+     than sitting at the end of a guide section. */
+  .cat-foot{
+    margin:1rem 0 0; padding-top:.9rem; border-top:1px solid var(--line);
+    font-size:.8rem; line-height:1.5; color:var(--text-2);
+  }
+  .cat-foot a{ color:var(--accent); font-weight:600; text-decoration:none; }
+  .cat-foot a:hover{ text-decoration:underline; }
+
   /* A handful of categories only have a single link — giving each its own big
      box looked unbalanced next to the categories with several. They're grouped
      into one shared "quick access" strip instead, each keeping its own number
@@ -1096,7 +1108,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.0): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.1): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1474,7 +1486,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.0</p>
+      <p class="credit">Eloori Interactive · v1.2.1</p>
     </div>
   </footer>
 
@@ -1670,6 +1682,9 @@
     { de:"Wohnungssuche", en:"Housing Search",
       subDe:"Zimmer, Wohnungen und mehr für den Umzug nach St.Gallen", subEn:"Rooms, apartments and more for your move to St.Gallen",
       cols:6,
+      footDe:"Gehst du selbst ins Austauschsemester?", footEn:"Going abroad yourself?",
+      footUrl:"arriving.html", footTrack:"cat-foot-arriving",
+      footLinkDe:"Vermiete dein Zimmer auf Ankommen & Wohnen →", footLinkEn:"Sublet your room on Arriving & Housing →",
       items:[
         { name:"SHSG Marketplace", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,96a7.89,7.89,0,0,0-.3-2.2L217.35,43.6A16.07,16.07,0,0,0,202,32H54A16.07,16.07,0,0,0,38.65,43.6L24.31,93.8A7.89,7.89,0,0,0,24,96h0v16a40,40,0,0,0,16,32v72a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V144a40,40,0,0,0,16-32V96ZM54,48H202l11.42,40H42.61Zm50,56h48v8a24,24,0,0,1-48,0Zm-16,0v8a24,24,0,0,1-35.12,21.26,7.88,7.88,0,0,0-1.82-1.06A24,24,0,0,1,40,112v-8ZM200,208H56V151.2a40.57,40.57,0,0,0,8,.8,40,40,0,0,0,32-16,40,40,0,0,0,64,0,40,40,0,0,0,32,16,40.57,40.57,0,0,0,8-.8Zm4.93-75.8a8.08,8.08,0,0,0-1.8,1.05A24,24,0,0,1,168,112v-8h48v8A24,24,0,0,1,204.93,132.2Z"/></svg>', url:"https://shsg.ch/de/marketplace", tag:"shsg.ch/marketplace",
           de:"Marktplatz der Studierendenschaft: Wohnungen und Zimmer, aber auch Bücher, Möbel, Nachhilfe und Praktika – von Studierenden für Studierende.",
@@ -1938,6 +1953,10 @@
         </div>
       </div>
       <div class="tile-row" style="--cols:${cat.cols || cat.items.length}">${cat.items.map(tileHTML).join('')}</div>
+      ${cat.footDe ? `
+      <p class="cat-foot">
+        <span data-de="${cat.footDe}" data-en="${cat.footEn}"></span> <a href="${cat.footUrl}" data-goatcounter-click="${cat.footTrack}" data-de="${cat.footLinkDe}" data-en="${cat.footLinkEn}"></a>
+      </p>` : ''}
     `;
     return box;
   }
