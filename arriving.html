@@ -254,6 +254,22 @@ select:focus,input:focus,textarea:focus{border-color:var(--accent)}
 .outvisit strong{display:block;font-size:.92rem}
 hr{border:none;border-top:1px solid var(--line);margin:22px 0}
 
+/* compare */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:760px){.compare{grid-template-columns:1fr}}
+.ccol{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;display:flex;flex-direction:column;gap:14px}
+.ccol.us{border-color:color-mix(in srgb,var(--accent) 45%,transparent);box-shadow:var(--shadow)}
+.ctag{font-family:"IBM Plex Mono",monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.ccol.us .ctag{color:var(--accent)}
+.ccol ul{list-style:none;margin:0;padding:0;display:grid;gap:9px;flex:1}
+.ccol li{font-size:.92rem;padding-left:22px;position:relative}
+.ccol li::before{content:"·";position:absolute;left:8px;color:var(--muted);font-weight:700}
+.ccol.us li::before{content:"✓";left:2px;color:var(--ok)}
+.ccol a.go{font-weight:700;font-size:.9rem;color:var(--accent);text-decoration:none}
+.ccol .btn{align-self:flex-start}
+.hsgmates{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;color:var(--ok);font-weight:600}
+.hsgmates svg{width:15px;height:15px}
+
 /* states */
 .spin{width:18px;height:18px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;display:inline-block;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -351,6 +367,44 @@ footer a{color:var(--muted)}
   </section>
 
   <!-- Checklist -->
+  <!-- HSG Housing Office vs. student sublets -->
+  <section class="block" id="compare" style="padding-top:20px">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Your two options</div>
+        <h2>HSG Housing Office or a student sublet?</h2>
+        <p>HSG runs its own Housing Office for incoming students, and it's a good option. Here's how it compares, so you can pick what suits you.</p>
+      </div>
+      <div class="compare">
+        <div class="ccol">
+          <div class="ctag">HSG Housing Office</div>
+          <ul>
+            <li><b>CHF 700–1,050</b> per month, all bills included</li>
+            <li><b>CHF 250</b> non-refundable application fee</li>
+            <li>No deposit</li>
+            <li>Fixed contract dates: 1 Feb – 31 May or 1 Aug – 31 Dec</li>
+            <li>Mostly living with other exchange students</li>
+            <li>First come, first served, so apply early</li>
+          </ul>
+          <a class="go" href="https://www.unisg.ch/en/studying/exchange-programme/the-housing-office/" target="_blank" rel="noopener">Apply at the HSG Housing Office →</a>
+        </div>
+        <div class="ccol us">
+          <div class="ctag">Student sublet on sg/unihub</div>
+          <ul>
+            <li>Rent set by the lister, shown up front on every listing</li>
+            <li><b>No application fee</b>, free to browse and contact</li>
+            <li>Dates agreed with the lister, e.g. until your last exam</li>
+            <li>Live with <b>HSG students</b> in a real St. Gallen WG (look for the green check)</li>
+            <li>Every lister verified with an HSG email</li>
+            <li>Deposit and utilities as agreed in the sublease</li>
+          </ul>
+          <a class="btn btn-primary btn-sm" href="#housing">Browse rooms</a>
+        </div>
+      </div>
+      <p class="disclose">HSG figures from the official <a href="https://www.unisg.ch/en/studying/exchange-programme/the-housing-office/faq/" target="_blank" rel="noopener">Housing Office FAQ</a> and the Student Exchange Fact Sheet 2026/27 (as of November 2026). Prices can change, so check HSG's site for the latest.</p>
+    </div>
+  </section>
+
   <section class="block" id="checklist">
     <div class="wrap">
       <div class="sec-head">
@@ -492,7 +546,8 @@ footer a{color:var(--muted)}
       <label>Sort
         <select id="fSort"><option value="feat">Featured first</option><option value="low">Rent: low to high</option><option value="high">Rent: high to low</option></select>
       </label>
-      <label class="check"><input type="checkbox" id="fFurn"> Furnished only</label>
+      <label class="check"><input type="checkbox" id="fHsg"> HSG flatmates only</label>
+      <label class="check" style="margin-left:0"><input type="checkbox" id="fFurn"> Furnished only</label>
     </div>
 
     <div class="safety"><svg class="ic"><use href="#i-warn"/></svg><div><strong>Stay safe:</strong> never send money before you've seen the room (in person, by video call or via an <a href="https://outvisit.ch" data-affiliate="outvisit">Outvisit viewing</a>), and never pay via gift cards or crypto. Report suspicious listings to contact@sgunihub.ch.</div></div>
@@ -565,6 +620,7 @@ footer a{color:var(--muted)}
       </div>
       <div class="field"><label>Description</label><textarea id="lDesc" rows="3" maxlength="2000" placeholder="What's the flat like? Who are the flatmates? Distance to HSG?"></textarea></div>
       <div class="field"><label style="display:flex;gap:8px;align-items:center;font-weight:500"><input type="checkbox" id="lFurn" checked> Furnished</label></div>
+      <div class="field"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:500"><input type="checkbox" id="lHsg" style="margin-top:4px"> All flatmates are HSG students <span class="hint" style="font-weight:400">(shown with a green check on your listing)</span></label></div>
       <div class="field"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:500"><input type="checkbox" id="lConsent" style="margin-top:4px"> I confirm my landlord agrees to this sublet, and the listing is accurate.</label></div>
       <div class="field">
         <label>Photos <span class="hint" style="font-weight:400">(1–8, the first one is the cover)</span></label>
@@ -670,7 +726,10 @@ function track(path) { try { window.goatcounter && window.goatcounter.count && w
 /* =====================================================================
    2) DATA LAYER: same interface for live (Supabase) and demo mode
    ===================================================================== */
-const PUBLIC_COLS = "id,title,area,price,semester,dates,size,mates,furnished,description,photos,featured,status,created_at";
+const BASE_COLS = "id,title,area,price,semester,dates,size,mates,furnished,description,photos,featured,status,created_at";
+let hasHsgCol = true; // falls back gracefully if the hsg_flatmates column hasn't been added in Supabase yet
+const cols = () => hasHsgCol ? BASE_COLS + ",hsg_flatmates" : BASE_COLS;
+const missingCol = e => e && (e.code === "42703" || e.code === "PGRST204" || /hsg_flatmates/.test(e.message || ""));
 
 function makeLiveApi() {
   const sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
@@ -678,7 +737,8 @@ function makeLiveApi() {
   const pathFromUrl = u => decodeURIComponent(u.split("/listing-photos/")[1] || "");
   return {
     async list() {
-      const { data, error } = await sb.from("listings").select(PUBLIC_COLS).eq("status", "active");
+      let { data, error } = await sb.from("listings").select(cols()).eq("status", "active");
+      if (missingCol(error)) { hasHsgCol = false; ({ data, error } = await sb.from("listings").select(cols()).eq("status", "active")); }
       if (error) throw error; return data;
     },
     async sendCode(email) {
@@ -693,7 +753,8 @@ function makeLiveApi() {
     async signOut() { await sb.auth.signOut(); },
     async myListing() {
       const id = await uid(); if (!id) return null;
-      const { data, error } = await sb.from("listings").select(PUBLIC_COLS + ",boost_requested").eq("owner_id", id).maybeSingle();
+      let { data, error } = await sb.from("listings").select(cols() + ",boost_requested").eq("owner_id", id).maybeSingle();
+      if (missingCol(error)) { hasHsgCol = false; ({ data, error } = await sb.from("listings").select(cols() + ",boost_requested").eq("owner_id", id).maybeSingle()); }
       if (error) throw error; return data;
     },
     async create(fields, photoDataUrls) {
@@ -708,7 +769,10 @@ function makeLiveApi() {
           uploaded.push(path);
         }
         const photos = uploaded.map(p => sb.storage.from("listing-photos").getPublicUrl(p).data.publicUrl);
-        const { data, error } = await sb.from("listings").insert({ ...fields, photos }).select(PUBLIC_COLS).single();
+        const row = { ...fields, photos };
+        if (!hasHsgCol) delete row.hsg_flatmates;
+        let { data, error } = await sb.from("listings").insert(row).select(cols()).single();
+        if (missingCol(error)) { hasHsgCol = false; delete row.hsg_flatmates; ({ data, error } = await sb.from("listings").insert(row).select(cols()).single()); }
         if (error) throw error;
         return data;
       } catch (e) {
@@ -749,7 +813,7 @@ function makeDemoApi() {
     { title: "Room with garden access", area: "Notkersegg", price: 720, semester: S[0], dates: "1 Feb – 31 Jul", size: 13, mates: 2, furnished: true, featured: false, description: "Calm, green neighborhood with a shared garden. Bus to campus in about 20 minutes." }
   ].map((r, i) => {
     const h = [210, 190, 160, 230, 200, 175][i];
-    return { ...r, id: "demo-" + i, status: "active", created_at: new Date(Date.now() - i * 864e5).toISOString(), owner: null,
+    return { ...r, hsg_flatmates: i % 3 !== 2, id: "demo-" + i, status: "active", created_at: new Date(Date.now() - i * 864e5).toISOString(), owner: null,
       photos: ROOMS.slice(0, 3 + (i % 3)).map((n, k) => samplePhoto(h + k * 12, n)) };
   });
   let pending = null, me = null;
@@ -831,8 +895,8 @@ async function loadListings() {
   catch (e) { console.error(e); $("#grid").innerHTML = '<div class="empty">Rooms couldn\'t be loaded. Please refresh the page.</div>'; $("#count").textContent = ""; }
 }
 function renderGrid() {
-  const sem = $("#fSem").value, max = +$("#fPrice").value, furn = $("#fFurn").checked, sort = $("#fSort").value;
-  let list = listings.filter(l => (!sem || l.semester === sem) && l.price <= max && (!furn || l.furnished));
+  const sem = $("#fSem").value, max = +$("#fPrice").value, furn = $("#fFurn").checked, hsg = $("#fHsg").checked, sort = $("#fSort").value;
+  let list = listings.filter(l => (!sem || l.semester === sem) && l.price <= max && (!furn || l.furnished) && (!hsg || l.hsg_flatmates));
   list.sort((a, b) => sort === "low" ? a.price - b.price : sort === "high" ? b.price - a.price
     : (b.featured - a.featured) || (new Date(b.created_at) - new Date(a.created_at)));
   $("#count").textContent = `${list.length} room${list.length === 1 ? "" : "s"} available${LIVE ? "" : " · sample data"}`;
@@ -846,10 +910,11 @@ function renderGrid() {
         <div class="row"><h4>${esc(l.title)}</h4><div class="price">${esc(l.price)}<small> CHF/mo</small></div></div>
         <div class="meta"><span>${esc(l.area)}</span><span>${esc(l.semester)}</span><span>${esc(l.dates)}</span>${l.furnished ? "<span>Furnished</span>" : ""}</div>
         <span class="verified"><svg class="ic"><use href="#i-seal"/></svg>Verified HSG student</span>
+        ${l.hsg_flatmates ? '<span class="hsgmates"><svg class="ic"><use href="#i-check"/></svg>Only HSG students as flatmates</span>' : ""}
       </div>
     </button>`).join("") : `<div class="empty">${listings.length ? "No rooms match these filters yet. Try another semester or a higher rent." : "No rooms listed yet. New rooms are added as HSG students plan their own exchange, so check back soon."}</div>`;
 }
-["#fSem", "#fPrice", "#fFurn", "#fSort"].forEach(s => $(s).addEventListener("change", renderGrid));
+["#fSem", "#fPrice", "#fFurn", "#fHsg", "#fSort"].forEach(s => $(s).addEventListener("change", renderGrid));
 loadListings();
 
 /* ---------- overlays ---------- */
@@ -900,6 +965,7 @@ $("#grid").addEventListener("click", e => {
     ${l.featured ? '<span class="tag gold">★ Featured</span>' : ""}
     <h3>${esc(l.title)}</h3>
     <span class="verified"><svg class="ic"><use href="#i-seal"/></svg>Listed by a verified HSG student</span>
+    ${l.hsg_flatmates ? '<br><span class="hsgmates" style="margin-top:4px"><svg class="ic"><use href="#i-check"/></svg>Only HSG students as flatmates</span>' : ""}
     <div class="facts">
       <div><small>RENT</small><b>CHF ${esc(l.price)}/mo</b></div>
       <div><small>AVAILABLE</small><b>${esc(l.dates)}</b></div>
@@ -1099,7 +1165,7 @@ $("#publish").onclick = () => busy($("#publish"), async () => {
   const fields = {
     title: $("#lTitle").value.trim(), area: $("#lArea").value.trim(), price: +$("#lPrice").value,
     semester: $("#lSem").value, dates: $("#lDates").value.trim(), size: num("#lSize"), mates: num("#lMates"),
-    furnished: $("#lFurn").checked, description: $("#lDesc").value.trim(), boost_requested: boost && !!CONFIG.STRIPE_BOOST_LINK
+    furnished: $("#lFurn").checked, hsg_flatmates: $("#lHsg").checked, description: $("#lDesc").value.trim(), boost_requested: boost && !!CONFIG.STRIPE_BOOST_LINK
   };
   if (!LIVE) delete fields.boost_requested;
   try {
@@ -1108,7 +1174,7 @@ $("#publish").onclick = () => busy($("#publish"), async () => {
     track("/arriving/published" + (boost ? "-boost" : ""));
     photos = []; renderThumbs();
     ["#lTitle", "#lArea", "#lPrice", "#lDates", "#lSize", "#lMates", "#lDesc"].forEach(s => $(s).value = "");
-    $("#lConsent").checked = false; $("#boostChk").checked = false;
+    $("#lConsent").checked = false; $("#boostChk").checked = false; $("#lHsg").checked = false;
     if (boost && CONFIG.STRIPE_BOOST_LINK) {
       const u = new URL(CONFIG.STRIPE_BOOST_LINK);
       u.searchParams.set("client_reference_id", row.id);
