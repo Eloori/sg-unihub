@@ -1108,7 +1108,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.2): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.3): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1486,7 +1486,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.2</p>
+      <p class="credit">Eloori Interactive · v1.2.3</p>
     </div>
   </footer>
 
@@ -1572,18 +1572,26 @@
           de:"Vom selben Entwickler wie Studienplan: Bilde verifizierte Lerngruppen mit anderen HSG-Studierenden und organisiere gemeinsame Lerntermine, vor Ort oder online.",
           en:"From the same developer as Studienplan: form verified study groups with other HSG students and organize shared learning sessions, in person or online." },
       ]},
+    { de:"Räume", en:"Rooms",
+      subDe:"Gruppenräume kostenlos reservieren", subEn:"Book a free group room",
+      items:[
+        { name:"Room Booking", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,216H208V40a16,16,0,0,0-16-16H64A16,16,0,0,0,48,40V216H24a8,8,0,0,0,0,16H232a8,8,0,0,0,0-16Zm-40,0H176V40h16ZM64,40h96V216H64Zm80,92a12,12,0,1,1-12-12A12,12,0,0,1,144,132Z"/></svg>', url:"https://apps.unisg.ch/gmr/", tag:"apps.unisg.ch/gmr",
+          de:"Kostenlos einen Gruppenraum für Lerngruppen, Projektarbeit oder Präsentationsvorbereitung reservieren.",
+          en:"Book a free group room for study groups, project work or presentation prep." },
+      ]},
     { de:"Prüfungsvorbereitung", en:"Exam Prep",
       subDe:"Zusätzliche Unterstützung vor der Prüfung", subEn:"Extra support before the exam",
       // 3 links, but stays in the "Weitere Anlaufstellen" pool instead of
       // becoming its own board box — see the `pool` flag in the render loop.
-      // Deliberately placed right before Räume (rather than after it, DATA's
-      // original order) so this 3-wide mini-item lands right after the
-      // Sport/Lerngruppen pair: on mobile, a wide mini-item always needs its
-      // own fresh row (see .mini-item--wide), so a solo 1-tile group placed
-      // right before one gets stranded alone with an empty cell next to it.
-      // Making Räume the LAST group instead means it's simply the final,
-      // trailing item in the list (normal, no visible gap) rather than
-      // stuck in the middle with a hole beside it.
+      // At 3 tiles, miniItemHTML (see makePoolBox) splits this into a
+      // 1-tile "head" item (title + Ecoreps) and a headerless 2-tile "rest"
+      // item (ready + Brian Midterms). The head item is just 1 column wide,
+      // so on mobile it shares a row with the preceding Räume (also 1
+      // column) instead of being forced onto its own row — keeping this
+      // group right after Räume in DATA order is what puts them in the
+      // same row together. The rest item then follows as its own full row;
+      // the title above the head item still reads as the label for both,
+      // since nothing else sits in between.
       pool:true,
       items:[
         { name:"Ecoreps", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,58.34l-32-32a8,8,0,0,0-11.32,0l-96,96A8,8,0,0,0,88,128v32a8,8,0,0,0,8,8h32a8,8,0,0,0,5.66-2.34l96-96A8,8,0,0,0,229.66,58.34ZM124.69,152H104V131.31l64-64L188.69,88ZM200,76.69,179.31,56,192,43.31,212.69,64ZM224,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h80a8,8,0,0,1,0,16H48V208H208V128a8,8,0,0,1,16,0Z"/></svg>', url:"https://ecoreps.de/home", tag:"ecoreps.de",
@@ -1592,16 +1600,9 @@
         { name:"ready", url:"https://www.ready.ch/de/courses/?university=2", tag:"ready.ch",
           de:"Kommerzieller Anbieter von Zusammenfassungen, Karteikarten und Musterlösungen zur Prüfungsvorbereitung – jeder Kurs lässt sich vor dem Kauf gratis anschauen.",
           en:"Commercial provider of summaries, flashcards and past-exam solutions for exam prep, some put together for specific HSG courses – every course can be previewed for free before you buy it." },
-        { name:"Brian Midterms", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M248,124a56.11,56.11,0,0,0-32-50.61V72a48,48,0,0,0-88-26.49A48,48,0,0,0,40,72v1.39a56,56,0,0,0,0,101.2V176a48,48,0,0,0,88,26.49A48,48,0,0,0,216,176v-1.41A56.09,56.09,0,0,0,248,124ZM88,208a32,32,0,0,1-31.81-28.56A55.87,55.87,0,0,0,64,180h8a8,8,0,0,0,0-16H64A40,40,0,0,1,50.67,86.27,8,8,0,0,0,56,78.73V72a32,32,0,0,1,64,0v68.26A47.8,47.8,0,0,0,88,128a8,8,0,0,0,0,16,32,32,0,0,1,0,64Zm104-44h-8a8,8,0,0,0,0,16h8a55.87,55.87,0,0,0,7.81-.56A32,32,0,1,1,168,144a8,8,0,0,0,0-16,47.8,47.8,0,0,0-32,12.26V72a32,32,0,0,1,64,0v6.73a8,8,0,0,0,5.33,7.54A40,40,0,0,1,192,164Zm16-52a8,8,0,0,1-8,8h-4a36,36,0,0,1-36-36V80a8,8,0,0,1,16,0v4a20,20,0,0,0,20,20h4A8,8,0,0,1,208,112ZM60,120H56a8,8,0,0,1,0-16h4A20,20,0,0,0,80,84V80a8,8,0,0,1,16,0v4A36,36,0,0,1,60,120Z"/></svg>', url:"https://brian-capstone.vercel.app/midterms", tag:"brian-capstone.vercel.app",
+        { name:"Brian Midterms", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg>', url:"https://brian-capstone.vercel.app/midterms", tag:"brian-capstone.vercel.app",
           de:"Kostenlose Probeprüfungen aus deinem eigenen Kursmaterial, korrigiert mit Begründung durch Gemini 4 Argon, inkl. Frage-Chat zum Material. Im Gegenzug wertet ein studentisches Capstone-Projekt aus, wie du lernst, und stellt dir gelegentlich sehr kurze Fragen.",
           en:"Free practice exams generated from your own course material, graded with reasoning by Gemini 4 Argon, plus a chat to ask questions about the material. In exchange, a student capstone project analyzes how you study and occasionally asks you very short questions." },
-      ]},
-    { de:"Räume", en:"Rooms",
-      subDe:"Gruppenräume kostenlos reservieren", subEn:"Book a free group room",
-      items:[
-        { name:"Room Booking", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,216H208V40a16,16,0,0,0-16-16H64A16,16,0,0,0,48,40V216H24a8,8,0,0,0,0,16H232a8,8,0,0,0,0-16Zm-40,0H176V40h16ZM64,40h96V216H64Zm80,92a12,12,0,1,1-12-12A12,12,0,0,1,144,132Z"/></svg>', url:"https://apps.unisg.ch/gmr/", tag:"apps.unisg.ch/gmr",
-          de:"Kostenlos einen Gruppenraum für Lerngruppen, Projektarbeit oder Präsentationsvorbereitung reservieren.",
-          en:"Book a free group room for study groups, project work or presentation prep." },
       ]},
     { de:"Community & Medien", en:"Community & Media",
       subDe:"Vernetzung, Austausch und Campus-Content abseits der Verwaltung", subEn:"Networking, exchange and campus content beyond the admin tools",
@@ -1976,6 +1977,29 @@
   // tools sharing a "Lernen & Prüfungsvorbereitung" slot) — the box is wide
   // (full page width, one horizontal row of groups, like Wohnungssuche)
   // so a --mini-cols equal to the group count always fits comfortably.
+  //
+  // A 3-tile group (first seen with Prüfungsvorbereitung: Ecoreps, ready,
+  // Brian Midterms) is split into two grid items instead of one: a "head"
+  // item (the index + title + just the first tile) and a headerless "rest"
+  // item (the remaining tiles). On mobile's 2-column grid this lets the
+  // head item sit one column wide, so it can share a row with the next
+  // 1-tile group (Räume) instead of forcing its own row and stranding an
+  // empty cell beside that neighbour — the rest item then simply follows
+  // as its own full row, with the title above it still reading as the
+  // label for both rows since nothing else is in between. On desktop this
+  // renders visually identically to one unbroken block: the two items are
+  // adjacent, same row, and their spans (1 + remaining) still add up to
+  // the original tile count, so the title just ends up left-aligned above
+  // the first tile rather than centered over all of them — the same way
+  // every other mini-group's title already sits above only its own
+  // (narrower) row. A 1- or 2-tile group is never split (unchanged).
+  function miniItemHTML(items, titleHTML){
+    return `
+      <div class="mini-item${items.length > 1 ? ' mini-item--wide' : ''}" style="--span:${items.length}">
+        ${titleHTML || ''}
+        <div class="tile-row" style="--cols:${items.length}">${items.map(tileHTML).join('')}</div>
+      </div>`;
+  }
   function makePoolBox(solo, boxNum){
     const num = String(boxNum).padStart(2,'0');
     const box = document.createElement('section');
@@ -1989,14 +2013,12 @@
         </div>
       </div>
       <div class="mini-groups" style="--mini-cols:${solo.reduce((n, cat) => n + cat.items.length, 0)}">
-        ${solo.map((cat, idx) => `
-          <div class="mini-item${cat.items.length > 1 ? ' mini-item--wide' : ''}" style="--span:${cat.items.length}">
-            <div class="mini-head">
-              <span class="mini-index">${idx+1}</span>
-              <h3 class="mini-title" data-de="${cat.de}" data-en="${cat.en}"></h3>
-            </div>
-            <div class="tile-row" style="--cols:${cat.items.length}">${cat.items.map(tileHTML).join('')}</div>
-          </div>`).join('')}
+        ${solo.map((cat, idx) => {
+          const title = `<div class="mini-head"><span class="mini-index">${idx+1}</span><h3 class="mini-title" data-de="${cat.de}" data-en="${cat.en}"></h3></div>`;
+          return cat.items.length > 2
+            ? miniItemHTML([cat.items[0]], title) + miniItemHTML(cat.items.slice(1), '')
+            : miniItemHTML(cat.items, title);
+        }).join('')}
       </div>
     `;
     return box;
