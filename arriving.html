@@ -608,7 +608,7 @@ footer a{color:var(--muted)}
 <footer>
   <div class="wrap">
     <span>sg/unihub is an independent student project and is not operated by the University of St. Gallen.</span>
-    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">arriving · v1.0</span></span>
+    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.5</span></span>
   </div>
 </footer>
 
@@ -901,7 +901,7 @@ try { setTheme(localStorage.getItem("sgunihub-theme") || (matchMedia("(prefers-c
 $("#themeBtn").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
 
 /* ---------- mode tag + semester selects ---------- */
-if (!LIVE) { $("#modeTag").textContent = "arriving · v1.0 · demo mode"; document.body.classList.add("is-demo"); }
+if (!LIVE) { $("#modeTag").textContent += " · demo mode"; document.body.classList.add("is-demo"); }
 upcomingSemesters().forEach(s => { $("#fSem").add(new Option(s.label, s.value)); $("#lSem").add(new Option(s.label, s.value)); });
 $("#lSem").selectedIndex = 1; // most listers sublet for the next semester
 function syncSemesterFilter() { // keep older semesters that still have listings selectable in the filter
