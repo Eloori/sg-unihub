@@ -609,7 +609,7 @@ footer a{color:var(--muted)}
 <footer>
   <div class="wrap">
     <span>sg/unihub is an independent student project and is not operated by the University of St. Gallen.</span>
-    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.7</span></span>
+    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.8</span></span>
   </div>
 </footer>
 
@@ -728,7 +728,8 @@ const CONFIG = {
   SEMESTERS_AHEAD: 6,        // how many semesters (from the current one) listers can pick; updates itself
   MAX_PHOTOS: 8,
   OTP_LENGTH: 6,             // must match Supabase → Auth → "Email OTP Length"
-  CONTACT_EMAIL: "contact@sgunihub.ch"
+  CONTACT_EMAIL: "contact@sgunihub.ch",
+  CONTACT_FUNCTION: "bright-worker"
 };
 
 /* Outgoing links. Swap in affiliate URLs here as soon as you have them. */
@@ -850,7 +851,7 @@ function makeLiveApi() {
       if (paths.length) await sb.storage.from("listing-photos").remove(paths);
     },
     async contact(payload) {
-      const { data, error } = await sb.functions.invoke("contact-lister", { body: payload });
+      const { data, error } = await sb.functions.invoke(CONFIG.CONTACT_FUNCTION, { body: payload });
       if (error) { let msg = null; try { msg = (await error.context.json()).error; } catch (e) {} throw new Error(msg || "Message could not be sent. Please try again."); }
       if (data?.error) throw new Error(data.error);
     }
