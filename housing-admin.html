@@ -97,7 +97,7 @@ td img{width:56px;height:42px;object-fit:cover;border-radius:6px;display:block}
     <!-- NEW -->
     <div id="tab-new">
       <div class="card">
-        <h2>Inserat für jemanden erfassen</h2>
+        <h2 id="fHead">Inserat für jemanden erfassen</h2>
         <p class="sub">Für Personen, die dir ihr Einverständnis gegeben haben. Anfragen gehen an die Kontakt-E-Mail. Über "My listing" auf der Seite können sie das Inserat mit dieser Adresse selbst verwalten.</p>
         <div class="grid2">
           <label class="f">Kontakt-E-Mail der Person *<input id="fEmail" type="email" placeholder="vorname.nachname@student.unisg.ch"><span class="hint">Bekommt die Anfragen. Wird nie öffentlich angezeigt. Pro Adresse ein Inserat.</span></label>
@@ -121,7 +121,7 @@ td img{width:56px;height:42px;object-fit:cover;border-radius:6px;display:block}
         <label class="f" style="margin-top:10px">Interne Notiz (nicht öffentlich)<input id="fNote" maxlength="300" placeholder="z. B. Von SHSG Marketplace, OK per WhatsApp am 10.11."></label>
         <label class="c"><input type="checkbox" id="fOk"> <span><b>Ich habe das Einverständnis der Person</b>, ihr Zimmer mit diesen Angaben und Fotos auf sg/unihub zu veröffentlichen, und die Vermieterschaft ist mit der Untermiete einverstanden.</span></label>
         <div class="err" id="fErr"></div>
-        <button class="btn" id="fSave">Inserat veröffentlichen</button>
+        <button class="btn" id="fSave">Inserat veröffentlichen</button> <button class="btn ghost hidden" id="fCancel">Abbrechen</button>
       </div>
 
       <div class="card hidden" id="done">
@@ -229,6 +229,28 @@ $("#fPhotos").addEventListener("change", async e => {
 $("#thumbs").addEventListener("click", e => { const b = e.target.closest("[data-rm]"); if (b) { photos.splice(+b.dataset.rm, 1); renderThumbs(); } });
 
 /* ---------- create ---------- */
+/* ---------- edit (reuses the form) ---------- */
+let editing = null;
+const TEXT_FIELDS = ["#fEmail", "#fTitle", "#fArea", "#fPrice", "#fDates", "#fSize", "#fMates", "#fDesc", "#fNote"];
+function resetForm() {
+  editing = null; TEXT_FIELDS.forEach(id => $(id).value = "");
+  ["#fHsg", "#fFeat", "#fOk"].forEach(id => $(id).checked = false); $("#fFurn").checked = true;
+  photos = []; renderThumbs(); $("#fErr").textContent = "";
+  $("#fHead").textContent = "Inserat für jemanden erfassen"; $("#fSave").textContent = "Inserat veröffentlichen"; $("#fCancel").classList.add("hidden");
+}
+function showTab(t) { $$(".tabs button").forEach(x => x.classList.toggle("on", x.dataset.tab === t)); $("#tab-new").classList.toggle("hidden", t !== "new"); $("#tab-all").classList.toggle("hidden", t !== "all"); }
+function openEdit(l) {
+  resetForm(); editing = l;
+  $("#fEmail").value = l.owner_email || ""; $("#fTitle").value = l.title || ""; $("#fArea").value = l.area || ""; $("#fPrice").value = l.price ?? "";
+  $("#fDates").value = l.dates || ""; $("#fSize").value = l.size ?? ""; $("#fMates").value = l.mates ?? ""; $("#fDesc").value = l.description || ""; $("#fNote").value = l.admin_note || "";
+  if (l.semester && ![...$("#fSem").options].some(o => o.value === l.semester)) $("#fSem").add(new Option(l.semester, l.semester), 0);
+  $("#fSem").value = l.semester; $("#fFurn").checked = !!l.furnished; $("#fHsg").checked = !!l.hsg_flatmates; $("#fFeat").checked = !!l.featured;
+  photos = (l.photos || []).slice(); renderThumbs();
+  $("#fHead").textContent = "Inserat bearbeiten"; $("#fSave").textContent = "Änderungen speichern"; $("#fCancel").classList.remove("hidden");
+  $("#done").classList.add("hidden"); showTab("new"); scrollTo({ top: 0, behavior: "smooth" });
+}
+$("#fCancel").onclick = () => { resetForm(); showTab("all"); };
+
 $("#fSave").onclick = () => {
   const v = id => $(id).value.trim();
   const email = v("#fEmail").toLowerCase();
@@ -236,27 +258,36 @@ $("#fSave").onclick = () => {
   if (!v("#fTitle") || !v("#fArea") || !v("#fPrice") || !v("#fDates")) return $("#fErr").textContent = "Titel, Quartier, Miete und Zeitraum ausfüllen.";
   if (+v("#fPrice") < 100 || +v("#fPrice") > 5000) return $("#fErr").textContent = "Miete zwischen CHF 100 und 5000.";
   if (!photos.length) return $("#fErr").textContent = "Mindestens ein Foto hinzufügen.";
-  if (!$("#fOk").checked) return $("#fErr").textContent = "Bitte bestätige das Einverständnis.";
+  if (!editing && !$("#fOk").checked) return $("#fErr").textContent = "Bitte bestätige das Einverständnis.";
   $("#fErr").textContent = "";
   busy($("#fSave"), async () => {
     const { data: s } = await sb.auth.getSession(); const uid = s.session.user.id;
     const uploaded = [];
     try {
+      const urls = [];
       for (const d of photos) {
+        if (!d.startsWith("data:")) { urls.push(d); continue; }
         const blob = await (await fetch(d)).blob();
         const path = `${uid}/${crypto.randomUUID()}.jpg`;
         const { error } = await sb.storage.from("listing-photos").upload(path, blob, { contentType: "image/jpeg" });
         if (error) throw error; uploaded.push(path);
+        urls.push(sb.storage.from("listing-photos").getPublicUrl(path).data.publicUrl);
       }
-      const urls = uploaded.map(p => sb.storage.from("listing-photos").getPublicUrl(p).data.publicUrl);
       const payload = { owner_email: email, title: v("#fTitle"), area: v("#fArea"), price: +v("#fPrice"), semester: $("#fSem").value, dates: v("#fDates"),
         size: v("#fSize"), mates: v("#fMates"), furnished: $("#fFurn").checked, hsg_flatmates: $("#fHsg").checked, description: v("#fDesc"),
         photos: urls, featured: $("#fFeat").checked, admin_note: v("#fNote") };
+      if (editing) {
+        const old = editing;
+        const { error } = await sb.rpc("admin_edit_listing", { p_id: old.id, p: payload });
+        if (error) throw /admin_edit_listing/.test(error.message) ? new Error("Bearbeiten ist noch nicht aktiv: bitte supabase-admin-edit.sql in Supabase ausführen.") : error;
+        const gone = (old.photos || []).filter(u => !urls.includes(u)).map(u => decodeURIComponent(u.split("/listing-photos/")[1] || "")).filter(x => x.startsWith(uid + "/"));
+        if (gone.length) await sb.storage.from("listing-photos").remove(gone).catch(() => {});
+        resetForm(); showTab("all"); await loadAll(); $("#tErr").textContent = ""; return;
+      }
       const { error } = await sb.rpc("admin_create_listing", { p: payload });
       if (error) throw error;
       showDone(email, payload.title);
-      ["#fEmail", "#fTitle", "#fArea", "#fPrice", "#fDates", "#fSize", "#fMates", "#fDesc", "#fNote"].forEach(id => $(id).value = "");
-      ["#fHsg", "#fFeat", "#fOk"].forEach(id => $(id).checked = false); photos = []; renderThumbs();
+      resetForm();
     } catch (e) {
       if (uploaded.length) await sb.storage.from("listing-photos").remove(uploaded);
       $("#fErr").textContent = /one_listing_per_email|duplicate/i.test(e.message || "") ? "Für diese E-Mail gibt es schon ein Inserat (eins pro Adresse)." : (e.message || "Fehler beim Speichern.");
@@ -308,6 +339,7 @@ function renderRows() {
       <td><span class="pill ${l.status}">${l.status === "active" ? "aktiv" : "vermietet"}</span>${l.featured ? ' <span class="pill feat">★ featured</span>' : (l.boost_requested ? ' <span class="pill feat">Boost bezahlt?</span>' : "")}</td>
       <td class="hint">${new Date(l.created_at).toLocaleDateString("de-CH")}</td>
       <td><div class="actions">
+        <button class="btn ghost sm" data-act="edit">Bearbeiten</button>
         <button class="btn ghost sm" data-act="status">${l.status === "active" ? "Vermietet" : "Aktivieren"}</button>
         <button class="btn ghost sm" data-act="feat">${l.featured ? "Featured aus" : "Featured an"}</button>
         <button class="btn danger sm" data-act="del">Löschen</button>
@@ -317,6 +349,7 @@ function renderRows() {
 $("#rows").addEventListener("click", e => {
   const b = e.target.closest("[data-act]"); if (!b) return;
   const l = all.find(x => x.id === b.closest("tr").dataset.id);
+  if (b.dataset.act === "edit") return openEdit(l);
   if (b.dataset.act === "del" && !b.dataset.sure) { b.dataset.sure = "1"; b.textContent = "Sicher?"; return; }
   busy(b, async () => {
     let r;
