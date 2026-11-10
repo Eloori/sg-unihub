@@ -220,6 +220,10 @@ select:focus,input:focus,textarea:focus{border-color:var(--accent)}
 .empty{padding:50px;text-align:center;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:var(--r);grid-column:1/-1}
 .safety{display:flex;gap:14px;background:var(--gold-soft);border-radius:14px;padding:16px 18px;font-size:.88rem;margin-bottom:24px;align-items:flex-start}
 .safety svg{color:var(--gold)}
+.safety>div{flex:1}
+.safety-x{flex:none;background:none;border:0;color:inherit;opacity:.55;cursor:pointer;font-size:1.25rem;line-height:1;padding:0 2px;margin:-2px -4px 0 0}
+.safety-x:hover{opacity:1}
+.safety.hide{display:none}
 
 /* ---------- modal ---------- */
 .overlay{position:fixed;inset:0;background:rgba(10,14,20,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:60;padding:18px}
@@ -599,7 +603,7 @@ footer a{color:var(--muted)}
       <label class="check" style="margin-left:0"><input type="checkbox" id="fFurn"> Furnished only</label>
     </div>
 
-    <div class="safety"><svg class="ic"><use href="#i-warn"/></svg><div><strong>Stay safe:</strong> never send money before you've seen the room (in person, by video call or via an <a href="https://outvisit.ch" data-affiliate="outvisit">Outvisit viewing</a>), and never pay via gift cards or crypto. Report suspicious listings to contact@sgunihub.ch. Listings are posted by their owners. sg/unihub does not check them and is not a party to any rental agreement.</div></div>
+    <div class="safety"><svg class="ic"><use href="#i-warn"/></svg><div><strong>Stay safe:</strong> never send money before you've seen the room (in person, by video call or via an <a href="https://outvisit.ch" data-affiliate="outvisit">Outvisit viewing</a>), and never pay via gift cards or crypto. Report suspicious listings to contact@sgunihub.ch. Listings are posted by their owners. sg/unihub does not check them and is not a party to any rental agreement.</div><button type="button" class="safety-x" id="safetyClose" aria-label="Hide notice">&times;</button></div>
 
     <div class="count" id="count"></div>
     <div class="grid" id="grid"></div>
@@ -609,7 +613,7 @@ footer a{color:var(--muted)}
 <footer>
   <div class="wrap">
     <span>sg/unihub is an independent student project and is not operated by the University of St. Gallen.</span>
-    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.9</span></span>
+    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.10</span></span>
   </div>
 </footer>
 
@@ -1316,6 +1320,15 @@ if ("serviceWorker" in navigator) {
     }
   });
 }
+
+/* ---------- dismissible safety notice ---------- */
+(() => {
+  const box = document.querySelector(".safety"), x = document.getElementById("safetyClose");
+  if (!box || !x) return;
+  const KEY = "sgunihub-safety-hidden";
+  try { if (localStorage.getItem(KEY)) box.classList.add("hide"); } catch (e) {}
+  x.onclick = () => { box.classList.add("hide"); try { localStorage.setItem(KEY, "1"); } catch (e) {} };
+})();
 
 </script>
 </body>
