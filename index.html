@@ -674,17 +674,24 @@
   @media (prefers-reduced-motion: reduce){ .modal-overlay, .modal-box{ transition:none; } }
   .legal-address{ font-style:normal; line-height:1.6; }
 
-  /* ---------- Dashboard CTAs into the Journey / Bachelorarbeit guide ---------- */
-  .hero-ctas{ display:flex; flex-wrap:wrap; gap:.7rem; margin:0 0 1.6rem; }
+  /* ---------- Dashboard quick links into Journey / Bachelorarbeit-Guide / Arriving ---------- */
+  /* A slim text-link row instead of filled pill buttons: pill badges read
+     fine for one or two, but a third one made the row look heavy ("runde
+     Balken") rather than like navigation. This reads closer to the site's
+     own quiet cat-foot link style (accent-colored text, underline on
+     hover, no fill or border) just sized up slightly since it's the
+     page's primary row of CTAs rather than a footnote. A thin 1px divider
+     between items (not after the last) keeps the row legible without
+     needing a box around each link. */
+  .hero-ctas{ display:flex; flex-wrap:wrap; align-items:center; margin:0 0 1.8rem; }
   .journey-cta{
-    display:inline-flex; align-items:center; gap:.55rem; margin:0;
-    font-family:var(--font-body); font-weight:700; font-size:.88rem; color:var(--accent);
-    text-decoration:none; padding:.55rem 1rem; border-radius:999px;
-    border:1px solid var(--accent); background:var(--accent-soft);
-    transition:transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease;
+    display:inline-flex; align-items:center; gap:.5rem;
+    font-family:var(--font-body); font-weight:700; font-size:.92rem; color:var(--accent);
+    text-decoration:none; padding:.25rem 0;
   }
-  .journey-cta:hover{ transform:translateY(-2px); box-shadow:0 10px 22px -10px var(--shadow); }
-  .journey-cta-icon{ font-size:.7rem; }
+  .journey-cta:hover{ text-decoration:underline; text-underline-offset:3px; }
+  .journey-cta:not(:first-child){ margin-left:1.2rem; padding-left:1.2rem; border-left:1px solid var(--line); }
+  .journey-cta-icon{ font-size:.75rem; opacity:.85; }
 
   /* ---------- Journey (step-through carousel) ---------- */
   .journey{ display:flex; flex-direction:column; gap:1.4rem; }
@@ -731,8 +738,13 @@
     .topbar{ gap:.7rem; }
     .wordmark{ font-size:clamp(2.3rem, 11vw, 6.4rem); margin:.9rem 0 .8rem; }
     .tagline{ font-size:1.05rem; margin-bottom:1.3rem; }
-    .hero-ctas{ margin-bottom:2rem; }
-    .journey-cta{ font-size:.86rem; padding:.55rem 1rem; }
+    /* Stacked instead of inline: on a narrow screen a wrapped row of these
+       links would leave a stray divider floating at the start of a
+       wrapped line, so mobile drops the dividers and lists them as a
+       plain vertical column instead (gap for spacing, no border-left). */
+    .hero-ctas{ flex-direction:column; align-items:flex-start; gap:.7rem; margin-bottom:2rem; }
+    .journey-cta{ font-size:.92rem; padding:.2rem 0; }
+    .journey-cta:not(:first-child){ margin-left:0; padding-left:0; border-left:none; }
     .category-box{ padding:1.3rem 1.2rem 1.5rem; border-radius:12px; }
     .cat-title{ font-size:1.2rem; }
     .page-title{ margin:.5rem 0 .6rem; }
@@ -926,6 +938,10 @@
           <a class="journey-cta" href="#bachelorarbeit" data-view-link="bachelorarbeit">
             <span class="journey-cta-icon">✎</span>
             <span data-de="Bachelorarbeit-Guide" data-en="Bachelor's Thesis Guide"></span>
+          </a>
+          <a class="journey-cta" href="arriving.html" data-goatcounter-click="hero-arriving">
+            <span class="journey-cta-icon">✈</span>
+            <span data-de="Ankommen &amp; Wohnen" data-en="Arriving &amp; Housing"></span>
           </a>
         </div>
       </header>
@@ -1123,7 +1139,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.10): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.11): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1509,7 +1525,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.10</p>
+      <p class="credit">Eloori Interactive · v1.2.11</p>
     </div>
   </footer>
 
