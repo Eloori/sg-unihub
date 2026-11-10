@@ -32,6 +32,7 @@ const CACHE_NAME = 'sgunihub-shell';
 const APP_SHELL = [
   './',
   './index.html',
+  './arriving.html',
   './favicon.ico',
   './favicon-16.png',
   './favicon-32.png',
@@ -42,6 +43,23 @@ const versionIn = (text) => {
   const m = typeof text === 'string' && text.match(/Eloori Interactive · (v[\d.]+)/);
   return m ? m[1] : undefined;
 };
+
+// Pages that show the footer version and reload themselves on a new one.
+const VERSIONED_PAGES = ['./', './arriving.html'];
+const isVersionedPage = (path) =>
+  path === '/' || path.endsWith('/index.html') || path.endsWith('/arriving.html') || path.endsWith('/arriving');
+
+async function refreshOtherPages(cache, changedPath) {
+  await Promise.all(VERSIONED_PAGES.map(async (rel) => {
+    const url = new URL(rel, self.registration.scope);
+    const samePage = url.pathname === changedPath || (url.pathname === '/' && changedPath.endsWith('/index.html'));
+    if (samePage) return;
+    try {
+      const res = await fetch(new Request(url.href, { cache: 'reload' }));
+      if (res && res.ok) await cache.put(url.href, res);
+    } catch (e) { /* offline: that page updates on its next visit */ }
+  }));
+}
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -69,13 +87,16 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // The main document is the only file carrying the footer version marker
-  // — only it is worth reading back out and comparing.
-  const isMainDoc = reqUrl.pathname === '/' || reqUrl.pathname.endsWith('/index.html');
+  // The pages carrying the footer version marker (dashboard and Arriving &
+  // Housing share one site version) are the only ones worth comparing.
+  const isMainDoc = isVersionedPage(reqUrl.pathname);
 
   event.respondWith(
     caches.open(CACHE_NAME).then(async (cache) => {
       const cached = await cache.match(req);
+      // Read the cached copy's text right away: once the cached response is
+      // handed to the page below, its body is consumed and can't be cloned.
+      const cachedTextP = (isMainDoc && cached) ? cached.clone().text().catch(() => undefined) : Promise.resolve(undefined);
 
       // cache:'reload' bypasses the browser's own HTTP cache so this always
       // reaches the real network, keeping the cached copy genuinely fresh
@@ -89,17 +110,24 @@ self.addEventListener('fetch', (event) => {
 
       const networkFetch = fetch(revalidateReq).then(async (fresh) => {
         if (fresh && fresh.ok) {
+          let newVersion, changed = false;
           if (isMainDoc) {
             try {
-              const oldVersion = cached ? versionIn(await cached.clone().text()) : undefined;
-              const newVersion = versionIn(await fresh.clone().text());
-              if (oldVersion && newVersion && oldVersion !== newVersion) {
-                const clientsList = await self.clients.matchAll({ type: 'window' });
-                clientsList.forEach((c) => c.postMessage({ type: 'sgunihub-new-version', version: newVersion }));
-              }
+              const oldVersion = versionIn(await cachedTextP);
+              newVersion = versionIn(await fresh.clone().text());
+              changed = !!(oldVersion && newVersion && oldVersion !== newVersion);
             } catch (e) { /* comparison is a nice-to-have, never block caching on it */ }
           }
-          cache.put(req, fresh.clone());
+          // Store first, then tell the tabs: a tab that reloads on the
+          // message must already get the new copy from the cache.
+          await cache.put(req, fresh.clone());
+          if (changed) {
+            // Bring the other versioned page up to date too, so an open
+            // dashboard tab and an open Arriving tab switch together.
+            await refreshOtherPages(cache, reqUrl.pathname);
+            const clientsList = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+            clientsList.forEach((c) => c.postMessage({ type: 'sgunihub-new-version', version: newVersion }));
+          }
         }
         return fresh;
       }).catch(() => undefined);

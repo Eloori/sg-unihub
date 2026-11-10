@@ -609,7 +609,7 @@ footer a{color:var(--muted)}
 <footer>
   <div class="wrap">
     <span>sg/unihub is an independent student project and is not operated by the University of St. Gallen.</span>
-    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.6</span></span>
+    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.7</span></span>
   </div>
 </footer>
 
@@ -1283,6 +1283,37 @@ function renderMyListing(l) {
 if (/[?&]boost=success/.test(location.search)) {
   toast("Payment received ✓ Your listing will be marked as Featured shortly.", 6000);
   history.replaceState(null, "", location.pathname + "#housing"); route();
+}
+
+
+/* ---------- auto-update (same mechanism and site version as the dashboard) ----------
+   sw.js compares the footer version of the cached and the freshly fetched page.
+   On a new version it updates the dashboard and this page together and messages
+   every open tab; each page reloads itself once per version. Never while a form
+   or listing is open, so nobody loses what they typed. */
+if ("serviceWorker" in navigator) {
+  const versionIn = t => (String(t || "").match(/Eloori Interactive · (v[\d.]+)/) || [])[1];
+  let pendingVersion = null;
+  const reloadOnceFor = latest => {
+    const shown = versionIn($("#modeTag") && $("#modeTag").textContent);
+    if (!shown || !latest || latest === shown) return;
+    if ($(".overlay.on")) { pendingVersion = latest; return; } // wait until the dialog is closed
+    const key = "sgunihub-autoreloaded-arriving-" + latest;
+    try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, "1"); } catch (e) { return; } // once per tab and version
+    location.reload();
+  };
+  setInterval(() => { if (pendingVersion && !$(".overlay.on")) { const v = pendingVersion; pendingVersion = null; reloadOnceFor(v); } }, 2000);
+  navigator.serviceWorker.addEventListener("message", e => {
+    if (e.data && e.data.type === "sgunihub-new-version") reloadOnceFor(e.data.version);
+  });
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+    if (navigator.serviceWorker.controller) {
+      setTimeout(() => {
+        fetch("./arriving.html", { cache: "default" }).then(r => r.text()).then(h => reloadOnceFor(versionIn(h))).catch(() => {});
+      }, 2500);
+    }
+  });
 }
 
 </script>
