@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin · Wohnungsbörse | sg/unihub</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#F3F6FA;--card:#fff;--text:#101828;--muted:#5B6472;--accent:#17395E;--on:#fff;--line:rgba(16,24,40,.1);--soft:rgba(23,57,94,.07);--ok:#1F7A4D;--gold:#B7791F;--red:#D14343}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 Manrope,system-ui,sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:0 22px}
+header{border-bottom:1px solid var(--line);background:#fff}
+header .wrap{display:flex;align-items:center;gap:14px;height:60px}
+.brand{font:700 1.2rem Fraunces,serif;text-decoration:none;color:inherit}
+.brand span{color:var(--accent)}
+.tag{font:500 .7rem "IBM Plex Mono",monospace;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--accent)}
+.right{margin-left:auto;display:flex;gap:10px;align-items:center;font-size:.85rem;color:var(--muted)}
+h1{font:600 1.9rem Fraunces,serif;margin:34px 0 6px}
+h2{font:600 1.35rem Fraunces,serif;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 18px;font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin:18px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:720px){.grid2,.grid3{grid-template-columns:1fr}}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:.82rem;font-weight:600;margin-bottom:12px}
+label.c{display:flex;gap:9px;align-items:flex-start;font-size:.9rem;margin:6px 0}
+label.c input{margin-top:4px}
+input,select,textarea{font:500 .92rem Manrope,sans-serif;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px;outline:none;width:100%}
+label.c input{width:auto}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font:600 .9rem Manrope,sans-serif;padding:11px 18px;border-radius:999px;background:var(--accent);color:var(--on)}
+.btn.ghost{background:#fff;color:var(--text);border:1px solid var(--line)}
+.btn.sm{padding:7px 12px;font-size:.8rem}
+.btn.danger{background:#fff;color:var(--red);border:1px solid rgba(209,67,67,.35)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.err{color:var(--red);font-size:.85rem;min-height:1.2em;margin:6px 0}
+.okmsg{color:var(--ok);font-weight:600}
+.hint{font-size:.78rem;color:var(--muted);font-weight:400}
+.thumbs{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:8px}
+.thumbs div{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--bg)}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+.thumbs button{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;cursor:pointer;font-size:.7rem}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th{text-align:left;font:500 .7rem "IBM Plex Mono",monospace;color:var(--muted);text-transform:uppercase;padding:8px 6px;border-bottom:1px solid var(--line)}
+td{padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+td img{width:56px;height:42px;object-fit:cover;border-radius:6px;display:block}
+.pill{font:500 .7rem "IBM Plex Mono",monospace;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.active{background:rgba(31,122,77,.12);color:var(--ok)}
+.pill.rented{background:var(--soft);color:var(--muted)}
+.pill.feat{background:rgba(183,121,31,.14);color:var(--gold)}
+.pill.man{background:var(--soft);color:var(--accent)}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.copybox{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px;white-space:pre-wrap;font-size:.86rem;margin:10px 0}
+.hidden{display:none}
+.spin{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;display:inline-block;animation:s .7s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+.tabs{display:flex;gap:6px;margin-top:20px}
+.tabs button{font:500 .8rem "IBM Plex Mono",monospace;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--muted)}
+.tabs button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.empty{color:var(--muted);text-align:center;padding:30px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="brand" href="arriving.html#housing">sg<span>/</span>unihub</a><span class="tag">Admin · Wohnungsbörse</span>
+  <div class="right"><span id="who"></span><button class="btn ghost sm hidden" id="logout">Abmelden</button></div>
+</div></header>
+
+<main class="wrap">
+  <!-- LOGIN -->
+  <section id="login">
+    <h1>Admin-Login</h1>
+    <p class="sub">Nur für Admins. Du bekommst einen Code per E-Mail.</p>
+    <div class="card" style="max-width:460px">
+      <div id="l1">
+        <label class="f">E-Mail<input id="lEmail" type="email" value="contact@sgunihub.ch" autocomplete="email"></label>
+        <button class="btn" id="lSend">Code senden</button>
+      </div>
+      <div id="l2" class="hidden">
+        <label class="f">Code aus der E-Mail<input id="lCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10"></label>
+        <button class="btn" id="lVerify">Anmelden</button> <button class="btn ghost" id="lBack">Zurück</button>
+      </div>
+      <div class="err" id="lErr"></div>
+    </div>
+  </section>
+
+  <!-- ADMIN -->
+  <section id="admin" class="hidden">
+    <div class="tabs"><button data-tab="new" class="on">Neues Inserat</button><button data-tab="all">Alle Inserate</button></div>
+
+    <!-- NEW -->
+    <div id="tab-new">
+      <div class="card">
+        <h2>Inserat für jemanden erfassen</h2>
+        <p class="sub">Für Personen, die dir ihr Einverständnis gegeben haben. Anfragen gehen an die Kontakt-E-Mail. Über "My listing" auf der Seite können sie das Inserat mit dieser Adresse selbst verwalten.</p>
+        <div class="grid2">
+          <label class="f">Kontakt-E-Mail der Person *<input id="fEmail" type="email" placeholder="vorname.nachname@student.unisg.ch"><span class="hint">Bekommt die Anfragen. Wird nie öffentlich angezeigt. Pro Adresse ein Inserat.</span></label>
+          <label class="f">Titel *<input id="fTitle" maxlength="90" placeholder="z. B. Helles Zimmer in 3er-WG, 10 min zur HSG"></label>
+        </div>
+        <div class="grid3">
+          <label class="f">Quartier *<input id="fArea" maxlength="60" placeholder="z. B. Rosenberg"></label>
+          <label class="f">Miete pro Monat (CHF, inkl.) *<input id="fPrice" type="number" min="100" max="5000"></label>
+          <label class="f">Semester *<select id="fSem"></select></label>
+        </div>
+        <div class="grid3">
+          <label class="f">Zeitraum *<input id="fDates" maxlength="60" placeholder="1 Feb – 31 Jul"></label>
+          <label class="f">Zimmergrösse (m²)<input id="fSize" type="number"></label>
+          <label class="f">Mitbewohnende<input id="fMates" type="number"></label>
+        </div>
+        <label class="f">Beschreibung (Englisch)<textarea id="fDesc" rows="4" maxlength="2000" placeholder="Wie ist die WG, die Lage, was ist inklusive?"></textarea></label>
+        <label class="f">Fotos (1 bis 8, das erste ist das Titelbild) *<input id="fPhotos" type="file" accept="image/*" multiple><div class="thumbs" id="thumbs"></div></label>
+        <label class="c"><input type="checkbox" id="fFurn" checked> Möbliert</label>
+        <label class="c"><input type="checkbox" id="fHsg"> Nur HSG-Studierende als Mitbewohnende (grünes Häkchen)</label>
+        <label class="c"><input type="checkbox" id="fFeat"> Featured (oben anzeigen)</label>
+        <label class="f" style="margin-top:10px">Interne Notiz (nicht öffentlich)<input id="fNote" maxlength="300" placeholder="z. B. Von SHSG Marketplace, OK per WhatsApp am 10.11."></label>
+        <label class="c"><input type="checkbox" id="fOk"> <span><b>Ich habe das Einverständnis der Person</b>, ihr Zimmer mit diesen Angaben und Fotos auf sg/unihub zu veröffentlichen, und die Vermieterschaft ist mit der Untermiete einverstanden.</span></label>
+        <div class="err" id="fErr"></div>
+        <button class="btn" id="fSave">Inserat veröffentlichen</button>
+      </div>
+
+      <div class="card hidden" id="done">
+        <h2 class="okmsg">Online ✓</h2>
+        <p class="sub">Schick der Person diese Nachricht, damit sie weiss, wie alles funktioniert:</p>
+        <div class="copybox" id="msgDe"></div>
+        <button class="btn ghost sm" data-copy="msgDe">Deutsch kopieren</button>
+        <div class="copybox" id="msgEn"></div>
+        <button class="btn ghost sm" data-copy="msgEn">Englisch kopieren</button>
+      </div>
+    </div>
+
+    <!-- ALL -->
+    <div id="tab-all" class="hidden">
+      <div class="card">
+        <h2>Alle Inserate</h2>
+        <p class="sub">Selbst erstellt oder von dir erfasst ("verwaltet"). Featured nach bezahltem Boost hier aktivieren.</p>
+        <div class="err" id="tErr"></div>
+        <div style="overflow-x:auto"><table>
+          <thead><tr><th></th><th>Titel</th><th>Kontakt</th><th>Semester</th><th>Miete</th><th>Status</th><th>Erstellt</th><th>Aktionen</th></tr></thead>
+          <tbody id="rows"><tr><td colspan="8" class="empty">Lädt…</td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* Same project as arriving.html */
+const CONFIG = {
+  SUPABASE_URL: "https://labmwidiwbwxdvnehbsa.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_2HCC0yDvzz7rA-MBEmNH4g_okQIYULN",
+  MAX_PHOTOS: 8,
+  SEMESTERS_AHEAD: 6
+};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const sb = window.supabase ? window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY) : null;
+async function busy(btn, fn) { const t = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spin"></span>'; try { return await fn(); } finally { btn.disabled = false; btn.innerHTML = t; } }
+
+/* semesters (same logic as arriving.html) */
+function upcomingSemesters(n = CONFIG.SEMESTERS_AHEAD, today = new Date()) {
+  const m = today.getMonth(); let year = today.getFullYear(), spring;
+  if (m === 0) { spring = false; year -= 1; } else spring = m <= 6;
+  const out = [];
+  for (let i = 0; i < n; i++) { out.push({ value: `${spring ? "Spring" : "Fall"} ${year}`, label: `${spring ? "Spring" : "Fall"} ${year} · ${spring ? "FS" : "HS"}${String(year).slice(2)}` }); if (!spring) year += 1; spring = !spring; }
+  return out;
+}
+upcomingSemesters().forEach(s => $("#fSem").add(new Option(s.label, s.value)));
+$("#fSem").selectedIndex = 1;
+
+/* ---------- login ---------- */
+let pending = "";
+$("#lSend").onclick = () => busy($("#lSend"), async () => {
+  $("#lErr").textContent = "";
+  if (!sb) return $("#lErr").textContent = "Supabase konnte nicht geladen werden.";
+  pending = $("#lEmail").value.trim().toLowerCase();
+  const { error } = await sb.auth.signInWithOtp({ email: pending, options: { shouldCreateUser: true } });
+  if (error) return $("#lErr").textContent = error.message;
+  $("#l1").classList.add("hidden"); $("#l2").classList.remove("hidden"); $("#lCode").focus();
+});
+$("#lBack").onclick = () => { $("#l2").classList.add("hidden"); $("#l1").classList.remove("hidden"); };
+$("#lVerify").onclick = () => busy($("#lVerify"), async () => {
+  $("#lErr").textContent = "";
+  const { error } = await sb.auth.verifyOtp({ email: pending, token: $("#lCode").value.trim(), type: "email" });
+  if (error) return $("#lErr").textContent = "Code falsch oder abgelaufen.";
+  await enter();
+});
+$("#lCode").addEventListener("keydown", e => { if (e.key === "Enter") $("#lVerify").click(); });
+$("#logout").onclick = async () => { await sb.auth.signOut(); location.reload(); };
+
+async function enter() {
+  const { data: s } = await sb.auth.getSession();
+  if (!s.session) return;
+  const { data: ok, error } = await sb.rpc("is_admin");
+  if (error || !ok) { $("#lErr").textContent = "Diese E-Mail hat keinen Admin-Zugang. (Ist supabase-admin.sql ausgeführt?)"; await sb.auth.signOut(); $("#lBack").click(); return; }
+  $("#who").textContent = s.session.user.email; $("#logout").classList.remove("hidden");
+  $("#login").classList.add("hidden"); $("#admin").classList.remove("hidden");
+  loadAll();
+}
+if (sb) enter();
+
+/* ---------- tabs ---------- */
+$$(".tabs button").forEach(b => b.onclick = () => {
+  $$(".tabs button").forEach(x => x.classList.toggle("on", x === b));
+  $("#tab-new").classList.toggle("hidden", b.dataset.tab !== "new");
+  $("#tab-all").classList.toggle("hidden", b.dataset.tab !== "all");
+  if (b.dataset.tab === "all") loadAll();
+});
+
+/* ---------- photos ---------- */
+let photos = [];
+function resize(file) {
+  return new Promise((res, rej) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => { const s = Math.min(1, 1600 / Math.max(img.width, img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url); res(c.toDataURL("image/jpeg", .82)); };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(); }; img.src = url;
+  });
+}
+function renderThumbs() { $("#thumbs").innerHTML = photos.map((p, i) => `<div><img src="${p}" alt=""><button type="button" data-rm="${i}">✕</button></div>`).join(""); }
+$("#fPhotos").addEventListener("change", async e => {
+  for (const f of [...e.target.files]) { if (photos.length >= CONFIG.MAX_PHOTOS) break; try { photos.push(await resize(f)); } catch (x) {} }
+  e.target.value = ""; renderThumbs();
+});
+$("#thumbs").addEventListener("click", e => { const b = e.target.closest("[data-rm]"); if (b) { photos.splice(+b.dataset.rm, 1); renderThumbs(); } });
+
+/* ---------- create ---------- */
+$("#fSave").onclick = () => {
+  const v = id => $(id).value.trim();
+  const email = v("#fEmail").toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return $("#fErr").textContent = "Bitte eine gültige Kontakt-E-Mail angeben.";
+  if (!v("#fTitle") || !v("#fArea") || !v("#fPrice") || !v("#fDates")) return $("#fErr").textContent = "Titel, Quartier, Miete und Zeitraum ausfüllen.";
+  if (+v("#fPrice") < 100 || +v("#fPrice") > 5000) return $("#fErr").textContent = "Miete zwischen CHF 100 und 5000.";
+  if (!photos.length) return $("#fErr").textContent = "Mindestens ein Foto hinzufügen.";
+  if (!$("#fOk").checked) return $("#fErr").textContent = "Bitte bestätige das Einverständnis.";
+  $("#fErr").textContent = "";
+  busy($("#fSave"), async () => {
+    const { data: s } = await sb.auth.getSession(); const uid = s.session.user.id;
+    const uploaded = [];
+    try {
+      for (const d of photos) {
+        const blob = await (await fetch(d)).blob();
+        const path = `${uid}/${crypto.randomUUID()}.jpg`;
+        const { error } = await sb.storage.from("listing-photos").upload(path, blob, { contentType: "image/jpeg" });
+        if (error) throw error; uploaded.push(path);
+      }
+      const urls = uploaded.map(p => sb.storage.from("listing-photos").getPublicUrl(p).data.publicUrl);
+      const payload = { owner_email: email, title: v("#fTitle"), area: v("#fArea"), price: +v("#fPrice"), semester: $("#fSem").value, dates: v("#fDates"),
+        size: v("#fSize"), mates: v("#fMates"), furnished: $("#fFurn").checked, hsg_flatmates: $("#fHsg").checked, description: v("#fDesc"),
+        photos: urls, featured: $("#fFeat").checked, admin_note: v("#fNote") };
+      const { error } = await sb.rpc("admin_create_listing", { p: payload });
+      if (error) throw error;
+      showDone(email, payload.title);
+      ["#fEmail", "#fTitle", "#fArea", "#fPrice", "#fDates", "#fSize", "#fMates", "#fDesc", "#fNote"].forEach(id => $(id).value = "");
+      ["#fHsg", "#fFeat", "#fOk"].forEach(id => $(id).checked = false); photos = []; renderThumbs();
+    } catch (e) {
+      if (uploaded.length) await sb.storage.from("listing-photos").remove(uploaded);
+      $("#fErr").textContent = /one_listing_per_email|duplicate/i.test(e.message || "") ? "Für diese E-Mail gibt es schon ein Inserat (eins pro Adresse)." : (e.message || "Fehler beim Speichern.");
+    }
+  });
+};
+
+function showDone(email, title) {
+  $("#msgDe").textContent =
+`Hallo! Dein Zimmer "${title}" ist jetzt auf sg/unihub online: https://sgunihub.ch/arriving.html#housing
+
+Anfragen von Austauschstudierenden bekommst du direkt per E-Mail an ${email}. Du kannst einfach auf die E-Mail antworten.
+
+Ist das Zimmer vergeben? Auf https://sgunihub.ch/arriving.html#manage mit dieser E-Mail-Adresse anmelden und als vermietet markieren oder löschen. Oder schreib mir einfach kurz.
+
+Eine kostenlose Vorlage für den Untermietvertrag gibt es auch auf der Seite. Danke dir!`;
+  $("#msgEn").textContent =
+`Hi! Your room "${title}" is now online on sg/unihub: https://sgunihub.ch/arriving.html#housing
+
+Exchange students' messages will reach you by email at ${email}. Just reply to the email to answer them.
+
+Room taken? Go to https://sgunihub.ch/arriving.html#manage, sign in with this email address and mark it as rented or delete it. Or just message me.
+
+There's also a free sublease template on the page. Thank you!`;
+  $("#done").classList.remove("hidden"); $("#done").scrollIntoView({ behavior: "smooth" });
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-copy]"); if (!b) return;
+  const text = $("#" + b.dataset.copy).textContent;
+  try { await navigator.clipboard.writeText(text); b.textContent = "Kopiert ✓"; } catch (x) { const r = document.createRange(); r.selectNodeContents($("#" + b.dataset.copy)); getSelection().removeAllRanges(); getSelection().addRange(r); b.textContent = "Markiert, jetzt Cmd+C"; }
+});
+
+/* ---------- list all ---------- */
+let all = [];
+async function loadAll() {
+  $("#tErr").textContent = "";
+  const { data, error } = await sb.rpc("admin_listings");
+  if (error) { $("#tErr").textContent = error.message; return; }
+  all = data || []; renderRows();
+}
+function renderRows() {
+  $("#rows").innerHTML = all.length ? all.map(l => `
+    <tr data-id="${esc(l.id)}">
+      <td>${l.photos?.[0] ? `<img src="${esc(l.photos[0])}" alt="">` : ""}</td>
+      <td><b>${esc(l.title)}</b><br><span class="hint">${esc(l.area)}${l.admin_note ? " · " + esc(l.admin_note) : ""}</span></td>
+      <td>${esc(l.owner_email)}${l.managed ? '<br><span class="pill man">verwaltet</span>' : ""}</td>
+      <td>${esc(l.semester)}<br><span class="hint">${esc(l.dates)}</span></td>
+      <td>CHF ${esc(l.price)}</td>
+      <td><span class="pill ${l.status}">${l.status === "active" ? "aktiv" : "vermietet"}</span>${l.featured ? ' <span class="pill feat">★ featured</span>' : (l.boost_requested ? ' <span class="pill feat">Boost bezahlt?</span>' : "")}</td>
+      <td class="hint">${new Date(l.created_at).toLocaleDateString("de-CH")}</td>
+      <td><div class="actions">
+        <button class="btn ghost sm" data-act="status">${l.status === "active" ? "Vermietet" : "Aktivieren"}</button>
+        <button class="btn ghost sm" data-act="feat">${l.featured ? "Featured aus" : "Featured an"}</button>
+        <button class="btn danger sm" data-act="del">Löschen</button>
+      </div></td>
+    </tr>`).join("") : '<tr><td colspan="8" class="empty">Noch keine Inserate.</td></tr>';
+}
+$("#rows").addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const l = all.find(x => x.id === b.closest("tr").dataset.id);
+  if (b.dataset.act === "del" && !b.dataset.sure) { b.dataset.sure = "1"; b.textContent = "Sicher?"; return; }
+  busy(b, async () => {
+    let r;
+    if (b.dataset.act === "status") r = await sb.rpc("admin_update_listing", { p_id: l.id, p_status: l.status === "active" ? "rented" : "active" });
+    if (b.dataset.act === "feat") r = await sb.rpc("admin_update_listing", { p_id: l.id, p_featured: !l.featured });
+    if (b.dataset.act === "del") {
+      r = await sb.rpc("admin_delete_listing", { p_id: l.id });
+      const paths = (r.data || []).map(u => decodeURIComponent(u.split("/listing-photos/")[1] || "")).filter(Boolean);
+      if (paths.length) await sb.storage.from("listing-photos").remove(paths); // only removes photos in your own folder
+    }
+    if (r && r.error) { $("#tErr").textContent = r.error.message; return; }
+    await loadAll();
+  });
+});
+</script>
+</body>
+</html>

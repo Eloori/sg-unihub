@@ -267,6 +267,7 @@ hr{border:none;border-top:1px solid var(--line);margin:22px 0}
 .ccol.us li::before{content:"✓";left:2px;color:var(--ok)}
 .ccol a.go{font-weight:700;font-size:.9rem;color:var(--accent);text-decoration:none}
 .ccol .btn{align-self:flex-start}
+.verified.managed{color:var(--accent)}
 .hsgmates{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;color:var(--ok);font-weight:600}
 .hsgmates svg{width:15px;height:15px}
 
@@ -608,7 +609,7 @@ footer a{color:var(--muted)}
 <footer>
   <div class="wrap">
     <span>sg/unihub is an independent student project and is not operated by the University of St. Gallen.</span>
-    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.5</span></span>
+    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.6</span></span>
   </div>
 </footer>
 
@@ -775,9 +776,19 @@ function track(path) { try { window.goatcounter && window.goatcounter.count && w
    2) DATA LAYER: same interface for live (Supabase) and demo mode
    ===================================================================== */
 const BASE_COLS = "id,title,area,price,semester,dates,size,mates,furnished,description,photos,featured,status,created_at";
-let hasHsgCol = true; // falls back gracefully if the hsg_flatmates column hasn't been added in Supabase yet
-const cols = () => hasHsgCol ? BASE_COLS + ",hsg_flatmates" : BASE_COLS;
-const missingCol = e => e && (e.code === "42703" || e.code === "PGRST204" || /hsg_flatmates/.test(e.message || ""));
+// Optional columns added by later SQL updates. If one is missing in Supabase, the page falls back step by step.
+const COL_LEVELS = [",hsg_flatmates,managed", ",hsg_flatmates", ""];
+let colLevel = 0;
+let hasHsgCol = true;
+const cols = () => BASE_COLS + COL_LEVELS[colLevel];
+const missingCol = e => e && (e.code === "42703" || e.code === "PGRST204" || /hsg_flatmates|managed/.test(e.message || ""));
+async function withCols(run) {
+  for (;;) {
+    const res = await run(cols());
+    if (!missingCol(res.error) || colLevel >= COL_LEVELS.length - 1) { hasHsgCol = colLevel < 2; return res; }
+    colLevel++;
+  }
+}
 
 function makeLiveApi() {
   const sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
@@ -785,8 +796,7 @@ function makeLiveApi() {
   const pathFromUrl = u => decodeURIComponent(u.split("/listing-photos/")[1] || "");
   return {
     async list() {
-      let { data, error } = await sb.from("listings").select(cols()).eq("status", "active");
-      if (missingCol(error)) { hasHsgCol = false; ({ data, error } = await sb.from("listings").select(cols()).eq("status", "active")); }
+      const { data, error } = await withCols(c => sb.from("listings").select(c).eq("status", "active"));
       if (error) throw error; return data;
     },
     async sendCode(email) {
@@ -801,8 +811,8 @@ function makeLiveApi() {
     async signOut() { await sb.auth.signOut(); },
     async myListing() {
       const id = await uid(); if (!id) return null;
-      let { data, error } = await sb.from("listings").select(cols() + ",boost_requested").eq("owner_id", id).maybeSingle();
-      if (missingCol(error)) { hasHsgCol = false; ({ data, error } = await sb.from("listings").select(cols() + ",boost_requested").eq("owner_id", id).maybeSingle()); }
+      try { await sb.rpc("claim_my_listings"); } catch (e) {} // take over a listing the admin created for this email
+      const { data, error } = await withCols(c => sb.from("listings").select(c + ",boost_requested").eq("owner_id", id).maybeSingle());
       if (error) throw error; return data;
     },
     async create(fields, photoDataUrls) {
@@ -820,7 +830,7 @@ function makeLiveApi() {
         const row = { ...fields, photos };
         if (!hasHsgCol) delete row.hsg_flatmates;
         let { data, error } = await sb.from("listings").insert(row).select(cols()).single();
-        if (missingCol(error)) { hasHsgCol = false; delete row.hsg_flatmates; ({ data, error } = await sb.from("listings").insert(row).select(cols()).single()); }
+        if (missingCol(error)) { colLevel = 2; hasHsgCol = false; delete row.hsg_flatmates; ({ data, error } = await sb.from("listings").insert(row).select(cols()).single()); }
         if (error) throw error;
         return data;
       } catch (e) {
@@ -957,7 +967,7 @@ function renderGrid() {
       <div class="lbody">
         <div class="row"><h4>${esc(l.title)}</h4><div class="price">${esc(l.price)}<small> CHF/mo</small></div></div>
         <div class="meta"><span>${esc(l.area)}</span><span>${esc(l.semester)}</span><span>${esc(l.dates)}</span>${l.furnished ? "<span>Furnished</span>" : ""}</div>
-        <span class="verified"><svg class="ic"><use href="#i-seal"/></svg>Verified HSG student</span>
+        ${l.managed ? '<span class="verified managed"><svg class="ic"><use href="#i-seal"/></svg>Listed via sg/unihub</span>' : '<span class="verified"><svg class="ic"><use href="#i-seal"/></svg>Verified HSG student</span>'}
         ${l.hsg_flatmates ? '<span class="hsgmates"><svg class="ic"><use href="#i-check"/></svg>Only HSG students as flatmates</span>' : ""}
       </div>
     </button>`).join("") : `<div class="empty">${listings.length ? "No rooms match these filters yet. Try another semester or a higher rent." : "No rooms listed yet. New rooms are added as HSG students plan their own exchange, so check back soon."}</div>`;
@@ -1012,7 +1022,7 @@ $("#grid").addEventListener("click", e => {
     </div>` : ""}
     ${l.featured ? '<span class="tag gold">★ Featured</span>' : ""}
     <h3>${esc(l.title)}</h3>
-    <span class="verified"><svg class="ic"><use href="#i-seal"/></svg>Listed by a verified HSG student</span>
+    ${l.managed ? '<span class="verified managed"><svg class="ic"><use href="#i-seal"/></svg>Listed by sg/unihub with the tenant\'s permission</span>' : '<span class="verified"><svg class="ic"><use href="#i-seal"/></svg>Listed by a verified HSG student</span>'}
     ${l.hsg_flatmates ? '<br><span class="hsgmates" style="margin-top:4px"><svg class="ic"><use href="#i-check"/></svg>Only HSG students as flatmates</span>' : ""}
     <div class="facts">
       <div><small>RENT</small><b>CHF ${esc(l.price)}/mo</b></div>
@@ -1110,11 +1120,14 @@ function setFlowMode(mode) {
   const m = mode === "manage";
   $("#s1Eyebrow").textContent = m ? "My listing · Verify" : "Step 1 of 4 · Verify";
   $("#s1Title").textContent = m ? "Manage your listing" : "Verify you're an HSG student";
-  $("#s1Sub").textContent = m ? "Enter the HSG email you used for your listing. We'll send you a code to confirm it's you." : "Only verified HSG students can post. That's what makes listings here trustworthy.";
+  $("#s1Sub").textContent = m ? "Enter the email your listing is linked to. We'll send you a code to confirm it's you." : "Only verified HSG students can post. That's what makes listings here trustworthy.";
 }
 async function afterSignIn() {
   const mine = await api.myListing().catch(() => null);
   if (mine) { renderMyListing(mine); goto(5); return; }
+  const email = (await api.email().catch(() => "")) || "";
+  const isHsg = CONFIG.ALLOWED_DOMAINS.includes(email.split("@")[1] || "");
+  if (flowMode === "manage" && !isHsg) { toast("No listing found for this email.", 4000); await api.signOut(); goto(1); return; }
   if (flowMode === "manage") toast("No listing found for this email. You can create one now.", 4000);
   goto(3);
 }
@@ -1152,7 +1165,7 @@ $("#sendCode").onclick = () => {
   const email = $("#email").value.trim().toLowerCase();
   const domain = email.split("@")[1] || "";
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return $("#emailErr").textContent = "Please enter a valid email address.";
-  if (!CONFIG.ALLOWED_DOMAINS.includes(domain)) return $("#emailErr").textContent = "Please use your HSG address (@student.unisg.ch).";
+  if (flowMode !== "manage" && !CONFIG.ALLOWED_DOMAINS.includes(domain)) return $("#emailErr").textContent = "Please use your HSG address (@student.unisg.ch).";
   $("#emailErr").textContent = "";
   busy($("#sendCode"), async () => {
     try {
