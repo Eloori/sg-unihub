@@ -613,7 +613,7 @@ footer a{color:var(--muted)}
 <footer>
   <div class="wrap">
     <span>sg/unihub is an independent student project and is not operated by the University of St. Gallen.</span>
-    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.10</span></span>
+    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.12</span></span>
   </div>
 </footer>
 
@@ -655,8 +655,8 @@ footer a{color:var(--muted)}
 
     <!-- step 3: details -->
     <div class="lstep" data-step="3">
-      <div class="eyebrow">Step 3 of 4 · Your room</div>
-      <h3>Describe your room</h3>
+      <div class="eyebrow" id="s3Eyebrow">Step 3 of 4 · Your room</div>
+      <h3 id="s3Title">Describe your room</h3>
       <p class="sub"><span class="verified"><svg class="ic"><use href="#i-seal"/></svg>Verified as <span id="whoami"></span></span> · <a href="#" id="signOut" style="color:var(--muted);font-size:.82rem">Sign out</a></p>
       <div class="field"><label>Title</label><input id="lTitle" maxlength="90" placeholder="e.g. Bright room in 3-person WG, 10 min to HSG"></div>
       <div class="two">
@@ -685,7 +685,7 @@ footer a{color:var(--muted)}
         <div class="thumbs" id="thumbs"></div>
       </div>
       <div class="err" id="detailErr"></div>
-      <div class="actions"><span></span><button class="btn btn-primary" id="toBoost">Continue</button></div>
+      <div class="actions"><button class="btn btn-ghost btn-sm" id="cancelEdit" style="display:none">Cancel</button><span></span><button class="btn btn-primary" id="toBoost">Continue</button></div>
     </div>
 
     <!-- step 4: boost -->
@@ -844,6 +844,33 @@ function makeLiveApi() {
         throw e;
       }
     },
+    async update(listing, fields, photoList) {
+      const id = await uid(); if (!id) throw new Error("Please verify your email again.");
+      const uploaded = [];
+      try {
+        const photos = [];
+        for (const p of photoList) {
+          if (!p.startsWith("data:")) { photos.push(p); continue; }
+          const blob = await (await fetch(p)).blob();
+          const path = `${id}/${crypto.randomUUID()}.jpg`;
+          const { error } = await sb.storage.from("listing-photos").upload(path, blob, { contentType: "image/jpeg" });
+          if (error) throw error;
+          uploaded.push(path);
+          photos.push(sb.storage.from("listing-photos").getPublicUrl(path).data.publicUrl);
+        }
+        const row = { ...fields, photos };
+        if (!hasHsgCol) delete row.hsg_flatmates;
+        const { data, error } = await sb.from("listings").update(row).eq("id", listing.id).select("id");
+        if (error) throw /permission|42501/i.test(error.message + error.code) ? new Error("Editing isn't enabled yet. Please contact contact@sgunihub.ch.") : error;
+        if (!data?.length) throw new Error("Your listing couldn't be updated. Please verify your email again.");
+        // clean up removed photos in your own folder (photos added by sg/unihub stay, they are not yours to delete)
+        const gone = (listing.photos || []).filter(u => !photos.includes(u)).map(pathFromUrl).filter(x => x.startsWith(id + "/"));
+        if (gone.length) await sb.storage.from("listing-photos").remove(gone).catch(() => {});
+      } catch (e) {
+        if (uploaded.length) await sb.storage.from("listing-photos").remove(uploaded).catch(() => {});
+        throw e;
+      }
+    },
     async setStatus(id, status) {
       const { error } = await sb.from("listings").update({ status }).eq("id", id);
       if (error) throw error;
@@ -894,6 +921,7 @@ function makeDemoApi() {
       const row = { ...fields, photos, id: "demo-" + Date.now(), owner: me, status: "active", featured: false, created_at: new Date().toISOString() };
       rows.unshift(row); return row;
     },
+    async update(l, fields, photos) { await sleep(400); Object.assign(rows.find(r => r.id === l.id), fields, { photos }); },
     async setStatus(id, status) { await sleep(200); rows.find(r => r.id === id).status = status; },
     async remove(l) { await sleep(200); rows = rows.filter(r => r.id !== l.id); },
     async contact() { await sleep(500); }
@@ -902,7 +930,7 @@ function makeDemoApi() {
 
 function makeOfflineApi() {
   const fail = async () => { throw new Error("The housing service couldn't be reached. Please check your connection and reload the page."); };
-  return { list: fail, sendCode: fail, verify: fail, email: async () => null, signOut: async () => {}, myListing: async () => null, create: fail, setStatus: fail, remove: fail, contact: fail };
+  return { list: fail, sendCode: fail, verify: fail, email: async () => null, signOut: async () => {}, myListing: async () => null, create: fail, update: fail, setStatus: fail, remove: fail, contact: fail };
 }
 const api = !CONFIGURED ? makeDemoApi() : (window.supabase ? makeLiveApi() : makeOfflineApi());
 
@@ -1113,9 +1141,11 @@ up.addEventListener("drop", e => addPhotos(e.dataTransfer.files));
 
 /* ---------- list-your-room flow ---------- */
 let pendingEmail = null;
+let editing = null; // listing being edited, or null
 function goto(n) {
   $$(".lstep").forEach(s => s.style.display = (+s.dataset.step === n) ? "block" : "none");
-  $(".progress").style.visibility = n === 5 ? "hidden" : "visible";
+  if (n !== 3 && editing) setEditing(null);
+  $(".progress").style.visibility = n === 5 || editing ? "hidden" : "visible";
   $$(".progress i").forEach((i, k) => i.classList.toggle("on", k < n));
   if (n === 2) setTimeout(() => boxes[0].focus(), 50);
 }
@@ -1219,6 +1249,7 @@ $("#toBoost").onclick = () => {
   if (!photos.length) return $("#detailErr").textContent = "Please add at least one photo of the room.";
   if (!$("#lConsent").checked) return $("#detailErr").textContent = "Please confirm your landlord agrees to the sublet.";
   $("#detailErr").textContent = "";
+  if (editing) return saveEdit();
   $("#boostNote").textContent = CONFIG.STRIPE_BOOST_LINK
     ? "You'll be taken to a secure Stripe checkout. Your listing goes live right away; the Featured badge is added once the payment is confirmed."
     : (LIVE ? "Featuring is coming soon. Your listing will be published for free." : "Demo mode: no payment is taken.");
@@ -1256,6 +1287,48 @@ $("#publish").onclick = () => busy($("#publish"), async () => {
   }
 });
 
+/* ---------- edit my listing (reuses the step 3 form) ---------- */
+const FORM_FIELDS = ["#lTitle", "#lArea", "#lPrice", "#lDates", "#lSize", "#lMates", "#lDesc"];
+function setEditing(l) {
+  editing = l;
+  $("#s3Eyebrow").textContent = l ? "My listing · Edit" : "Step 3 of 4 · Your room";
+  $("#s3Title").textContent = l ? "Edit your listing" : "Describe your room";
+  $("#toBoost").textContent = l ? "Save changes" : "Continue";
+  $("#cancelEdit").style.display = l ? "" : "none";
+  $("#detailErr").textContent = "";
+  if (!l) { photos = []; renderThumbs(); FORM_FIELDS.forEach(s => $(s).value = ""); $("#lConsent").checked = false; $("#lHsg").checked = false; $("#lFurn").checked = true; }
+}
+function openEdit(l) {
+  setEditing(l);
+  $("#lTitle").value = l.title || ""; $("#lArea").value = l.area || ""; $("#lPrice").value = l.price ?? "";
+  $("#lDates").value = l.dates || ""; $("#lSize").value = l.size ?? ""; $("#lMates").value = l.mates ?? ""; $("#lDesc").value = l.description || "";
+  const sel = $("#lSem");
+  if (l.semester && ![...sel.options].some(o => o.value === l.semester)) sel.add(new Option(l.semester, l.semester), 0);
+  sel.value = l.semester;
+  $("#lFurn").checked = !!l.furnished; $("#lHsg").checked = !!l.hsg_flatmates; $("#lConsent").checked = false;
+  photos = (l.photos || []).slice(); renderThumbs();
+  goto(3);
+}
+async function saveEdit() {
+  const num = s => $(s).value === "" ? null : +$(s).value;
+  const fields = {
+    title: $("#lTitle").value.trim(), area: $("#lArea").value.trim(), price: +$("#lPrice").value,
+    semester: $("#lSem").value, dates: $("#lDates").value.trim(), size: num("#lSize"), mates: num("#lMates"),
+    furnished: $("#lFurn").checked, hsg_flatmates: $("#lHsg").checked, description: $("#lDesc").value.trim()
+  };
+  const ok = await busy($("#toBoost"), async () => {
+    try { await api.update(editing, fields, photos.slice()); return true; }
+    catch (e) { $("#detailErr").textContent = e.message || "Something went wrong. Please try again."; return false; }
+  });
+  if (!ok) return;
+  track("/arriving/edited");
+  const m = await api.myListing().catch(() => null);
+  setEditing(null);
+  if (m) { renderMyListing(m); goto(5); }
+  loadListings(); toast("Changes saved ✓");
+}
+$("#cancelEdit").onclick = async () => { const m = await api.myListing().catch(() => null); setEditing(null); if (m) { renderMyListing(m); goto(5); } };
+
 /* ---------- manage my listing ---------- */
 function renderMyListing(l) {
   $("#manageErr").textContent = "";
@@ -1267,9 +1340,11 @@ function renderMyListing(l) {
         <span class="state ${l.status}">${l.status === "active" ? "● Live on the board" : "○ Marked as rented (hidden)"}${l.featured ? " · ★ Featured" : (l.boost_requested ? " · Featured payment pending" : "")}</span></div>
     </div>
     <div class="actions" style="margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="editListing">Edit listing</button>
       <button class="btn btn-ghost btn-sm" id="toggleRented">${l.status === "active" ? "Mark as rented" : "Show on board again"}</button>
       <button class="btn btn-ghost btn-sm danger" id="deleteListing">Delete listing</button>
     </div>`;
+  $("#editListing").onclick = () => openEdit(l);
   $("#toggleRented").onclick = () => busy($("#toggleRented"), async () => {
     try { await api.setStatus(l.id, l.status === "active" ? "rented" : "active"); const m = await api.myListing(); renderMyListing(m); loadListings(); }
     catch (e) { $("#manageErr").textContent = e.message; }
