@@ -337,7 +337,7 @@ function renderRows() {
       <td>${esc(l.semester)}<br><span class="hint">${esc(l.dates)}</span></td>
       <td>CHF ${esc(l.price)}</td>
       <td><span class="pill ${l.status}">${l.status === "active" ? "aktiv" : "vermietet"}</span>${l.featured ? ' <span class="pill feat">★ featured</span>' : (l.boost_requested ? ' <span class="pill feat">Boost bezahlt?</span>' : "")}</td>
-      <td class="hint">${new Date(l.created_at).toLocaleDateString("de-CH")}</td>
+      <td class="hint">${new Date(l.created_at).toLocaleDateString("de-CH")}${l.views != null ? `<br>${l.views} Aufrufe` : ""}</td>
       <td><div class="actions">
         <button class="btn ghost sm" data-act="edit">Bearbeiten</button>
         <button class="btn ghost sm" data-act="status">${l.status === "active" ? "Vermietet" : "Aktivieren"}</button>

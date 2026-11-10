@@ -231,7 +231,11 @@ select:focus,input:focus,textarea:focus{border-color:var(--accent)}
 .modal{background:var(--card);border:1px solid var(--line);border-radius:22px;width:100%;max-width:560px;max-height:92vh;overflow:auto;padding:30px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.3)}
 .modal h3{font-family:Fraunces,serif;font-weight:600;font-size:1.6rem;margin:6px 0 8px;letter-spacing:-.01em}
 .modal .sub{color:var(--muted);font-size:.92rem;margin:0 0 22px}
-.close{position:absolute;top:16px;right:16px}
+.close{position:absolute;top:16px;right:16px;z-index:5;background:var(--card)}
+.close + .gallery{margin-top:28px}
+.vrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.views{display:inline-flex;align-items:center;gap:5px;font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--muted)}
+.views .ic{width:15px;height:15px}
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
 .field label{font-size:.82rem;font-weight:600}
 .field .hint{font-size:.78rem;color:var(--muted)}
@@ -613,7 +617,7 @@ footer a{color:var(--muted)}
 <footer>
   <div class="wrap">
     <span>sg/unihub is an independent student project and is not operated by the University of St. Gallen.</span>
-    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.13</span></span>
+    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.14</span></span>
   </div>
 </footer>
 
@@ -881,6 +885,10 @@ function makeLiveApi() {
       const paths = (listing.photos || []).map(pathFromUrl).filter(Boolean);
       if (paths.length) await sb.storage.from("listing-photos").remove(paths);
     },
+    async view(id, count) {
+      const { data, error } = await sb.rpc("listing_view", { p_id: id, p_count: count });
+      if (error) throw error; return data;
+    },
     async contact(payload) {
       const { data, error } = await sb.functions.invoke(CONFIG.CONTACT_FUNCTION, { body: payload });
       if (error) { let msg = null; try { msg = (await error.context.json()).error; } catch (e) {} throw new Error(msg || "Message could not be sent. Please try again."); }
@@ -924,13 +932,14 @@ function makeDemoApi() {
     async update(l, fields, photos) { await sleep(400); Object.assign(rows.find(r => r.id === l.id), fields, { photos }); },
     async setStatus(id, status) { await sleep(200); rows.find(r => r.id === id).status = status; },
     async remove(l) { await sleep(200); rows = rows.filter(r => r.id !== l.id); },
+    async view(id, count) { const r = rows.find(x => x.id === id); r.views = (r.views || 0) + (count ? 1 : 0); return r.views; },
     async contact() { await sleep(500); }
   };
 }
 
 function makeOfflineApi() {
   const fail = async () => { throw new Error("The housing service couldn't be reached. Please check your connection and reload the page."); };
-  return { list: fail, sendCode: fail, verify: fail, email: async () => null, signOut: async () => {}, myListing: async () => null, create: fail, update: fail, setStatus: fail, remove: fail, contact: fail };
+  return { list: fail, sendCode: fail, verify: fail, email: async () => null, signOut: async () => {}, myListing: async () => null, view: async () => null, create: fail, update: fail, setStatus: fail, remove: fail, contact: fail };
 }
 const api = !CONFIGURED ? makeDemoApi() : (window.supabase ? makeLiveApi() : makeOfflineApi());
 
@@ -1055,8 +1064,9 @@ $("#grid").addEventListener("click", e => {
     </div>` : ""}
     ${l.featured ? '<span class="tag gold">★ Featured</span>' : ""}
     <h3>${esc(l.title)}</h3>
-    ${l.managed ? '<span class="verified managed"><svg class="ic"><use href="#i-seal"/></svg>Listed by sg/unihub with the tenant\'s permission</span>' : '<span class="verified"><svg class="ic"><use href="#i-seal"/></svg>Listed by a verified HSG student</span>'}
-    ${l.hsg_flatmates ? '<br><span class="hsgmates" style="margin-top:4px"><svg class="ic"><use href="#i-check"/></svg>Only HSG students as flatmates</span>' : ""}
+    <div class="vrow">${l.managed ? '<span class="verified managed"><svg class="ic"><use href="#i-seal"/></svg>Listed by sg/unihub with the tenant\'s permission</span>' : '<span class="verified"><svg class="ic"><use href="#i-seal"/></svg>Listed by a verified HSG student</span>'}
+      <span class="views" id="dViews" hidden title="Views"><svg class="ic"><use href="#i-eye"/></svg><span></span></span></div>
+    ${l.hsg_flatmates ? '<span class="hsgmates" style="margin-top:4px"><svg class="ic"><use href="#i-check"/></svg>Only HSG students as flatmates</span>' : ""}
     <div class="facts">
       <div><small>RENT</small><b>CHF ${esc(l.price)}/mo</b></div>
       <div><small>AVAILABLE</small><b>${esc(l.dates)}</b></div>
@@ -1086,6 +1096,7 @@ $("#grid").addEventListener("click", e => {
     </form>`;
   openOv("#detailOv");
   if (photos.length) initGallery(photos.length);
+  countView(l);
   $("#contactForm").onsubmit = ev => {
     ev.preventDefault();
     const name = $("#cName").value.trim(), email = $("#cMail").value.trim(), message = $("#cMsg").value.trim();
@@ -1100,6 +1111,19 @@ $("#grid").addEventListener("click", e => {
     });
   };
 });
+
+/* ---------- view counter: each browser counts once per listing ---------- */
+function countView(l) {
+  const KEY = "sgunihub-viewed";
+  let seen = [];
+  try { seen = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) {}
+  const fresh = !seen.includes(String(l.id));
+  api.view(l.id, fresh).then(n => {
+    if (fresh) { seen.push(String(l.id)); try { localStorage.setItem(KEY, JSON.stringify(seen.slice(-300))); } catch (e) {} }
+    const el = $("#dViews");
+    if (el && n != null && $("#detailOv").classList.contains("on")) { el.querySelector("span").textContent = `${n} view${n === 1 ? "" : "s"}`; el.hidden = false; }
+  }).catch(() => {});
+}
 
 /* ---------- sublease contract template (fillable PDF next to this page) ---------- */
 const CONTRACT_PDF = "untermietvertrag-sgunihub.pdf";
