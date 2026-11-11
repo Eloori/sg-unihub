@@ -421,6 +421,51 @@
     display:block; font-family:var(--font-mono); font-size:.64rem; font-weight:500;
     color:var(--text-2); opacity:.75; margin-top:-.15rem; letter-spacing:.01em;
   }
+
+  /* A small promo badge in a regular tile's free bottom-right corner (see
+     tileHTML) — a discount value framed by two thin rules (the "two lines"
+     with the value between them), the code underneath in the same quiet
+     style as .deal-sub above. Absolute so it never affects the centered
+     icon+name layout; only used on the rare tile that carries `promo` data,
+     and short values/codes by design so it never grows large enough to
+     collide with a short name like "Ecoreps". */
+  .tile-promo{
+    position:absolute; right:.7rem; bottom:.65rem; z-index:1;
+    display:flex; flex-direction:column; align-items:center;
+    font-family:var(--font-mono); line-height:1.35; pointer-events:none;
+  }
+  .tile-promo-value{
+    font-weight:800; font-size:.66rem; color:var(--accent); white-space:nowrap;
+    padding:.15rem 0; border-top:1px solid var(--accent); border-bottom:1px solid var(--accent);
+  }
+  .tile-promo-code{
+    font-size:.56rem; font-weight:500; color:var(--text-2); opacity:.75;
+    white-space:nowrap; margin-top:.15rem; letter-spacing:.01em;
+  }
+  /* The name is centered across the tile's full width by .tile-inner, so on
+     a narrow tile a short name like "Ecoreps" can sit close enough to center
+     to run under the corner badge. Reserving space on the right (matching
+     roughly the badge's own width) shifts the centered text box left, clear
+     of the badge, without needing to left-align the whole tile. */
+  .tile:has(.tile-promo) .tile-name{ padding-right:2.3rem; box-sizing:border-box; }
+
+  /* Click-to-copy confirmation (see the data-promo-code click handler in the
+     script) — a small pill, bottom-centered, the same "contrast chip" look
+     in both themes (swap text/bg instead of using the accent, which reads
+     too close to the page's own accent-colored UI to look like a system
+     toast). Fixed positioning so it floats above the page regardless of
+     scroll position. */
+  .copy-toast{
+    position:fixed; left:50%; bottom:1.6rem; z-index:999;
+    transform:translateX(-50%) translateY(12px);
+    background:var(--text); color:var(--bg);
+    font-family:var(--font-mono); font-size:.82rem; font-weight:600;
+    padding:.65rem 1.2rem; border-radius:999px; box-shadow:0 14px 30px -10px var(--shadow);
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .copy-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  @media (prefers-reduced-motion: reduce){ .copy-toast{ transition:opacity .15s ease; } }
   /* .tile-inner's base rule above fixes height:128px, sized for an icon plus
      a two-line name — enough for every regular tile, but not always for a
      deal tile's value line (e.g. "ab CHF 0.15"), which has no line-clamp and
@@ -770,6 +815,10 @@
     .tile-icon{ width:36px; height:36px; font-size:.95rem; }
     .tile-icon svg{ width:20px; height:20px; }
     .tile-name{ font-size:.86rem; line-height:1.25; }
+    .tile:has(.tile-promo) .tile-name{ padding-right:2rem; }
+    .tile-promo{ right:.5rem; bottom:.45rem; }
+    .tile-promo-value{ font-size:.58rem; }
+    .tile-promo-code{ font-size:.48rem; }
 
     .tile-info-btn{
       display:flex; align-items:center; justify-content:center;
@@ -1139,7 +1188,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.15): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.16): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1525,7 +1574,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.15</p>
+      <p class="credit">Eloori Interactive · v1.2.16</p>
     </div>
   </footer>
 
@@ -1602,6 +1651,9 @@
         { name:"Printwerk", valueDe:"ab CHF 0.15", valueEn:"from CHF 0.15", url:"https://www.print-werk.ch/en/preise-fur-druck-und-ausrustarbeiten", tag:"print-werk.ch",
           de:"Spezielle Studierendenpreise für Bachelor- und Masterarbeiten: Druck s/w ab CHF 0.15 pro Seite, farbig ab CHF 0.50 pro Seite.",
           en:"Special student pricing for Bachelor's and Master's theses: black/white printing from CHF 0.15 per page, colour from CHF 0.50 per page." },
+        { name:"Ecoreps", sub:"UNIHUB10", copyCode:"UNIHUB10", valueDe:"-10CHF", valueEn:"-10CHF", url:"https://ecoreps.de/home", tag:"ecoreps.de",
+          de:"Mit dem Code <strong>UNIHUB10</strong> gibt's CHF 10 Rabatt auf alle Repetitorien bei Ecoreps, einem der beliebtesten Tools zur Prüfungsvorbereitung. Code beim Klick automatisch in der Zwischenablage.",
+          en:"Use the code <strong>UNIHUB10</strong> for CHF 10 off any Ecoreps course – one of the most popular exam-prep tools among students. The code is copied to your clipboard automatically when you click." },
       ]},
     { de:"Community & Medien", en:"Community & Media",
       subDe:"Vernetzung, Austausch und Campus-Content abseits der Verwaltung", subEn:"Networking, exchange and campus content beyond the admin tools",
@@ -1675,11 +1727,12 @@
           de:"KI-Karteikarten, die mündlich oder schriftlich geprüft werden: Du beantwortest eine Frage per Tippen oder Sprechen und bekommst sofort gesagt, was stimmt und was fehlt. Vom gleichen Team wie Studienplan und StudyGroups (gleicher Account). Bis 15. November 2026 unbegrenzt kostenlos, danach CHF 29 statt CHF 39 pro Semester.",
           en:"AI flashcards that talk back: answer by typing or speaking and get told right away what you got right and what's missing. From the same team as Studienplan and StudyGroups (same account). Unlimited and free until 15 November 2026, then CHF 29 instead of CHF 39 per semester." },
         { name:"Ecoreps", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,58.34l-32-32a8,8,0,0,0-11.32,0l-96,96A8,8,0,0,0,88,128v32a8,8,0,0,0,8,8h32a8,8,0,0,0,5.66-2.34l96-96A8,8,0,0,0,229.66,58.34ZM124.69,152H104V131.31l64-64L188.69,88ZM200,76.69,179.31,56,192,43.31,212.69,64ZM224,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h80a8,8,0,0,1,0,16H48V208H208V128a8,8,0,0,1,16,0Z"/></svg>', url:"https://ecoreps.de/home", tag:"ecoreps.de",
-          de:"Kommerzieller Anbieter kostenpflichtiger Repetitorien – unter Studierenden weit verbreitet zur Prüfungsvorbereitung.",
-          en:"Commercial provider of paid exam-prep courses – not an official club, but widely used among students to prepare for exams." },
+          promo:{ value:"-10CHF", code:"UNIHUB10" },
+          de:"Kommerzieller Anbieter kostenpflichtiger Repetitorien – eines der beliebtesten Tools unter Studierenden zur Prüfungsvorbereitung.",
+          en:"Commercial provider of paid exam-prep courses – not an official club, but one of the most popular tools among students to prepare for exams." },
         { name:"ready", url:"https://www.ready.ch/de/courses/?university=2", tag:"ready.ch",
-          de:"Kommerzieller Anbieter von Zusammenfassungen, Karteikarten und Musterlösungen zur Prüfungsvorbereitung – jeder Kurs lässt sich vor dem Kauf gratis anschauen.",
-          en:"Commercial provider of summaries, flashcards and past-exam solutions for exam prep, some put together for specific HSG courses – every course can be previewed for free before you buy it." },
+          de:"Kommerzieller Anbieter von Zusammenfassungen, Karteikarten und Musterlösungen zur Prüfungsvorbereitung – jeder Kurs lässt sich vor dem Kauf gratis anschauen. Achtung: nicht alle Kurse werden regelmässig aktualisiert.",
+          en:"Commercial provider of summaries, flashcards and past-exam solutions for exam prep, some put together for specific HSG courses – every course can be previewed for free before you buy it. Note: not all courses are kept up to date." },
         { name:"Brian Midterms", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M72 104a16 16 0 1 1 16 16a16 16 0 0 1-16-16m96 16a16 16 0 1 0-16-16a16 16 0 0 0 16 16m68-40v112a36 36 0 0 1-36 36H56a36 36 0 0 1-36-36V80a36 36 0 0 1 36-36h60V16a12 12 0 0 1 24 0v28h60a36 36 0 0 1 36 36m-24 0a12 12 0 0 0-12-12H56a12 12 0 0 0-12 12v112a12 12 0 0 0 12 12h144a12 12 0 0 0 12-12Zm-12 82a30 30 0 0 1-30 30H86a30 30 0 0 1 0-60h84a30 30 0 0 1 30 30m-80-6v12h16v-12Zm-34 12h10v-12H86a6 6 0 0 0 0 12m90-6a6 6 0 0 0-6-6h-10v12h10a6 6 0 0 0 6-6"/></svg>', url:"https://brian-capstone.vercel.app/midterms", tag:"brian-capstone.vercel.app",
           de:"Kostenlose Probeprüfungen aus deinem eigenen Kursmaterial, korrigiert mit Begründung durch Gemini 4 Argon, inkl. Frage-Chat zum Material. Im Gegenzug wertet ein studentisches Capstone-Projekt aus, wie du lernst, und stellt dir gelegentlich sehr kurze Fragen.",
           en:"Free practice exams generated from your own course material, graded with reasoning by Gemini 4 Argon, plus a chat to ask questions about the material. In exchange, a student capstone project analyzes how you study and occasionally asks you very short questions." },
@@ -1792,6 +1845,32 @@
     if(el) trackEvent(el.dataset.goatcounterClick);
   });
 
+  // Click-to-copy for a tile carrying a `promo`/`copyCode` discount code
+  // (see tileHTML and dealTileHTML) — copies the code and shows a brief
+  // confirmation pill, alongside the tile's normal click (it's a real link,
+  // so the target site still opens in its own tab same as always; this
+  // just also puts the code on the clipboard, ready to paste there).
+  let copyToastTimer = null;
+  function showCopyToast(code){
+    let toast = document.getElementById('copyToast');
+    if(!toast){
+      toast = document.createElement('div');
+      toast.id = 'copyToast';
+      toast.className = 'copy-toast';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = (lang === 'de' ? 'Code kopiert: ' : 'Code copied: ') + code;
+    toast.classList.add('show');
+    clearTimeout(copyToastTimer);
+    copyToastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-promo-code]');
+    if(!el || !navigator.clipboard || !navigator.clipboard.writeText) return;
+    const code = el.dataset.promoCode;
+    navigator.clipboard.writeText(code).then(() => showCopyToast(code)).catch(() => {});
+  });
+
   // Mobile only (the button is hidden above the phone breakpoint in CSS):
   // tapping a tile's name/icon opens its link straight away — fast access
   // being the whole point of the grid — while this small "i" button is the
@@ -1888,11 +1967,24 @@
     const id = slug(it.name);
     const pin = isPinned(id);
     const full = !pin && pinned.length >= PIN_MAX;
+    // Optional small promo badge in the free bottom-right corner (pin is
+    // top-left, info "i" is top-right, so bottom-right is the only corner
+    // not already claimed) — a discount value framed by two thin rules,
+    // with the code underneath in the same quiet style as a Studi-Deals
+    // `.deal-sub` line. data-promo-code lets the global click handler
+    // below copy the code to the clipboard on click, same as the matching
+    // Studi-Deals tile.
+    const promo = it.promo ? `
+        <span class="tile-promo">
+          <span class="tile-promo-value">${it.promo.value}</span>
+          <span class="tile-promo-code">${it.promo.code}</span>
+        </span>` : '';
     return `
       <div class="tile" data-pin-id="${id}">
-        <a class="tile-inner" href="${it.url}" target="_blank" rel="noopener" data-goatcounter-click="tool-${id}">
+        <a class="tile-inner" href="${it.url}" target="_blank" rel="noopener" data-goatcounter-click="tool-${id}"${it.promo ? ` data-promo-code="${it.promo.code}"` : ''}>
           ${icon}
           <span class="tile-name">${it.name}</span>
+          ${promo}
         </a>
         <button type="button" class="tile-pin-btn${pin ? ' pinned' : ''}" data-pin-id="${id}"
           data-de-title="${pin ? 'Von Angepinnt entfernen' : 'Anpinnen'}" data-en-title="${pin ? 'Remove from Pinned' : 'Pin'}"
@@ -1913,7 +2005,7 @@
     const id = slug(it.name);
     return `
       <div class="tile" data-pin-id="${id}">
-        <a class="tile-inner tile-inner--deal" href="${it.url}" target="_blank" rel="noopener" data-goatcounter-click="deal-${id}">
+        <a class="tile-inner tile-inner--deal" href="${it.url}" target="_blank" rel="noopener" data-goatcounter-click="deal-${id}"${it.copyCode ? ` data-promo-code="${it.copyCode}"` : ''}>
           <span class="deal-value" data-de="${it.valueDe}" data-en="${it.valueEn}"></span>
           <span class="tile-name">${it.name}</span>
           ${it.sub ? `<span class="deal-sub">${it.sub}</span>` : ''}
