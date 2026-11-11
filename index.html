@@ -427,37 +427,32 @@
      unfilled (no background sash): just the value framed by two thin
      rules and the code underneath, same quiet style as the rest of the
      site's badges, tilted into the corner instead of sitting flat.
-     .tile-ribbon-wrap is a small square clipping window pinned to the
-     corner — its own border-radius matches .tile-inner's exactly, so the
-     clip follows the tile's own rounded corner instead of a plain square
-     (a plain square would let the rule/text bleed past the visible curve
-     into the page background right at the tip). Its own overflow:hidden,
-     not the whole tile's, so the icon's hover scale/rotate elsewhere is
-     never affected. .tile-ribbon is the actual rotated strip positioned
-     inside it; .tile-ribbon-rule-top/-bottom are two independent lines,
-     not a shared border, because a line closer to the actual corner has
-     less room before it would have to cross the rounded curve — giving
-     both the same length would force one to run short of the edge or the
-     other to bleed past it, so the nearer rule is deliberately shorter.
-     Sized in px, not rem: a fixed small geometry tuned against the tile's
-     actual corner, not something that should scale with text zoom.
-     Pointer-events:none throughout so the ribbon never steals the click
-     from the tile underneath; only used on the rare tile that carries
-     `promo` data. */
-  .tile-ribbon-wrap{
-    position:absolute; right:0; bottom:0; z-index:1;
-    width:58px; height:58px; overflow:hidden; pointer-events:none;
-    border-bottom-right-radius:14px;
-  }
+     Clipped by the TILE's own overflow:hidden (added below, scoped to
+     tiles that carry one) rather than a small separate corner window: a
+     small window only has a little room before its own edge, which left
+     next to no margin for the code text and forced the name to be padded
+     out of the way. Clipping against the full tile instead gives far more
+     room, so the ribbon sits comfortably inside with real margin on every
+     side and the name is never touched. Verified the icon's hover
+     scale/rotate still isn't visibly clipped by this (it sits well inside
+     the tile's own padding). .tile-ribbon-rule-top/-bottom are two
+     independent lines rather than a shared border, since the one nearer
+     the actual corner naturally has less room before the curve. Sized in
+     px, not rem: a fixed small geometry tuned against the tile's actual
+     corner, not something that should scale with text zoom.
+     Pointer-events:none so the ribbon never steals the click from the
+     tile underneath; only used on the rare tile that carries `promo`
+     data. */
+  .tile-inner:has(.tile-ribbon){ overflow:hidden; }
   .tile-ribbon{
-    position:absolute; right:-22px; bottom:8px; width:78px;
-    transform:rotate(-45deg); transform-origin:center;
+    position:absolute; right:-8px; bottom:12px; z-index:1;
+    transform:rotate(-45deg); transform-origin:center; pointer-events:none;
     display:flex; flex-direction:column; align-items:center;
     font-family:var(--font-mono); line-height:1.15;
   }
   .tile-ribbon-rule{ height:1px; background:var(--accent); }
-  .tile-ribbon-rule--top{ width:75px; }
-  .tile-ribbon-rule--bottom{ width:48px; }
+  .tile-ribbon-rule--top{ width:68px; }
+  .tile-ribbon-rule--bottom{ width:42px; }
   .tile-ribbon-value{
     font-weight:800; font-size:.56rem; color:var(--accent); white-space:nowrap;
     padding:.06rem 0;
@@ -466,12 +461,6 @@
     font-size:.44rem; font-weight:500; color:var(--text-2); opacity:.75;
     white-space:nowrap; margin-top:.08rem; letter-spacing:.01em;
   }
-  /* The name is centered across the tile's full width by .tile-inner, so on
-     a narrow tile a short name like "Ecoreps" can sit close enough to center
-     to run under the corner ribbon. Reserving space on the right (matching
-     roughly the ribbon's own footprint) shifts the centered text box left,
-     clear of the ribbon, without needing to left-align the whole tile. */
-  .tile:has(.tile-ribbon-wrap) .tile-name{ padding-right:1.3rem; box-sizing:border-box; }
 
   /* Click-to-copy confirmation (see the data-promo-code click handler in the
      script) — a small pill, bottom-centered, the same "contrast chip" look
@@ -839,11 +828,9 @@
     .tile-icon{ width:36px; height:36px; font-size:.95rem; }
     .tile-icon svg{ width:20px; height:20px; }
     .tile-name{ font-size:.86rem; line-height:1.25; }
-    .tile:has(.tile-ribbon-wrap) .tile-name{ padding-right:.82rem; }
-    .tile-ribbon-wrap{ width:46px; height:46px; }
-    .tile-ribbon{ right:-17px; bottom:6px; width:58px; }
-    .tile-ribbon-rule--top{ width:56px; }
-    .tile-ribbon-rule--bottom{ width:35px; }
+    .tile-ribbon{ right:-4px; bottom:9px; }
+    .tile-ribbon-rule--top{ width:45px; }
+    .tile-ribbon-rule--bottom{ width:28px; }
     .tile-ribbon-value{ font-size:.42rem; padding:.05rem 0; }
     .tile-ribbon-code{ font-size:.32rem; margin-top:.06rem; }
 
@@ -1215,7 +1202,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.20): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.21): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1601,7 +1588,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.20</p>
+      <p class="credit">Eloori Interactive · v1.2.21</p>
     </div>
   </footer>
 
@@ -1997,18 +1984,16 @@
     // Optional small promo ribbon folded into the free bottom-right corner
     // (pin is top-left, info "i" is top-right, so bottom-right is the only
     // corner not already claimed) — a diagonal sash with the discount value
-    // and the code underneath, clipped to a small corner window (see
-    // .tile-ribbon-wrap CSS). data-promo-code lets the global click handler
+    // and the code underneath, clipped by the tile's own corner (see
+    // .tile-ribbon CSS). data-promo-code lets the global click handler
     // below copy the code to the clipboard on click, same as the matching
     // Studi-Deals tile.
     const promo = it.promo ? `
-        <span class="tile-ribbon-wrap">
-          <span class="tile-ribbon">
-            <span class="tile-ribbon-rule tile-ribbon-rule--top"></span>
-            <span class="tile-ribbon-value">${it.promo.value}</span>
-            <span class="tile-ribbon-rule tile-ribbon-rule--bottom"></span>
-            <span class="tile-ribbon-code">${it.promo.code}</span>
-          </span>
+        <span class="tile-ribbon">
+          <span class="tile-ribbon-rule tile-ribbon-rule--top"></span>
+          <span class="tile-ribbon-value">${it.promo.value}</span>
+          <span class="tile-ribbon-rule tile-ribbon-rule--bottom"></span>
+          <span class="tile-ribbon-code">${it.promo.code}</span>
         </span>` : '';
     return `
       <div class="tile" data-pin-id="${id}">
