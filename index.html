@@ -1055,10 +1055,10 @@
         <div class="nl-text">
           <span class="nl-eyebrow">News of the Week</span>
           <strong data-de="Jeden Montag in 5 Minuten: alles, was du an der HSG nicht verpassen solltest." data-en="Every Monday in 5 minutes: everything you shouldn't miss at HSG."></strong>
-          <span class="nl-sub" data-de="Fristen, Insider-Tipps, Wirtschaft und Karriere. Auf Englisch, gratis, jederzeit abbestellbar." data-en="Deadlines, insider tips, economy and career. Free, unsubscribe anytime."></span>
+          <span class="nl-sub" data-de="Start am 30. November. Fristen, Events, Karriere und Wirtschaft. Auf Englisch, gratis, mit jeder E-Mail-Adresse, jederzeit abbestellbar." data-en="Starts 30 November. Deadlines, events, career and economy. Free, any email address, unsubscribe anytime."></span>
         </div>
         <form class="nl-form" data-nl-form="banner" novalidate>
-          <input type="email" name="email" placeholder="you@student.unisg.ch" autocomplete="email" aria-label="Email" required>
+          <input type="email" name="email" placeholder="deine@email.ch" data-de-ph="deine@email.ch" data-en-ph="your@email.com" autocomplete="email" aria-label="Email" required>
           <input type="text" name="website" class="nl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button type="submit" data-de="Abonnieren" data-en="Subscribe"></button>
           <p class="nl-msg" aria-live="polite"></p>
@@ -1283,7 +1283,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.18): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.19): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1682,7 +1682,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.18</p>
+      <p class="credit">Eloori Interactive · v1.2.19</p>
     </div>
   </footer>
 
@@ -1693,9 +1693,9 @@
         <button type="button" class="modal-close" id="nlModalClose" aria-label="Close">✕</button>
       </div>
       <div class="modal-body">
-        <span class="nl-sub" data-de="Jeden Montag in 5 Minuten: Fristen, Insider-Tipps, Wirtschaft und Karriere für HSG-Studierende. Auf Englisch, gratis, jederzeit abbestellbar." data-en="Every Monday in 5 minutes: deadlines, insider tips, economy and career for HSG students. Free, unsubscribe anytime."></span>
+        <span class="nl-sub" data-de="Jeden Montag in 5 Minuten: Fristen, Events, Karriere und Wirtschaft für HSG-Studierende. Start am 30. November. Auf Englisch, gratis, mit jeder E-Mail-Adresse, jederzeit abbestellbar." data-en="Every Monday in 5 minutes: deadlines, events, career and economy for HSG students. Starts 30 November. Free, any email address, unsubscribe anytime."></span>
         <form class="nl-form" data-nl-form="footer" novalidate>
-          <input type="email" name="email" placeholder="you@student.unisg.ch" autocomplete="email" aria-label="Email" required>
+          <input type="email" name="email" placeholder="deine@email.ch" data-de-ph="deine@email.ch" data-en-ph="your@email.com" autocomplete="email" aria-label="Email" required>
           <input type="text" name="website" class="nl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button type="submit" data-de="Abonnieren" data-en="Subscribe"></button>
           <p class="nl-msg" aria-live="polite"></p>
@@ -3048,9 +3048,13 @@ SOFTWARE.`;
     const L = () => document.documentElement.lang === 'en' ? 'en' : 'de';
     const T = {
       bad:  { de:'Bitte eine gültige E-Mail-Adresse eingeben.', en:'Please enter a valid email address.' },
-      ok:   { de:'Danke! Du bist dabei. Die nächste Ausgabe kommt am Montag.', en:"Thanks, you're in! The next issue arrives on Monday." },
+      ok:   new Date() < new Date('2026-11-30T12:00:00+01:00')
+            ? { de:'Danke! Du bist dabei. Die erste Ausgabe kommt am 30. November.', en:"Thanks, you're in! The first issue arrives on 30 November." }
+            : { de:'Danke! Du bist dabei. Die nächste Ausgabe kommt am Montag.', en:"Thanks, you're in! The next issue arrives on Monday." },
       fail: { de:'Das hat nicht geklappt. Bitte versuch es nochmals.', en:"That didn't work. Please try again." }
     };
+    const syncPh = () => document.querySelectorAll('[data-de-ph]').forEach(i => { i.placeholder = L() === 'en' ? i.dataset.enPh : i.dataset.dePh; });
+    syncPh(); new MutationObserver(syncPh).observe(document.documentElement, { attributes:true, attributeFilter:['lang'] });
     const banner = document.getElementById('nlBanner');
     if(banner && !get(HIDE_KEY) && !get(SUB_KEY)) banner.hidden = false;
     document.getElementById('nlClose')?.addEventListener('click', () => { banner.hidden = true; set(HIDE_KEY); trackEvent('newsletter-banner-close'); });
