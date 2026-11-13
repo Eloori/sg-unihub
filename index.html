@@ -469,6 +469,15 @@
     font-weight:800; font-size:.56rem; color:var(--accent); white-space:nowrap;
     padding:.06rem 0;
   }
+  /* Longer codes (e.g. DL-UNIHUB10) sit a bit further into the tile so
+     the code doesn't run past the rounded corner. */
+  .tile-ribbon--long{ right:0; bottom:20px; }
+  .tile-ribbon--long .tile-ribbon-rule--top{ width:76px; }
+  .tile-ribbon--long .tile-ribbon-rule--bottom{ width:56px; }
+  /* Phone layout: the corner ribbon would cross the tile name, so the
+     discount moves to a small line under the name instead (same quiet
+     mono style as the Education Card line on deal tiles). Hidden on desktop. */
+  .tile-promo-line{ display:none; }
   .tile-ribbon-code{
     font-size:.44rem; font-weight:500; color:var(--text-2); opacity:.75;
     white-space:nowrap; margin-top:.08rem; letter-spacing:.01em;
@@ -868,7 +877,11 @@
     .tile-icon{ width:36px; height:36px; font-size:.95rem; }
     .tile-icon svg{ width:20px; height:20px; }
     .tile-name{ font-size:.86rem; line-height:1.25; }
-    .tile-ribbon{ right:-4px; bottom:9px; }
+    .tile-ribbon{ display:none; }
+    .tile-promo-line{
+      display:block; font-family:var(--font-mono); font-size:.62rem; font-weight:500;
+      color:var(--accent); margin-top:-.2rem; letter-spacing:.01em; white-space:nowrap;
+    }
     .tile-ribbon-rule--top{ width:45px; }
     .tile-ribbon-rule--bottom{ width:28px; }
     .tile-ribbon-value{ font-size:.42rem; padding:.05rem 0; }
@@ -2120,8 +2133,10 @@
     // .tile-ribbon CSS). data-promo-code lets the global click handler
     // below copy the code to the clipboard on click, same as the matching
     // Studi-Deals tile.
+    const longCode = it.promo && it.promo.code.length > 8;
     const promo = it.promo ? `
-        <span class="tile-ribbon">
+        <span class="tile-promo-line">${it.promo.value} · ${it.promo.code}</span>
+        <span class="tile-ribbon${longCode ? ' tile-ribbon--long' : ''}">
           <span class="tile-ribbon-rule tile-ribbon-rule--top"></span>
           <span class="tile-ribbon-value">${it.promo.value}</span>
           <span class="tile-ribbon-rule tile-ribbon-rule--bottom"></span>
