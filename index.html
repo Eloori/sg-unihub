@@ -630,6 +630,37 @@
   .guide-source{ color:var(--text-2); text-decoration:none; }
   .guide-source:hover{ color:var(--accent); }
 
+  /* ---------- Master's matching widget (view-masters) ---------- */
+  .master-match{
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    padding:1.3rem 1.5rem 1.5rem; box-shadow:0 2px 10px -4px var(--shadow);
+    margin-bottom:1.5rem;
+  }
+  .master-match-title{ font-family:var(--font-display); font-weight:700; font-size:1.15rem; margin:0 0 .4rem; }
+  .master-match-sub{ margin:0 0 1rem; color:var(--text-2); font-size:.88rem; line-height:1.5; max-width:52em; }
+  .match-chips{ display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:.8rem; }
+  .match-chips-lang{ padding-top:.1rem; margin-bottom:0; border-top:1px solid var(--line); padding-top:.9rem; }
+  .match-chip{
+    font-family:var(--font-mono); font-size:.76rem; color:var(--text); background:transparent;
+    border:1px solid var(--line); border-radius:999px; padding:.4rem .85rem; cursor:pointer;
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .match-chip:hover{ border-color:var(--accent); }
+  .match-chip.selected{ background:var(--accent); color:var(--accent-contrast); border-color:var(--accent); }
+  .match-results{ margin-top:1rem; }
+  .match-hint{ margin:0; color:var(--text-2); font-size:.88rem; line-height:1.5; }
+  .match-cards{ display:flex; flex-wrap:wrap; gap:.7rem; }
+  .match-card{
+    display:flex; flex-direction:column; gap:.2rem; align-items:flex-start;
+    font-family:inherit; text-align:left; cursor:pointer;
+    background:var(--accent-soft); border:1px solid var(--line); border-radius:10px;
+    padding:.7rem .9rem; min-width:11rem; flex:1 1 11rem;
+    transition:border-color .2s ease;
+  }
+  .match-card:hover{ border-color:var(--accent); }
+  .match-card-abbr{ font-family:var(--font-mono); font-size:.72rem; color:var(--accent); letter-spacing:.03em; }
+  .match-card-name{ font-family:var(--font-display); font-weight:700; font-size:.96rem; color:var(--text); }
+
   /* ---------- Bachelorarbeit step-by-step guide ---------- */
   .thesis-steps{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.9rem; }
   .thesis-step{
@@ -1029,6 +1060,7 @@
         <a href="#guide" data-view-link="guide" data-de="Neu an der HSG" data-en="New to HSG"></a>
         <a href="arriving.html" data-goatcounter-click="menu-arriving" data-de="Ankommen &amp; Wohnen" data-en="Arriving &amp; Housing"></a>
         <a href="#bachelorarbeit" data-view-link="bachelorarbeit" data-de="Bachelorarbeit" data-en="Bachelor's Thesis"></a>
+        <a href="#masters" data-view-link="masters" data-de="Master-Wahl" data-en="Choosing your Master"></a>
         <a href="#contact" data-view-link="contact" data-de="Kontakt" data-en="Contact"></a>
       </nav>
       <a class="brand" href="#dashboard" data-view-link="dashboard">sg<span class="slash">/</span>unihub</a>
@@ -1294,6 +1326,26 @@
       </div>
     </section>
 
+    <section class="view" id="view-masters" data-view="masters" hidden>
+      <header class="page-head">
+        <span class="eyebrow" data-de="Nach dem Bachelor" data-en="After your Bachelor's"></span>
+        <h2 class="page-title" data-de="Master an der HSG" data-en="Master's at HSG"></h2>
+        <p class="page-sub" data-de="14 eigene Master-Programme, ganz unterschiedliche Schwerpunkte. Ein Überblick über Zulassung und Ausrichtung – plus ein paar Vorschläge, falls du noch unschlüssig bist."
+           data-en="14 of HSG's own Master's programmes, each with a very different focus. An overview of admission and orientation – plus a few suggestions if you're still unsure."></p>
+      </header>
+
+      <div class="master-match" id="masterMatch">
+        <h3 class="master-match-title" data-de="Welcher Master könnte zu dir passen?" data-en="Which Master might fit you?"></h3>
+        <p class="master-match-sub" data-de="Wähle, was dich interessiert – wir zeigen dir die Programme, die am besten dazu passen. Ersetzt keine Studienberatung, nur einen ersten Fingerzeig."
+           data-en="Pick what interests you – we'll show you the programmes that fit best. This doesn't replace academic advising, just a first pointer."></p>
+        <div class="match-chips" id="matchInterestChips"></div>
+        <div class="match-chips match-chips-lang" id="matchLangChips"></div>
+        <div class="match-results" id="matchResults"></div>
+      </div>
+
+      <div class="guide-list" id="mastersList"></div>
+    </section>
+
     <section class="view" id="view-business" data-view="business" hidden>
       <header class="page-head">
         <span class="eyebrow" data-de="Hintergrund" data-en="Background"></span>
@@ -1307,7 +1359,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.20): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.21): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1708,7 +1760,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.20</p>
+      <p class="credit">Eloori Interactive · v1.2.21</p>
     </div>
   </footer>
 
@@ -2850,6 +2902,419 @@
   }
   document.getElementById('guideList').innerHTML = GUIDE.map(guideSectionHTML).join('');
 
+  // ---------- Master's programmes (view-masters) ----------
+  // Admission requirements (bachelor's degree needed, test/assessment
+  // requirements, deadlines) were fetched fresh from the current official
+  // unisg.ch admission pages (retrieved November 2026) — those change from
+  // year to year, so they're never taken from an older brochure. The focus/
+  // specialization text draws on general, fairly stable programme knowledge,
+  // cross-checked against HSG's own Master brochure and Student Exchange
+  // Fact Sheet 2025/2026. `tags` and `teachLang` aren't rendered directly —
+  // they drive the matching widget below.
+  const MASTERS = [
+    { id:"sim", abbr:"SIM", nameDe:"Master in Strategy and International Management (SIM-HSG)", nameEn:"Master in Strategy and International Management (SIM-HSG)",
+      teachLang:"en", tags:["strategy","innovation"],
+      stats:[
+        { valueDe:"Englisch", valueEn:"English", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"School of Management", valueEn:"School of Management", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"Video-Interview + GMAT/GRE", valueEn:"Video interview + GMAT/GRE", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"1. Okt – 30. Apr", valueEn:"1 Oct – 30 Apr", labelDe:"Bewerbungsfenster (4 Runden)", labelEn:"Application window (4 rounds)" },
+      ],
+      points:[
+        { de:"Generalistischer Strategie- und International-Management-Fokus, breit angelegt mit vielen Wahlmöglichkeiten und einer sehr internationalen Kohorte – im FT-Ranking «Masters in Management» 2024 weltweit auf Platz 1.",
+          en:"A generalist strategy and international management focus, broadly laid out with plenty of electives and a very international cohort – ranked #1 worldwide in the FT \"Masters in Management\" ranking 2024." },
+        { de:"Klassischer Türöffner für Strategieberatung (McKinsey, BCG, Bain & Co.) und Konzernstrategie-Rollen; das stark case-basierte Auswahlverfahren spiegelt das bereits.",
+          en:"A classic route into strategy consulting (McKinsey, BCG, Bain & Co.) and corporate-strategy roles; the heavily case-style admission process already reflects that." },
+        { de:"Zulassung: Bachelor in Business Administration/Economics (180 ECTS, davon mind. 60 ECTS BWL/VWL und 6 ECTS Mathematik/Statistik) oder gleichwertig.",
+          en:"Admission: a Bachelor's in Business Administration/Economics (180 ECTS, incl. at least 60 ECTS in BA/Econ and 6 ECTS in Maths/Statistics) or equivalent." },
+        { de:"Auswahl ganz ohne Noten-Cutoff, dafür gewichtet: GMAT/GRE (20%), Notenschnitt (20%), Aussercurriculares & Erfahrung (25%), vorab aufgezeichnetes Video-Interview (35%). Deutschkenntnisse sind nicht nötig.",
+          en:"Selection has no grade cut-off, but is weighted: GMAT/GRE (20%), average grade (20%), extracurriculars & experience (25%), a pre-recorded video interview (35%). No German is required." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung SIM (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/strategy-and-international-management/" }] },
+
+    { id:"mbf", abbr:"MBF", nameDe:"Master in Banking and Finance (MBF)", nameEn:"Master in Banking and Finance (MBF)",
+      teachLang:"en", tags:["finance","quant"],
+      stats:[
+        { valueDe:"Englisch", valueEn:"English", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"School of Finance", valueEn:"School of Finance", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"GMAT/GRE optional + Motivationsschreiben", valueEn:"Optional GMAT/GRE + motivation letter", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"1. Okt – 30. Apr", valueEn:"1 Oct – 30 Apr", labelDe:"Bewerbungsfenster (5 Runden)", labelEn:"Application window (5 rounds)" },
+      ],
+      points:[
+        { de:"Klarer Finance-Fokus auf Banking, Asset Management und Kapitalmärkte; verpflichtende «MBF Integration Days» kurz vor Semesterstart.",
+          en:"A clear finance focus on banking, asset management and capital markets; mandatory \"MBF Integration Days\" shortly before the semester starts." },
+        { de:"Typische Karrierewege: Investment Banking, Asset/Wealth Management, Corporate Finance.",
+          en:"Typical career paths: investment banking, asset/wealth management, corporate finance." },
+        { de:"Zulassung: Bachelor BWL/VWL (180 ECTS) oder ein Business-Administration-Abschluss einer Fachhochschule mit Notenschnitt ≥5.0.",
+          en:"Admission: a Bachelor's in Business Administration/Economics (180 ECTS), or a university-of-applied-sciences Business Administration degree with a grade average of at least 5.0." },
+        { de:"Auswahl: Notenschnitt (30%), GMAT/GRE (30% – bei Uni-Bachelor optional, sonst doppelt gewichtete Note), Aussercurriculares (15%), Motivationsschreiben (25%). Nachweis genügender Buchhaltungskenntnisse ist Pflicht.",
+          en:"Selection: average grade (30%), GMAT/GRE (30% – optional with a university Bachelor's, otherwise the grade is weighted twice), extracurriculars (15%), motivation letter (25%). Proof of sufficient accounting knowledge is mandatory." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung MBF (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/banking-and-finance/" }] },
+
+    { id:"macfin", abbr:"MACFin", nameDe:"Master in Accounting and Corporate Finance (MACFin)", nameEn:"Master in Accounting and Corporate Finance (MACFin)",
+      teachLang:"both", tags:["accounting","finance"],
+      stats:[
+        { valueDe:"Deutsch oder Englisch", valueEn:"German or English", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"School of Management", valueEn:"School of Management", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"GMAT/GRE optional (Uni) / Pflicht (FH)", valueEn:"GMAT/GRE optional (university) / mandatory (UAS)", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"1. Okt – 31. Mär", valueEn:"1 Oct – 31 Mar", labelDe:"Bewerbungsfenster (3 Runden)", labelEn:"Application window (3 rounds)" },
+      ],
+      points:[
+        { de:"Mit Abstand grösster Master der HSG (rund 690 Studierende); verbindet Rechnungslegung/Controlling mit Corporate Finance.",
+          en:"By far HSG's largest Master's (around 690 students); combines accounting/controlling with corporate finance." },
+        { de:"Klassischer Weg in Big-4-Wirtschaftsprüfung, Controlling, Corporate Finance und Treasury.",
+          en:"A classic route into Big Four auditing, controlling, corporate finance and treasury roles." },
+        { de:"Zulassung: Bachelor BWL (180 ECTS) oder ein ähnlicher/teilähnlicher Major mit den geforderten Mindest-ECTS in BWL, VWL, Recht und Mathematik.",
+          en:"Admission: a Bachelor's in Business Administration (180 ECTS), or a similar/partly similar major meeting the required minimum ECTS in BA, Economics, Law and Mathematics." },
+        { de:"Bei FH-Abschluss oder abweichendem Major kann eine 56-ECTS-Vorbereitungsstufe nötig sein; Nachweis Buchhaltungskenntnisse ist ohnehin Pflicht.",
+          en:"A university-of-applied-sciences degree or a differing major may require a 56-ECTS preparatory level; proof of accounting knowledge is required either way." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung MACFin (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/accounting-and-corporate-finance/" }] },
+
+    { id:"mgm", abbr:"MGM", nameDe:"Master in General Management (MGM)", nameEn:"Master in General Management (MGM)",
+      teachLang:"both", tags:["strategy","accounting"],
+      stats:[
+        { valueDe:"Zweisprachig DE/EN (je 18 ECTS)", valueEn:"Bilingual DE/EN (18 ECTS each)", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"School of Management", valueEn:"School of Management", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"Qualification Module vor Ort (alle)", valueEn:"On-campus Qualification Module (all)", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"1. Okt – 31. Mär", valueEn:"1 Oct – 31 Mar", labelDe:"Bewerbungsfenster", labelEn:"Application window" },
+      ],
+      points:[
+        { de:"Bewusst generalistisch angelegt: Strategic Management & Leadership, Finance/Accounting/Controlling sowie quantitative Methoden – keine fachliche Spezialisierung.",
+          en:"Deliberately generalist: Strategic Management & Leadership, Finance/Accounting/Controlling and quantitative methods – no single subject specialization." },
+        { de:"Für alle Bewerbenden verpflichtend: ein mehrtägiges, persönlich vor Ort stattfindendes Qualification Module (Eignungstest) vor Semesterstart, ohne Ausweichtermin.",
+          en:"Mandatory for every applicant: a multi-day, in-person Qualification Module (aptitude assessment) before the semester starts, with no alternative date." },
+        { de:"Zulassung: Bachelor BWL (180 ECTS) oder ein ähnlicher/teilähnlicher Major.",
+          en:"Admission: a Bachelor's in Business Administration (180 ECTS), or a similar/partly similar major." },
+        { de:"Bewerbende aus dem Ausland durchlaufen zusätzlich ein gewichtetes Auswahlverfahren (Note, optionaler Test, Lebenslauf, Motivationsschreiben).",
+          en:"Applicants from abroad also go through an additional weighted selection process (grade, optional test, CV, motivation letter)." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung MGM (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/general-management/" }] },
+
+    { id:"mimm", abbr:"MiMM", nameDe:"Master in Marketing Management (MiMM)", nameEn:"Master in Marketing Management (MiMM)",
+      teachLang:"en", tags:["marketing","strategy"],
+      stats:[
+        { valueDe:"Englisch", valueEn:"English", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"School of Management", valueEn:"School of Management", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"GMAT/GRE optional (Pflicht bei FH) + Bootcamp", valueEn:"Optional GMAT/GRE (mandatory for UAS) + bootcamp", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"1. Okt – 31. Mär", valueEn:"1 Oct – 31 Mar", labelDe:"Bewerbungsfenster (3 Runden)", labelEn:"Application window (3 rounds)" },
+      ],
+      points:[
+        { de:"Klarer Marketing-Fokus: Markenführung, Marktforschung, digitales Marketing; verpflichtendes «Bootcamp MiMM» kurz vor Semesterstart.",
+          en:"A clear marketing focus: brand management, market research, digital marketing; a mandatory \"Bootcamp MiMM\" shortly before the semester starts." },
+        { de:"Typische Karrierewege: Brand-/Product-Management, Marktforschung, digitales Marketing, Marketing-Beratung.",
+          en:"Typical career paths: brand/product management, market research, digital marketing, marketing consulting." },
+        { de:"Zulassung: Bachelor BWL (180 ECTS) oder ein ähnlicher/teilähnlicher Major.",
+          en:"Admission: a Bachelor's in Business Administration (180 ECTS), or a similar/partly similar major." },
+        { de:"GMAT/GRE ist bei FH-Abschlüssen Pflicht, bei Uni-Bachelor optional – ohne Test wird die Note doppelt gewichtet.",
+          en:"GMAT/GRE is mandatory for university-of-applied-sciences degrees, optional with a university Bachelor's – without a test the grade is weighted twice." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung MiMM (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/marketing-management/" }] },
+
+    { id:"mbi", abbr:"MBI", nameDe:"Master in Business Innovation (MBI)", nameEn:"Master in Business Innovation (MBI)",
+      teachLang:"both", tags:["innovation","strategy"],
+      stats:[
+        { valueDe:"Zweisprachig DE/EN (je 18 ECTS)", valueEn:"Bilingual DE/EN (18 ECTS each)", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"School of Management", valueEn:"School of Management", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"Proctored Online-Test (90 Min.)", valueEn:"Proctored online test (90 min)", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"1. Okt – 31. Mär", valueEn:"1 Oct – 31 Mar", labelDe:"Bewerbungsfenster (2 Runden)", labelEn:"Application window (2 rounds)" },
+      ],
+      points:[
+        { de:"Fokus auf Entrepreneurship und Unternehmens-Innovation – Venture Building, Produktinnovation, Corporate Innovation.",
+          en:"A focus on entrepreneurship and corporate innovation – venture building, product innovation, corporate innovation." },
+        { de:"Typische Karrierewege: Startups, Innovationsmanagement in Konzernen, Produktmanagement, Beratung.",
+          en:"Typical career paths: startups, corporate innovation management, product management, consulting." },
+        { de:"Zulassung: Bachelor BWL (180 ECTS) oder ein ähnlicher/teilähnlicher Major; ohne Business-Hintergrund ist vorab eine Vorbereitungsstufe nötig.",
+          en:"Admission: a Bachelor's in Business Administration (180 ECTS), or a similar/partly similar major; without a business background, a preparatory level is required first." },
+        { de:"Statt eines klassischen Interviews: ein bis zu 90-minütiger, live beaufsichtigter Online-Eignungstest (30% der Auswahl), ortsunabhängig ablegbar.",
+          en:"Instead of a classic interview: an up-to-90-minute, live-proctored online aptitude test (30% of the selection), which can be taken from anywhere." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung MBI (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/business-innovation/" }] },
+
+    { id:"mia", abbr:"MIA", nameDe:"Master in International Affairs and Governance (MIA)", nameEn:"Master in International Affairs and Governance (MIA)",
+      teachLang:"en", tags:["politics","economics"],
+      stats:[
+        { valueDe:"Englisch", valueEn:"English", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"School of Economics and Political Science", valueEn:"School of Economics and Political Science", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"Notenschnitt + Schreibprobe, GMAT/GRE optional", valueEn:"Grade + writing sample, optional GMAT/GRE", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"1. Okt – 30. Apr", valueEn:"1 Oct – 30 Apr", labelDe:"Bewerbungsfenster", labelEn:"Application window" },
+      ],
+      points:[
+        { de:"Fokus auf internationale Beziehungen, Governance und Politik, ergänzt um Wirtschafts- und Rechtswissenschaft.",
+          en:"A focus on international affairs, governance and politics, complemented by economics and law." },
+        { de:"Typische Karrierewege: internationale Organisationen, Diplomatie, NGOs, Entwicklungszusammenarbeit, Think Tanks.",
+          en:"Typical career paths: international organizations, diplomacy, NGOs, development cooperation, think tanks." },
+        { de:"Zulassung: Bachelor in Wirtschafts-, Sozial- oder Rechtswissenschaften (180 ECTS, mind. 30 ECTS in Volkswirtschaft, Recht oder Politikwissenschaft).",
+          en:"Admission: a Bachelor's in economic, social or legal sciences (180 ECTS, at least 30 ECTS in economics, law or political science)." },
+        { de:"Eine Schreibprobe (akademische Arbeit oder Essay zu internationalen Themen) zählt 10% der Auswahl; GMAT/GRE ist freiwillig.",
+          en:"A writing sample (an academic paper or an essay on an international topic) counts for 10% of the selection; GMAT/GRE is voluntary." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung MIA (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/international-affairs-and-governance/" }] },
+
+    { id:"mecon", abbr:"MEcon", nameDe:"Master in Economics (MEcon)", nameEn:"Master in Economics (MEcon)",
+      teachLang:"en", tags:["economics","quant"],
+      stats:[
+        { valueDe:"Englisch", valueEn:"English", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"School of Economics and Political Science", valueEn:"School of Economics and Political Science", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"Notenschnitt, bei Ausland optionaler Test", valueEn:"Grade average, optional test for foreign applicants", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"1. Okt – 31. Mär", valueEn:"1 Oct – 31 Mar", labelDe:"Bewerbungsfenster (3 Runden)", labelEn:"Application window (3 rounds)" },
+      ],
+      points:[
+        { de:"Vertieft volkswirtschaftliche Theorie und Methodik: Mikro-/Makroökonomik, Ökonometrie, Spieltheorie, internationale Ökonomie.",
+          en:"Deepens economic theory and method: micro-/macroeconomics, econometrics, game theory, international economics." },
+        { de:"Typische Karrierewege: Wirtschaftsforschung, Zentralbanken, Wirtschaftspolitik-Beratung, internationale Organisationen.",
+          en:"Typical career paths: economic research, central banks, economic-policy consulting, international organizations." },
+        { de:"Zulassung: VWL-Bachelor (180 ECTS, mind. 60 ECTS volkswirtschaftliche Kernfächer) – BWL-Credits zählen hier nicht.",
+          en:"Admission: an Economics Bachelor's (180 ECTS, at least 60 ECTS in core economics subjects) – Business Administration credits don't count here." },
+        { de:"Bei abweichendem Bachelor ist je nach Fall eine Integrationswoche oder eine 36-ECTS-Vorbereitungsstufe nötig.",
+          en:"A differing Bachelor's may require either an integration week or a 36-ECTS preparatory level, depending on the case." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung MEcon (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/economics/" }] },
+
+    { id:"miqef", abbr:"MiQE/F", nameDe:"Master in Quantitative Economics and Finance (MiQE/F)", nameEn:"Master in Quantitative Economics and Finance (MiQE/F)",
+      teachLang:"en", tags:["quant","economics"],
+      stats:[
+        { valueDe:"Englisch", valueEn:"English", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"School of Economics and Political Science", valueEn:"School of Economics and Political Science", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"GMAT/GRE Pflicht + Schreibprobe", valueEn:"Mandatory GMAT/GRE + writing sample", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"1. Okt – 30. Apr", valueEn:"1 Oct – 30 Apr", labelDe:"Bewerbungsfenster (4 Runden)", labelEn:"Application window (4 rounds)" },
+      ],
+      points:[
+        { de:"Der quantitativste Wirtschaftsmaster der HSG: Ökonometrie, Mathematik, Statistik und Programmieren in R stehen im Zentrum.",
+          en:"HSG's most quantitative economics Master: econometrics, mathematics, statistics and programming in R are central." },
+        { de:"Passt zu Rollen in quantitativer Finance, Data Science, Ökonometrie und empirischer Forschung.",
+          en:"A good fit for roles in quantitative finance, data science, econometrics and empirical research." },
+        { de:"Zulassung: VWL-Bachelor (180 ECTS) mit mind. 60 ECTS in VWL/Mathematik/Statistik/Informatik, davon 6 ECTS Statistik.",
+          en:"Admission: an Economics Bachelor's (180 ECTS) with at least 60 ECTS in Economics/Maths/Statistics/Computer Science, including 6 ECTS in Statistics." },
+        { de:"GMAT/GRE ist hier – anders als bei den meisten anderen HSG-Mastern – verpflichtend, ausser bei einem Bachelor von der HSG oder einer anderen Schweizer Uni.",
+          en:"GMAT/GRE is mandatory here – unlike most other HSG Master's – except with a Bachelor's from HSG or another Swiss university." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung MiQE/F (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/quantitative-economics-and-finance/" }] },
+
+    { id:"mcs", abbr:"MCS", nameDe:"Master in Computer Science (MCS)", nameEn:"Master in Computer Science (MCS)",
+      teachLang:"en", tags:["tech","quant"],
+      stats:[
+        { valueDe:"Englisch", valueEn:"English", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"School of Computer Science", valueEn:"School of Computer Science", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"Notenschnitt + optionaler Test", valueEn:"Grade average + optional test", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"1. Okt – 30. Apr", valueEn:"1 Oct – 30 Apr", labelDe:"Bewerbungsfenster (4 Runden)", labelEn:"Application window (4 rounds)" },
+      ],
+      points:[
+        { de:"Jüngstes Master-Programm der HSG (seit 2023); Schwerpunkte u. a. KI/Machine Learning, Cybersecurity, Data Science, Human-Computer Interaction.",
+          en:"HSG's newest Master's programme (since 2023); focus areas include AI/machine learning, cybersecurity, data science, human-computer interaction." },
+        { de:"Mit zuletzt rund 20 Studierenden pro Jahrgang bislang der kleinste HSG-Master – entsprechend persönliche Betreuung.",
+          en:"With around 20 students per cohort so far, HSG's smallest Master's – correspondingly personal supervision." },
+        { de:"Zulassung: Informatik-Bachelor (180 ECTS) oder ein Major mit mind. 52 ECTS Mathematik/Informatik.",
+          en:"Admission: a Computer Science Bachelor's (180 ECTS), or a major with at least 52 ECTS in Mathematics/Computer Science." },
+        { de:"Verpflichtende «MCS Integration Days» vor Semesterstart; Nachweis genügender Buchhaltungskenntnisse ist ebenfalls Pflicht.",
+          en:"Mandatory \"MCS Integration Days\" before the semester starts; proof of sufficient accounting knowledge is also required." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung MCS (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/computer-science/" }] },
+
+    { id:"mil", abbr:"MIL", nameDe:"Master in International Law (MIL)", nameEn:"Master in International Law (MIL)",
+      teachLang:"en", tags:["law","politics"],
+      stats:[
+        { valueDe:"Englisch", valueEn:"English", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"Law School", valueEn:"Law School", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"Notenschnitt (Ausland) + optionaler Test", valueEn:"Grade average (foreign applicants) + optional test", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"HS 1.Okt–30.Apr / FS 1.Okt–30.Nov", valueEn:"Autumn 1 Oct–30 Apr / Spring 1 Oct–30 Nov", labelDe:"Bewerbungsfenster", labelEn:"Application window" },
+      ],
+      points:[
+        { de:"Der einzige englischsprachige Rechts-Master der HSG; Fokus auf internationales und Wirtschaftsrecht.",
+          en:"HSG's only English-taught law Master's; a focus on international and business law." },
+        { de:"Typische Karrierewege: internationale Organisationen, global tätige Anwaltskanzleien, Menschenrechtsarbeit.",
+          en:"Typical career paths: international organizations, globally active law firms, human-rights work." },
+        { de:"Zulassung: Bachelor mit mind. 30 ECTS Rechtswissenschaft, oder ein konsekutiver Master mit insgesamt 270 ECTS.",
+          en:"Admission: a Bachelor's with at least 30 ECTS in law, or a consecutive Master's totalling 270 ECTS." },
+        { de:"Absolvent:innen eines Schweizer Jus-Bachelors haben in der Regel keine zusätzlichen Auflagen.",
+          en:"Holders of a Swiss law Bachelor's generally face no additional requirements." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung MIL (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/international-law/" }] },
+
+    { id:"mlaw", abbr:"MLaw", nameDe:"Master of Law (MLaw)", nameEn:"Master of Law (MLaw)",
+      teachLang:"de", tags:["law"],
+      stats:[
+        { valueDe:"Deutsch", valueEn:"German", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"Law School", valueEn:"Law School", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"Kein Auswahlverfahren", valueEn:"No selection process", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"HS 1.Okt–30.Apr / FS 1.Okt–30.Nov", valueEn:"Autumn 1 Oct–30 Apr / Spring 1 Oct–30 Nov", labelDe:"Bewerbungsfenster", labelEn:"Application window" },
+      ],
+      points:[
+        { de:"Klassischer Schweizer Jus-Master und Voraussetzung für das spätere Anwaltspatent; breites Pflichtprogramm statt freier Spezialisierung.",
+          en:"The classic Swiss law Master's and a prerequisite for the Swiss bar exam; a broad compulsory curriculum rather than free specialization." },
+        { de:"Offene Zulassung für Inhaber:innen eines Schweizer Jus-Bachelors – kein Eignungstest, kein Motivationsschreiben.",
+          en:"Open admission for holders of a Swiss law Bachelor's – no aptitude test, no motivation letter." },
+        { de:"Zulassung: anerkannter Schweizer Bachelor in Rechtswissenschaft, mind. 120 ECTS auf dem aktuellen Notenauszug.",
+          en:"Admission: a recognised Swiss Bachelor's in law, with at least 120 ECTS on the current transcript." },
+        { de:"Nachweis genügender Buchhaltungskenntnisse und zwei Fremdsprachenkurse müssen bis Studienabschluss erbracht werden.",
+          en:"Proof of sufficient accounting knowledge and two foreign-language courses must be completed by graduation." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung Law (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/law/" }] },
+
+    { id:"mle", abbr:"MLE", nameDe:"Master in Law and Economics (MLE)", nameEn:"Master in Law and Economics (MLE)",
+      teachLang:"de", tags:["law","economics"],
+      stats:[
+        { valueDe:"Deutsch", valueEn:"German", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"Law School", valueEn:"Law School", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"Kein Auswahlverfahren", valueEn:"No selection process", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"HS 1.Okt–30.Apr / FS 1.Okt–30.Nov", valueEn:"Autumn 1 Oct–30 Apr / Spring 1 Oct–30 Nov", labelDe:"Bewerbungsfenster", labelEn:"Application window" },
+      ],
+      points:[
+        { de:"Verbindet juristische mit volkswirtschaftlicher Methodik (Law & Economics); passt zu Wettbewerbsrecht, Regulierungsökonomie, ökonomischer Rechtsanalyse.",
+          en:"Combines legal with economic methodology (law & economics); a good fit for competition law, regulatory economics, economic analysis of law." },
+        { de:"Offen für Absolvent:innen eines Schweizer Jus-Bachelors, ergänzt um volks-/betriebswirtschaftliche Pflichtcredits (30 ECTS im ersten Jahr).",
+          en:"Open to holders of a Swiss law Bachelor's, topped up with compulsory economics/business credits (30 ECTS in the first year)." },
+        { de:"Zulassung: anerkannter Schweizer Bachelor in Rechtswissenschaft.",
+          en:"Admission: a recognised Swiss Bachelor's in law." },
+        { de:"Kein Eignungstest; Nachweis genügender Buchhaltungskenntnisse ist aber auch hier Pflicht.",
+          en:"No aptitude test; but proof of sufficient accounting knowledge is required here too." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung Law and Economics (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/law-and-economics/" }] },
+
+    { id:"jmm", abbr:"JMM", nameDe:"Joint Medical Master (JMM-HSG/UZH)", nameEn:"Joint Medical Master (JMM-HSG/UZH)",
+      teachLang:"de", tags:[],
+      stats:[
+        { valueDe:"Deutsch", valueEn:"German", labelDe:"Unterrichtssprache", labelEn:"Language of instruction" },
+        { valueDe:"gemeinsam mit UZH-Medizinfakultät", valueEn:"jointly with UZH's medical faculty", labelDe:"Zuständige School", labelEn:"Responsible School" },
+        { valueDe:"Eingeschränkte Zulassung", valueEn:"Restricted admission", labelDe:"Auswahlverfahren", labelEn:"Selection process" },
+        { valueDe:"siehe Zulassungsseite", valueEn:"see admission page", labelDe:"Bewerbungsfenster", labelEn:"Application window" },
+      ],
+      points:[
+        { de:"Gemeinsamer Humanmedizin-Master mit der Universität Zürich – fachlich ein Sonderfall, kein wirtschaftswissenschaftlicher Master.",
+          en:"A joint human-medicine Master's with the University of Zurich – a special case academically, not a business/economics Master's." },
+        { de:"Zulassung ist beschränkt (Eignungsverfahren); die genauen Kriterien sind nur auf der deutschsprachigen Zulassungsseite der HSG dokumentiert.",
+          en:"Admission is restricted (an aptitude procedure); the exact criteria are only documented on HSG's German-language admission page." },
+        { de:"Deshalb taucht dieses Programm bewusst nicht in den Interessens-Vorschlägen oben auf.",
+          en:"For that reason, this programme deliberately doesn't appear in the interest-based suggestions above." },
+      ],
+      sources:[{ label:"Universität St.Gallen: Zulassung Joint Medical Master (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/joint-medical-master-in-stgallen/" }] },
+  ];
+
+  function masterSectionHTML(m, i){
+    const num = String(i+1).padStart(2,'0');
+    const esc = s => s.replace(/"/g,'&quot;');
+    return `
+      <section class="category-box guide-section" id="master-${m.id}">
+        <div class="cat-head">
+          <span class="cat-index">${num}</span>
+          <div>
+            <h2 class="cat-title" data-de="${esc(m.nameDe)}" data-en="${esc(m.nameEn)}"></h2>
+          </div>
+        </div>
+        <div class="guide-stats">
+          ${m.stats.map(s => `
+            <div class="guide-stat">
+              <span class="guide-stat-value" data-de="${esc(s.valueDe)}" data-en="${esc(s.valueEn)}"></span>
+              <span class="guide-stat-label" data-de="${esc(s.labelDe)}" data-en="${esc(s.labelEn)}"></span>
+            </div>`).join('')}
+        </div>
+        <ul class="guide-points">
+          ${m.points.map(p => `<li data-de="${esc(p.de)}" data-en="${esc(p.en)}"></li>`).join('')}
+        </ul>
+        <div class="guide-sources">
+          <span data-de="Quellen (Zulassungsvoraussetzungen abgerufen im November 2026)" data-en="Sources (admission requirements retrieved November 2026)"></span>:
+          ${m.sources.map((s,si) => `${si > 0 ? ' · ' : ' '}<a class="guide-source" href="${s.url}" target="_blank" rel="noopener">${s.label}</a>`).join('')}
+        </div>
+      </section>`;
+  }
+  document.getElementById('mastersList').innerHTML = MASTERS.map(masterSectionHTML).join('');
+
+  // ---------- Master's matching widget ----------
+  const MATCH_TAGS = [
+    { id:"strategy", de:"Strategie & Consulting", en:"Strategy & consulting" },
+    { id:"finance", de:"Finance & Banking", en:"Finance & banking" },
+    { id:"accounting", de:"Accounting & Controlling", en:"Accounting & controlling" },
+    { id:"marketing", de:"Marketing", en:"Marketing" },
+    { id:"innovation", de:"Entrepreneurship & Innovation", en:"Entrepreneurship & innovation" },
+    { id:"economics", de:"Volkswirtschaft", en:"Economics" },
+    { id:"politics", de:"Int. Beziehungen & Politik", en:"Int'l affairs & policy" },
+    { id:"law", de:"Recht", en:"Law" },
+    { id:"tech", de:"Technologie & Data Science", en:"Technology & data science" },
+    { id:"quant", de:"Quantitative Methoden", en:"Quantitative methods" },
+  ];
+  const MATCH_LANGS = [
+    { id:"egal", de:"Sprache egal", en:"Language: either" },
+    { id:"de", de:"Lieber Deutsch", en:"Prefer German" },
+    { id:"en", de:"Lieber Englisch", en:"Prefer English" },
+  ];
+  const matchSelectedTags = new Set();
+  let matchSelectedLang = "egal";
+
+  function renderMatchChips(){
+    document.getElementById('matchInterestChips').innerHTML = MATCH_TAGS.map(t =>
+      `<button type="button" class="match-chip" data-tag="${t.id}" data-de="${t.de}" data-en="${t.en}"></button>`).join('');
+    document.getElementById('matchLangChips').innerHTML = MATCH_LANGS.map(l =>
+      `<button type="button" class="match-chip${l.id === 'egal' ? ' selected' : ''}" data-langopt="${l.id}" data-de="${l.de}" data-en="${l.en}"></button>`).join('');
+  }
+  renderMatchChips();
+
+  // The initial hint is inserted directly, not via renderMatchResults() (see
+  // below) — that function calls applyLang(lang), and `lang` itself isn't
+  // declared until much further down the script, same as every other
+  // data-de/data-en element rendered up here. The one later, global
+  // applyLang(lang) call picks up this element's text exactly like it does
+  // for GUIDE/MASTERS.
+  document.getElementById('matchResults').innerHTML =
+    `<p class="match-hint" data-de="Wähle oben mindestens ein Interesse aus." data-en="Pick at least one interest above."></p>`;
+
+  function renderMatchResults(){
+    const box = document.getElementById('matchResults');
+    if(matchSelectedTags.size === 0){
+      box.innerHTML = `<p class="match-hint" data-de="Wähle oben mindestens ein Interesse aus." data-en="Pick at least one interest above."></p>`;
+      applyLang(lang);
+      return;
+    }
+    const scored = MASTERS
+      .filter(m => matchSelectedLang === 'egal' || m.teachLang === 'both' || m.teachLang === matchSelectedLang)
+      .map(m => ({ m, score: m.tags.filter(t => matchSelectedTags.has(t)).length }))
+      .filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score);
+    if(!scored.length){
+      box.innerHTML = `<p class="match-hint" data-de="Mit dieser Kombination passt keiner der Master wirklich gut dazu. Versuch's mit einer anderen Auswahl, oder sieh dir die ganze Liste unten an."
+        data-en="No Master fits this combination particularly well. Try a different selection, or just browse the full list below."></p>`;
+      applyLang(lang);
+      return;
+    }
+    const top = scored.slice(0, 3).map(x => x.m);
+    const esc = s => s.replace(/"/g,'&quot;');
+    box.innerHTML = `
+      <div class="match-cards">
+        ${top.map(m => `
+          <button type="button" class="match-card" data-target="master-${m.id}" data-goatcounter-click="match-${m.id}">
+            <span class="match-card-abbr">${m.abbr}</span>
+            <span class="match-card-name" data-de="${esc(m.nameDe)}" data-en="${esc(m.nameEn)}"></span>
+          </button>`).join('')}
+      </div>`;
+    applyLang(lang);
+  }
+
+  document.getElementById('matchInterestChips').addEventListener('click', (e) => {
+    const btn = e.target.closest('.match-chip');
+    if(!btn) return;
+    const tag = btn.dataset.tag;
+    if(matchSelectedTags.has(tag)) matchSelectedTags.delete(tag); else matchSelectedTags.add(tag);
+    btn.classList.toggle('selected');
+    renderMatchResults();
+  });
+  document.getElementById('matchLangChips').addEventListener('click', (e) => {
+    const btn = e.target.closest('.match-chip');
+    if(!btn) return;
+    matchSelectedLang = btn.dataset.langopt;
+    document.querySelectorAll('#matchLangChips .match-chip').forEach(b => b.classList.toggle('selected', b === btn));
+    renderMatchResults();
+  });
+  // The match cards link to an in-page programme card further down the same
+  // view — a real "#master-xy" hash would be swallowed by the SPA's view
+  // router (routeFromHash only recognizes full view names, see VIEWS above),
+  // so this scrolls directly instead of changing the hash.
+  document.getElementById('masterMatch').addEventListener('click', (e) => {
+    const btn = e.target.closest('.match-card');
+    if(!btn) return;
+    const target = document.getElementById(btn.dataset.target);
+    if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+
   // Gentle staggered entrance for the boards, plus a scroll-reveal for
   // whichever ones start below the fold — never a jarring pop-in. Re-run
   // (with animate:false) after a pin toggle rebuilds the board, so boxes
@@ -3052,7 +3517,7 @@ SOFTWARE.`;
   });
 
   // ---------- View routing (Dashboard / Neu an der HSG / Kontakt) ----------
-  const VIEWS = ['dashboard','guide','journey','bachelorarbeit','business','contact','impressum','datenschutz'];
+  const VIEWS = ['dashboard','guide','journey','bachelorarbeit','masters','business','contact','impressum','datenschutz'];
   function showView(name){
     if(!VIEWS.includes(name)) name = 'dashboard';
     document.querySelectorAll('.view').forEach(v => { v.hidden = v.dataset.view !== name; });
@@ -3164,6 +3629,11 @@ SOFTWARE.`;
       bodyDe:"Sobald du dich für Praktika und den Berufseinstieg interessierst, ist Career & Corporate Services deine erste Anlaufstelle.",
       bodyEn:"Once internships and your career start become interesting, Career & Corporate Services is your first stop.",
       links:[{ tool:"CSC", url:"https://csc.unisg.ch/" }] },
+    { de:"Master-Wahl", en:"Choosing your Master",
+      titleDe:"Und danach?", titleEn:"And after that?",
+      bodyDe:"Die HSG bietet 14 eigene Master-Programme an – von Finance über Recht bis Computer Science. Im Master-Guide siehst du alle Programme mit Zulassungsvoraussetzungen auf einen Blick und kannst dir anhand deiner Interessen passende Vorschläge anzeigen lassen.",
+      bodyEn:"HSG offers 14 of its own Master's programmes – from finance to law to computer science. The Master's guide gives you every programme with its admission requirements at a glance, and can suggest the ones that fit your interests.",
+      links:[{ labelDe:"Master-Guide", labelEn:"Master's guide", url:"#masters" }] },
     { de:"Bachelorarbeit", en:"Bachelor's thesis",
       titleDe:"Der krönende Abschluss", titleEn:"The final milestone",
       bodyDe:"Zum Abschluss steht die Bachelorarbeit an. Suchst du eine Betreuungsperson oder möchtest mit einem Unternehmen zusammenarbeiten, bietet Studyond ein umfassendes Netzwerk. Alles Wichtige zu Ablauf, Fristen und Quellen findest du im eigenen Bachelorarbeit-Guide.",
