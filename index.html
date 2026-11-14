@@ -605,6 +605,14 @@
     background:var(--accent-soft); border:1px solid var(--line);
     font-size:.88rem; line-height:1.55; color:var(--text-2);
   }
+  /* The admissions-reform sources line on view-masters sits directly under
+     the page header, not inside a .category-box — .guide-sources' own
+     margin-bottom is 0 everywhere else because the enclosing card's padding
+     already provides the gap below it. This one needs its own, since the
+     next thing is another box (.master-match), not a card's inner padding.
+     The ">" keeps it from also affecting the many .guide-sources nested
+     inside #mastersList's per-programme cards. */
+  #view-masters > .guide-sources{ margin-bottom:1.8rem; }
   /* A row of small "frame" cards for a handful of headline numbers (GPA
      cutoff, timing, credit range, …) that would otherwise be buried inside
      a long bullet list — scanning four key figures at a glance beats
@@ -654,7 +662,7 @@
   .quiz-option.selected{ background:var(--accent); color:var(--accent-contrast); border-color:var(--accent); }
   .quiz-nav{ display:flex; justify-content:flex-start; }
   .match-hint{ margin:0 0 .9rem; color:var(--text-2); font-size:.88rem; line-height:1.5; }
-  .match-cards{ display:flex; flex-wrap:wrap; gap:.7rem; }
+  .match-cards{ display:flex; flex-wrap:wrap; gap:.7rem; margin-bottom:1.2rem; }
   .match-card{
     display:flex; flex-direction:column; gap:.2rem; align-items:flex-start;
     font-family:inherit; text-align:left; cursor:pointer;
