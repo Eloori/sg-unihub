@@ -638,17 +638,19 @@
   }
   .master-match-title{ font-family:var(--font-display); font-weight:700; font-size:1.15rem; margin:0 0 .4rem; }
   .master-match-sub{ margin:0 0 1rem; color:var(--text-2); font-size:.88rem; line-height:1.5; max-width:52em; }
-  .match-chips{ display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:.8rem; }
-  .match-chips-lang{ padding-top:.1rem; margin-bottom:0; border-top:1px solid var(--line); padding-top:.9rem; }
-  .match-chip{
-    font-family:var(--font-mono); font-size:.76rem; color:var(--text); background:transparent;
-    border:1px solid var(--line); border-radius:999px; padding:.4rem .85rem; cursor:pointer;
+  .quiz-progress{ font-family:var(--font-mono); font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; color:var(--text-2); margin-bottom:.5rem; }
+  .quiz-question{ font-family:var(--font-display); font-weight:700; font-size:1.05rem; line-height:1.4; margin:0 0 .9rem; }
+  .quiz-options{ display:flex; flex-direction:column; gap:.55rem; margin-bottom:1rem; }
+  .quiz-option{
+    text-align:left; font-family:inherit; font-size:.92rem; line-height:1.4;
+    background:var(--surface); color:var(--text); border:1px solid var(--line);
+    border-radius:10px; padding:.7rem .9rem; cursor:pointer;
     transition:background .2s ease, color .2s ease, border-color .2s ease;
   }
-  .match-chip:hover{ border-color:var(--accent); }
-  .match-chip.selected{ background:var(--accent); color:var(--accent-contrast); border-color:var(--accent); }
-  .match-results{ margin-top:1rem; }
-  .match-hint{ margin:0; color:var(--text-2); font-size:.88rem; line-height:1.5; }
+  .quiz-option:hover{ border-color:var(--accent); }
+  .quiz-option.selected{ background:var(--accent); color:var(--accent-contrast); border-color:var(--accent); }
+  .quiz-nav{ display:flex; justify-content:flex-start; }
+  .match-hint{ margin:0 0 .9rem; color:var(--text-2); font-size:.88rem; line-height:1.5; }
   .match-cards{ display:flex; flex-wrap:wrap; gap:.7rem; }
   .match-card{
     display:flex; flex-direction:column; gap:.2rem; align-items:flex-start;
@@ -1334,13 +1336,19 @@
            data-en="14 of HSG's own Master's programmes, each with a very different focus. An overview of admission and orientation – plus a few suggestions if you're still unsure."></p>
       </header>
 
+      <div class="guide-note" data-de="Wichtig für künftige Bewerbungen: Weil der St.Galler Kantonsrat den staatlichen Beitrag an die HSG auf maximal 9'500 Studierende begrenzt hat, verschärft die HSG die Zulassung zu mehreren Mastern ab dem Herbstsemester 2027. Bei MACFin, MBI und MiMM entscheidet neu ein Zulassungsausschuss anhand von Eignungstest, Notendurchschnitt und aussercurricularem Engagement (bei MBI zusätzlich eine vierte, programmspezifische Prüfung); bei MGM läuft die Zulassung über das neue Qualifizierungsmodul MGM. Die internationale Zulassungsquote von 25% bleibt unverändert. Die rechtliche Grundlage gilt ab 1. August 2026, wirkt sich aber erst auf Bewerbungen für den Studienstart Herbst 2027 aus."
+           data-en="Important for future applications: because the canton of St.Gallen's parliament capped its state funding for HSG at a maximum of 9,500 students, HSG is tightening admission to several Master's programmes starting Autumn Semester 2027. For MACFin, MBI and MiMM, an admissions committee now decides based on an aptitude test, grade average and extracurricular engagement (MBI adds a fourth, programme-specific exam); for MGM, admission runs through the new Qualification Module MGM. The 25% international-admission quota stays unchanged. The legal basis takes effect 1 August 2026, but only affects applications for entry in Autumn 2027."></div>
+      <div class="guide-sources">
+        <span data-de="Quellen zur Zulassungsreform" data-en="Sources on the admissions reform"></span>:
+        <a class="guide-source" href="https://www.vaterland.li/regional/ostschweiz/hsg-verschaerft-zulassung-fuer-bwl-master-art-740938" target="_blank" rel="noopener">Liechtensteiner Vaterland</a> ·
+        <a class="guide-source" href="https://www.businessclassost.ch/article/249823-mbhkmxmv" target="_blank" rel="noopener">Business Class Ost</a>
+      </div>
+
       <div class="master-match" id="masterMatch">
         <h3 class="master-match-title" data-de="Welcher Master könnte zu dir passen?" data-en="Which Master might fit you?"></h3>
-        <p class="master-match-sub" data-de="Wähle, was dich interessiert – wir zeigen dir die Programme, die am besten dazu passen. Ersetzt keine Studienberatung, nur einen ersten Fingerzeig."
-           data-en="Pick what interests you – we'll show you the programmes that fit best. This doesn't replace academic advising, just a first pointer."></p>
-        <div class="match-chips" id="matchInterestChips"></div>
-        <div class="match-chips match-chips-lang" id="matchLangChips"></div>
-        <div class="match-results" id="matchResults"></div>
+        <p class="master-match-sub" data-de="8 kurze Fragen zu dem, was dir im späteren Beruf wichtig ist – am Ende siehst du, welche Programme am besten passen könnten. Ersetzt keine Studienberatung, nur einen ersten Fingerzeig."
+           data-en="8 short questions about what matters to you in your future job – at the end you'll see which programmes might fit best. This doesn't replace academic advising, just a first pointer."></p>
+        <div id="matchQuiz"></div>
       </div>
 
       <div class="guide-list" id="mastersList"></div>
@@ -2921,16 +2929,22 @@
         { valueDe:"1. Okt – 30. Apr", valueEn:"1 Oct – 30 Apr", labelDe:"Bewerbungsfenster (4 Runden)", labelEn:"Application window (4 rounds)" },
       ],
       points:[
-        { de:"Generalistischer Strategie- und International-Management-Fokus, breit angelegt mit vielen Wahlmöglichkeiten und einer sehr internationalen Kohorte – im FT-Ranking «Masters in Management» 2024 weltweit auf Platz 1.",
-          en:"A generalist strategy and international management focus, broadly laid out with plenty of electives and a very international cohort – ranked #1 worldwide in the FT \"Masters in Management\" ranking 2024." },
+        { de:"Generalistischer Strategie- und International-Management-Fokus, breit angelegt mit vielen Wahlmöglichkeiten und einer sehr internationalen Kohorte – im FT-Ranking «Masters in Management» 2026 zum 15. Mal weltweit auf Platz 1.",
+          en:"A generalist strategy and international management focus, broadly laid out with plenty of electives and a very international cohort – ranked #1 worldwide in the FT \"Masters in Management\" ranking 2026, the 15th time SIM-HSG has topped it." },
         { de:"Klassischer Türöffner für Strategieberatung (McKinsey, BCG, Bain & Co.) und Konzernstrategie-Rollen; das stark case-basierte Auswahlverfahren spiegelt das bereits.",
           en:"A classic route into strategy consulting (McKinsey, BCG, Bain & Co.) and corporate-strategy roles; the heavily case-style admission process already reflects that." },
+        { de:"Neben den fünf Kernkursen prägen zwei besondere Formate das Programm: die SIMagination Challenge (ein eigenständiges internationales Social-Impact-Projekt) und das SIM International Project – ein Pflichtpraktikum im Ausland, das Studierende selbst organisieren.",
+          en:"Beyond the five core courses, two distinctive formats shape the programme: the SIMagination Challenge (a self-directed international social-impact project) and the SIM International Project – a mandatory international internship that students arrange themselves." },
         { de:"Zulassung: Bachelor in Business Administration/Economics (180 ECTS, davon mind. 60 ECTS BWL/VWL und 6 ECTS Mathematik/Statistik) oder gleichwertig.",
           en:"Admission: a Bachelor's in Business Administration/Economics (180 ECTS, incl. at least 60 ECTS in BA/Econ and 6 ECTS in Maths/Statistics) or equivalent." },
         { de:"Auswahl ganz ohne Noten-Cutoff, dafür gewichtet: GMAT/GRE (20%), Notenschnitt (20%), Aussercurriculares & Erfahrung (25%), vorab aufgezeichnetes Video-Interview (35%). Deutschkenntnisse sind nicht nötig.",
           en:"Selection has no grade cut-off, but is weighted: GMAT/GRE (20%), average grade (20%), extracurriculars & experience (25%), a pre-recorded video interview (35%). No German is required." },
       ],
-      sources:[{ label:"Universität St.Gallen: Zulassung SIM (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/strategy-and-international-management/" }] },
+      sources:[
+        { label:"Universität St.Gallen: Zulassung SIM (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/strategy-and-international-management/" },
+        { label:"Universität St.Gallen: Curriculum SIM (unisg.ch)", url:"https://www.unisg.ch/en/studying/programmes/master/strategy-and-international-management-sim/curriculum/" },
+        { label:"HSG News: SIM-HSG erneut auf Platz 1 (unisg.ch)", url:"https://www.unisg.ch/en/newsdetail/news/university-of-stgallen-masters-in-strategy-and-international-management-ranked-1/" },
+      ] },
 
     { id:"mbf", abbr:"MBF", nameDe:"Master in Banking and Finance (MBF)", nameEn:"Master in Banking and Finance (MBF)",
       teachLang:"en", tags:["finance","quant"],
@@ -2969,8 +2983,15 @@
           en:"Admission: a Bachelor's in Business Administration (180 ECTS), or a similar/partly similar major meeting the required minimum ECTS in BA, Economics, Law and Mathematics." },
         { de:"Bei FH-Abschluss oder abweichendem Major kann eine 56-ECTS-Vorbereitungsstufe nötig sein; Nachweis Buchhaltungskenntnisse ist ohnehin Pflicht.",
           en:"A university-of-applied-sciences degree or a differing major may require a 56-ECTS preparatory level; proof of accounting knowledge is required either way." },
+        { de:"Die 30 ECTS Wahlbereich gliedern sich in allgemeine Wahlfächer (12 ECTS, Breite über das Finanzmanagement) und ein Spezialisierungsmodul (12 ECTS, mind. zwei 6-ECTS-Kurse) zur gezielten Vorbereitung auf den Berufseinstieg.",
+          en:"The 30-ECTS elective area splits into general electives (12 ECTS, covering the breadth of financial management) and a specialization module (12 ECTS, at least two 6-ECTS courses) that prepares you more specifically for your first job." },
+        { de:"Seit Herbstsemester 2027 ist auch die Zulassung zu MACFin Teil der HSG-weit verschärften Aufnahmeregeln (Hintergrund siehe Kasten oben).",
+          en:"Since Autumn Semester 2027, admission to MACFin has also been part of HSG's tightened university-wide admission rules (see the box above for background)." },
       ],
-      sources:[{ label:"Universität St.Gallen: Zulassung MACFin (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/accounting-and-corporate-finance/" }] },
+      sources:[
+        { label:"Universität St.Gallen: Zulassung MACFin (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/accounting-and-corporate-finance/" },
+        { label:"Universität St.Gallen: Curriculum MACFin (unisg.ch)", url:"https://www.unisg.ch/en/studium/programme/master/accounting-and-corporate-finance-macfin/curriculum" },
+      ] },
 
     { id:"mgm", abbr:"MGM", nameDe:"Master in General Management (MGM)", nameEn:"Master in General Management (MGM)",
       teachLang:"both", tags:["strategy","accounting"],
@@ -2981,16 +3002,21 @@
         { valueDe:"1. Okt – 31. Mär", valueEn:"1 Oct – 31 Mar", labelDe:"Bewerbungsfenster", labelEn:"Application window" },
       ],
       points:[
-        { de:"Bewusst generalistisch angelegt: Strategic Management & Leadership, Finance/Accounting/Controlling sowie quantitative Methoden – keine fachliche Spezialisierung.",
-          en:"Deliberately generalist: Strategic Management & Leadership, Finance/Accounting/Controlling and quantitative methods – no single subject specialization." },
-        { de:"Für alle Bewerbenden verpflichtend: ein mehrtägiges, persönlich vor Ort stattfindendes Qualification Module (Eignungstest) vor Semesterstart, ohne Ausweichtermin.",
-          en:"Mandatory for every applicant: a multi-day, in-person Qualification Module (aptitude assessment) before the semester starts, with no alternative date." },
+        { de:"Deckt vier Kernbereiche gleichzeitig ab – Strategy, Entrepreneurship, Finance & Management Accounting sowie Leadership – mit je zwei Pflichtkursen pro Bereich, ergänzt um Artificial Intelligence in Business; keine fachliche Spezialisierung, dafür echte Breite.",
+          en:"Covers four core areas at once – Strategy, Entrepreneurship, Finance & Management Accounting and Leadership – with two compulsory courses in each, plus Artificial Intelligence in Business; no single-subject specialization, but genuine breadth." },
+        { de:"Entrepreneurship ist fest im Pflichtprogramm verankert (Entrepreneurship I & II) und lässt sich über Wahlkurse wie Lean Startup, High-Growth Entrepreneurship oder Inventing Ventures sowie im zweisemestrigen Managerial Impact Project (Option Start-up Entrepreneurship) vertiefen.",
+          en:"Entrepreneurship is built into the compulsory programme (Entrepreneurship I & II) and can be deepened through electives such as Lean Startup, High-Growth Entrepreneurship or Inventing Ventures, and through the two-semester Managerial Impact Project (Start-up Entrepreneurship track)." },
+        { de:"Für alle Bewerbenden verpflichtend: ein mehrtägiges, persönlich vor Ort stattfindendes Qualifizierungsmodul MGM (Eignungstest) vor Semesterstart, ohne Ausweichtermin – seit Herbstsemester 2027 Teil der HSG-weit verschärften Zulassung (Hintergrund siehe Kasten oben).",
+          en:"Mandatory for every applicant: a multi-day, in-person Qualification Module MGM (aptitude assessment) before the semester starts, with no alternative date – since Autumn Semester 2027 part of HSG's tightened university-wide admission rules (see the box above for background)." },
         { de:"Zulassung: Bachelor BWL (180 ECTS) oder ein ähnlicher/teilähnlicher Major.",
           en:"Admission: a Bachelor's in Business Administration (180 ECTS), or a similar/partly similar major." },
         { de:"Bewerbende aus dem Ausland durchlaufen zusätzlich ein gewichtetes Auswahlverfahren (Note, optionaler Test, Lebenslauf, Motivationsschreiben).",
           en:"Applicants from abroad also go through an additional weighted selection process (grade, optional test, CV, motivation letter)." },
       ],
-      sources:[{ label:"Universität St.Gallen: Zulassung MGM (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/general-management/" }] },
+      sources:[
+        { label:"Universität St.Gallen: Zulassung MGM (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/general-management/" },
+        { label:"Universität St.Gallen: Curriculum MGM (unisg.ch)", url:"https://www.unisg.ch/en/studying/programmes/master/general-management-mgm/curriculum/" },
+      ] },
 
     { id:"mimm", abbr:"MiMM", nameDe:"Master in Marketing Management (MiMM)", nameEn:"Master in Marketing Management (MiMM)",
       teachLang:"en", tags:["marketing","strategy"],
@@ -3009,8 +3035,15 @@
           en:"Admission: a Bachelor's in Business Administration (180 ECTS), or a similar/partly similar major." },
         { de:"GMAT/GRE ist bei FH-Abschlüssen Pflicht, bei Uni-Bachelor optional – ohne Test wird die Note doppelt gewichtet.",
           en:"GMAT/GRE is mandatory for university-of-applied-sciences degrees, optional with a university Bachelor's – without a test the grade is weighted twice." },
+        { de:"Der fachliche Kern folgt drei Tracks – Customer (Consumer Behaviour & Methods), Corporate Management (Marketing Management) und Function (Marketing Functions) – ergänzt um ein dreisemestriges Applied-Research-Projekt mit einem Unternehmenspartner.",
+          en:"The academic core follows three tracks – Customer (Consumer Behaviour & Methods), Corporate Management (Marketing Management) and Function (Marketing Functions) – complemented by a three-semester Applied Research Project with a corporate partner." },
+        { de:"Seit Herbstsemester 2027 ist auch die Zulassung zu MiMM Teil der HSG-weit verschärften Aufnahmeregeln (Hintergrund siehe Kasten oben).",
+          en:"Since Autumn Semester 2027, admission to MiMM has also been part of HSG's tightened university-wide admission rules (see the box above for background)." },
       ],
-      sources:[{ label:"Universität St.Gallen: Zulassung MiMM (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/marketing-management/" }] },
+      sources:[
+        { label:"Universität St.Gallen: Zulassung MiMM (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/marketing-management/" },
+        { label:"Universität St.Gallen: Curriculum MiMM (unisg.ch)", url:"https://www.unisg.ch/en/studying/programmes/master/master-in-marketing-management-mimm/curriculum/" },
+      ] },
 
     { id:"mbi", abbr:"MBI", nameDe:"Master in Business Innovation (MBI)", nameEn:"Master in Business Innovation (MBI)",
       teachLang:"both", tags:["innovation","strategy"],
@@ -3029,8 +3062,15 @@
           en:"Admission: a Bachelor's in Business Administration (180 ECTS), or a similar/partly similar major; without a business background, a preparatory level is required first." },
         { de:"Statt eines klassischen Interviews: ein bis zu 90-minütiger, live beaufsichtigter Online-Eignungstest (30% der Auswahl), ortsunabhängig ablegbar.",
           en:"Instead of a classic interview: an up-to-90-minute, live-proctored online aptitude test (30% of the selection), which can be taken from anywhere." },
+        { de:"Die Wahlfächer sind in sechs MBI-Profile gegliedert – u. a. Start-up & Scale-up Entrepreneurship, Digital Channel & Customer Relationship Management, Supply Chain & Operations Management oder Technology Solution Architect; die Wahl eines Profils ist freiwillig, hilft aber bei der Fokussierung.",
+          en:"Electives are organized into six MBI profiles – including Start-up & Scale-up Entrepreneurship, Digital Channel & Customer Relationship Management, Supply Chain & Operations Management, and Technology Solution Architect; choosing one is optional, but helps you focus." },
+        { de:"Seit Herbstsemester 2027 ist die MBI-Zulassung Teil der HSG-weit verschärften Aufnahmeregeln; zum Online-Test kommt neu eine vierte, programmspezifische Prüfungskomponente hinzu (Hintergrund siehe Kasten oben).",
+          en:"Since Autumn Semester 2027, MBI admission has been part of HSG's tightened university-wide admission rules; alongside the online test there is now a fourth, programme-specific exam component (see the box above for background)." },
       ],
-      sources:[{ label:"Universität St.Gallen: Zulassung MBI (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/business-innovation/" }] },
+      sources:[
+        { label:"Universität St.Gallen: Zulassung MBI (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/business-innovation/" },
+        { label:"Universität St.Gallen: Curriculum MBI (unisg.ch)", url:"https://www.unisg.ch/en/studying/programmes/master/master-in-business-innovation-mbi-1/curriculum/" },
+      ] },
 
     { id:"mia", abbr:"MIA", nameDe:"Master in International Affairs and Governance (MIA)", nameEn:"Master in International Affairs and Governance (MIA)",
       teachLang:"en", tags:["politics","economics"],
@@ -3220,100 +3260,178 @@
   }
   document.getElementById('mastersList').innerHTML = MASTERS.map(masterSectionHTML).join('');
 
-  // ---------- Master's matching widget ----------
-  const MATCH_TAGS = [
-    { id:"strategy", de:"Strategie & Consulting", en:"Strategy & consulting" },
-    { id:"finance", de:"Finance & Banking", en:"Finance & banking" },
-    { id:"accounting", de:"Accounting & Controlling", en:"Accounting & controlling" },
-    { id:"marketing", de:"Marketing", en:"Marketing" },
-    { id:"innovation", de:"Entrepreneurship & Innovation", en:"Entrepreneurship & innovation" },
-    { id:"economics", de:"Volkswirtschaft", en:"Economics" },
-    { id:"politics", de:"Int. Beziehungen & Politik", en:"Int'l affairs & policy" },
-    { id:"law", de:"Recht", en:"Law" },
-    { id:"tech", de:"Technologie & Data Science", en:"Technology & data science" },
-    { id:"quant", de:"Quantitative Methoden", en:"Quantitative methods" },
+  // ---------- Master's matching widget: a short multi-question quiz ----------
+  // Each question maps its options onto weighted points for one or more of
+  // MASTERS' `tags` (so a program's match score is the sum of accumulated
+  // points for every tag it carries, not just a tag-overlap count), except
+  // the final question, which instead records a teaching-language preference
+  // used purely as a filter.
+  const MATCH_QUESTIONS = [
+    { de:"Was motiviert dich im späteren Beruf am meisten?",
+      en:"What would motivate you most in your future job?",
+      options:[
+        { de:"Komplexe Unternehmensstrategien entwickeln", en:"Developing complex business strategies", scores:{strategy:2} },
+        { de:"Mit Zahlen, Bilanzen und Finanzierungen arbeiten", en:"Working with numbers, accounts and financing", scores:{finance:2, accounting:1} },
+        { de:"Etwas Neues aufbauen oder gründen", en:"Building or founding something new", scores:{innovation:2} },
+        { de:"Marken und Konsumverhalten verstehen", en:"Understanding brands and consumer behaviour", scores:{marketing:2} },
+        { de:"Mit Daten, Code und neuen Technologien arbeiten", en:"Working with data, code and new technology", scores:{tech:2, quant:1} },
+        { de:"Dich politisch oder gesellschaftlich einbringen", en:"Getting involved politically or in society", scores:{politics:2} },
+        { de:"Im Recht und mit Gesetzen arbeiten", en:"Working in law, with legislation", scores:{law:2} },
+      ] },
+    { de:"Reist und arbeitest du gerne in wechselnden, internationalen Teams?",
+      en:"Do you enjoy traveling and working in changing, international teams?",
+      options:[
+        { de:"Ja, am liebsten ständig unterwegs", en:"Yes, ideally I'm always on the move", scores:{strategy:1, politics:1} },
+        { de:"Ab und zu reicht mir völlig", en:"Every now and then is plenty for me", scores:{} },
+        { de:"Lieber lokal verankert bleiben", en:"I'd rather stay rooted locally", scores:{law:1, accounting:1} },
+      ] },
+    { de:"Wie gerne arbeitest du mit Zahlen, Modellen und Statistik – zum Beispiel ein Budget durchplanen?",
+      en:"How much do you enjoy working with numbers, models and statistics – planning out a budget, say?",
+      options:[
+        { de:"Sehr gerne, je komplexer desto besser", en:"A lot – the more complex, the better", scores:{quant:2, finance:1} },
+        { de:"Ganz gerne, aber nicht nur", en:"Fairly, but not exclusively", scores:{economics:1} },
+        { de:"Eher ungern – ich bin kreativer oder zwischenmenschlicher unterwegs", en:"Not really – I'm more creative or people-oriented", scores:{marketing:1, innovation:1} },
+      ] },
+    { de:"Könntest du dir vorstellen, für eine internationale Organisation, NGO oder im öffentlichen Sektor zu arbeiten?",
+      en:"Could you imagine working for an international organization, NGO, or in the public sector?",
+      options:[
+        { de:"Ja, total", en:"Yes, absolutely", scores:{politics:2} },
+        { de:"Eher nein, lieber Privatwirtschaft", en:"Not really, I'd rather go into the private sector", scores:{} },
+      ] },
+    { de:"Reizt dich die Startup- und Gründer-Welt, oder Innovationsarbeit in bestehenden Unternehmen?",
+      en:"Does the startup/founder world appeal to you, or innovation work inside existing companies?",
+      options:[
+        { de:"Ja, sehr", en:"Yes, a lot", scores:{innovation:2} },
+        { de:"Ein bisschen", en:"A little", scores:{innovation:1} },
+        { de:"Eher nicht", en:"Not really", scores:{} },
+      ] },
+    { de:"Interessieren dich Programmieren, KI oder Data Science?",
+      en:"Are you interested in programming, AI or data science?",
+      options:[
+        { de:"Ja, das ist mein Ding", en:"Yes, that's my thing", scores:{tech:2, quant:1} },
+        { de:"Ein bisschen Grundlagen reichen mir", en:"Some basics are enough for me", scores:{tech:1} },
+        { de:"Nein, eher nicht", en:"No, not really", scores:{} },
+      ] },
+    { de:"Bringst du einen rechtswissenschaftlichen Bachelor mit (BLaw oder Law & Economics)?",
+      en:"Do you have a Bachelor's in law (BLaw or Law & Economics)?",
+      options:[
+        { de:"Ja", en:"Yes", scores:{law:2} },
+        { de:"Nein", en:"No", scores:{} },
+      ] },
+    { de:"Auf welcher Sprache würdest du am liebsten unterrichtet werden?",
+      en:"Which language would you most like to be taught in?",
+      options:[
+        { de:"Lieber Deutsch", en:"Prefer German", lang:"de" },
+        { de:"Lieber Englisch", en:"Prefer English", lang:"en" },
+        { de:"Ist mir egal", en:"Either is fine", lang:"egal" },
+      ] },
   ];
-  const MATCH_LANGS = [
-    { id:"egal", de:"Sprache egal", en:"Language: either" },
-    { id:"de", de:"Lieber Deutsch", en:"Prefer German" },
-    { id:"en", de:"Lieber Englisch", en:"Prefer English" },
-  ];
-  const matchSelectedTags = new Set();
-  let matchSelectedLang = "egal";
+  let matchQuizIndex = 0;
+  const matchAnswers = new Array(MATCH_QUESTIONS.length).fill(null);
 
-  function renderMatchChips(){
-    document.getElementById('matchInterestChips').innerHTML = MATCH_TAGS.map(t =>
-      `<button type="button" class="match-chip" data-tag="${t.id}" data-de="${t.de}" data-en="${t.en}"></button>`).join('');
-    document.getElementById('matchLangChips').innerHTML = MATCH_LANGS.map(l =>
-      `<button type="button" class="match-chip${l.id === 'egal' ? ' selected' : ''}" data-langopt="${l.id}" data-de="${l.de}" data-en="${l.en}"></button>`).join('');
+  function matchComputeScores(){
+    const scores = {};
+    let teachLangPref = 'egal';
+    MATCH_QUESTIONS.forEach((q, i) => {
+      const ai = matchAnswers[i];
+      if(ai === null) return;
+      const opt = q.options[ai];
+      if(opt.scores) Object.entries(opt.scores).forEach(([tag, pts]) => { scores[tag] = (scores[tag]||0) + pts; });
+      if(opt.lang) teachLangPref = opt.lang;
+    });
+    return { scores, teachLangPref };
   }
-  renderMatchChips();
 
-  // The initial hint is inserted directly, not via renderMatchResults() (see
-  // below) — that function calls applyLang(lang), and `lang` itself isn't
-  // declared until much further down the script, same as every other
-  // data-de/data-en element rendered up here. The one later, global
-  // applyLang(lang) call picks up this element's text exactly like it does
-  // for GUIDE/MASTERS.
-  document.getElementById('matchResults').innerHTML =
-    `<p class="match-hint" data-de="Wähle oben mindestens ein Interesse aus." data-en="Pick at least one interest above."></p>`;
-
-  function renderMatchResults(){
-    const box = document.getElementById('matchResults');
-    if(matchSelectedTags.size === 0){
-      box.innerHTML = `<p class="match-hint" data-de="Wähle oben mindestens ein Interesse aus." data-en="Pick at least one interest above."></p>`;
-      applyLang(lang);
-      return;
-    }
-    const scored = MASTERS
-      .filter(m => matchSelectedLang === 'egal' || m.teachLang === 'both' || m.teachLang === matchSelectedLang)
-      .map(m => ({ m, score: m.tags.filter(t => matchSelectedTags.has(t)).length }))
-      .filter(x => x.score > 0)
-      .sort((a, b) => b.score - a.score);
-    if(!scored.length){
-      box.innerHTML = `<p class="match-hint" data-de="Mit dieser Kombination passt keiner der Master wirklich gut dazu. Versuch's mit einer anderen Auswahl, oder sieh dir die ganze Liste unten an."
-        data-en="No Master fits this combination particularly well. Try a different selection, or just browse the full list below."></p>`;
-      applyLang(lang);
-      return;
-    }
-    const top = scored.slice(0, 3).map(x => x.m);
+  function quizQuestionHTML(q, qi){
     const esc = s => s.replace(/"/g,'&quot;');
-    box.innerHTML = `
-      <div class="match-cards">
-        ${top.map(m => `
-          <button type="button" class="match-card" data-target="master-${m.id}" data-goatcounter-click="match-${m.id}">
-            <span class="match-card-abbr">${m.abbr}</span>
-            <span class="match-card-name" data-de="${esc(m.nameDe)}" data-en="${esc(m.nameEn)}"></span>
-          </button>`).join('')}
+    return `
+      <div class="quiz-progress" data-de="Frage ${qi+1} von ${MATCH_QUESTIONS.length}" data-en="Question ${qi+1} of ${MATCH_QUESTIONS.length}"></div>
+      <div class="quiz-question" data-de="${esc(q.de)}" data-en="${esc(q.en)}"></div>
+      <div class="quiz-options">
+        ${q.options.map((o, oi) => `<button type="button" class="quiz-option${matchAnswers[qi] === oi ? ' selected' : ''}" data-opt="${oi}" data-de="${esc(o.de)}" data-en="${esc(o.en)}"></button>`).join('')}
+      </div>
+      <div class="quiz-nav">
+        <button type="button" class="ctrl-btn" id="quizBack" ${qi === 0 ? 'disabled' : ''} data-de="← Zurück" data-en="← Back"></button>
       </div>`;
-    applyLang(lang);
   }
-
-  document.getElementById('matchInterestChips').addEventListener('click', (e) => {
-    const btn = e.target.closest('.match-chip');
-    if(!btn) return;
-    const tag = btn.dataset.tag;
-    if(matchSelectedTags.has(tag)) matchSelectedTags.delete(tag); else matchSelectedTags.add(tag);
-    btn.classList.toggle('selected');
-    renderMatchResults();
-  });
-  document.getElementById('matchLangChips').addEventListener('click', (e) => {
-    const btn = e.target.closest('.match-chip');
-    if(!btn) return;
-    matchSelectedLang = btn.dataset.langopt;
-    document.querySelectorAll('#matchLangChips .match-chip').forEach(b => b.classList.toggle('selected', b === btn));
-    renderMatchResults();
-  });
+  function attachQuizQuestionHandlers(){
+    const back = document.getElementById('quizBack');
+    if(back) back.addEventListener('click', () => {
+      if(matchQuizIndex > 0){ matchQuizIndex--; renderMatchQuiz(); }
+    });
+    document.querySelectorAll('#matchQuiz .quiz-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        matchAnswers[matchQuizIndex] = Number(btn.dataset.opt);
+        matchQuizIndex++;
+        renderMatchQuiz();
+      });
+    });
+  }
+  function matchRestartQuiz(){
+    matchAnswers.fill(null);
+    matchQuizIndex = 0;
+    renderMatchQuiz();
+  }
   // The match cards link to an in-page programme card further down the same
   // view — a real "#master-xy" hash would be swallowed by the SPA's view
   // router (routeFromHash only recognizes full view names, see VIEWS above),
   // so this scrolls directly instead of changing the hash.
-  document.getElementById('masterMatch').addEventListener('click', (e) => {
-    const btn = e.target.closest('.match-card');
-    if(!btn) return;
-    const target = document.getElementById(btn.dataset.target);
-    if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
-  });
+  function renderMatchResultsScreen(host){
+    const { scores, teachLangPref } = matchComputeScores();
+    const esc = s => s.replace(/"/g,'&quot;');
+    const scored = MASTERS
+      .filter(m => teachLangPref === 'egal' || m.teachLang === 'both' || m.teachLang === teachLangPref)
+      .map(m => ({ m, score: m.tags.reduce((sum, t) => sum + (scores[t]||0), 0) }))
+      .filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score);
+    const restartBtn = `<div class="quiz-nav"><button type="button" class="ctrl-btn" id="quizRestart" data-de="↺ Quiz neu starten" data-en="↺ Restart quiz"></button></div>`;
+    if(!scored.length){
+      host.innerHTML = `
+        <p class="match-hint" data-de="Mit diesen Antworten passt keiner der Master wirklich gut dazu. Versuch's nochmal mit anderen Antworten, oder sieh dir die ganze Liste unten an."
+           data-en="No Master fits these answers particularly well. Try the quiz again with different answers, or just browse the full list below."></p>
+        ${restartBtn}`;
+    } else {
+      const top = scored.slice(0, 3).map(x => x.m);
+      host.innerHTML = `
+        <p class="match-hint" data-de="Basierend auf deinen Antworten könnten diese Programme zu dir passen:" data-en="Based on your answers, these programmes might be a good fit:"></p>
+        <div class="match-cards">
+          ${top.map(m => `
+            <button type="button" class="match-card" data-target="master-${m.id}" data-goatcounter-click="match-${m.id}">
+              <span class="match-card-abbr">${m.abbr}</span>
+              <span class="match-card-name" data-de="${esc(m.nameDe)}" data-en="${esc(m.nameEn)}"></span>
+            </button>`).join('')}
+        </div>
+        ${restartBtn}`;
+      host.querySelectorAll('.match-card').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.target);
+          if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+        });
+      });
+    }
+    applyLang(lang);
+    document.getElementById('quizRestart').addEventListener('click', matchRestartQuiz);
+  }
+  function renderMatchQuiz(){
+    const host = document.getElementById('matchQuiz');
+    if(matchQuizIndex >= MATCH_QUESTIONS.length){
+      renderMatchResultsScreen(host);
+      return;
+    }
+    host.innerHTML = quizQuestionHTML(MATCH_QUESTIONS[matchQuizIndex], matchQuizIndex);
+    applyLang(lang);
+    attachQuizQuestionHandlers();
+  }
+  // The initial render is inserted directly, not via renderMatchQuiz() (see
+  // above) — that function calls applyLang(lang), and `lang` itself isn't
+  // declared until much further down the script, same as every other
+  // data-de/data-en element rendered up here. The one later, global
+  // applyLang(lang) call picks up this markup's attributes exactly like it
+  // does for GUIDE/MASTERS; every later re-render goes through
+  // renderMatchQuiz() itself, safely, since those only run in response to a
+  // click, after the whole script (and `lang`) has already run once.
+  document.getElementById('matchQuiz').innerHTML = quizQuestionHTML(MATCH_QUESTIONS[0], 0);
+  attachQuizQuestionHandlers();
 
   // Gentle staggered entrance for the boards, plus a scroll-reveal for
   // whichever ones start below the fold — never a jarring pop-in. Re-run
@@ -3629,16 +3747,16 @@ SOFTWARE.`;
       bodyDe:"Sobald du dich für Praktika und den Berufseinstieg interessierst, ist Career & Corporate Services deine erste Anlaufstelle.",
       bodyEn:"Once internships and your career start become interesting, Career & Corporate Services is your first stop.",
       links:[{ tool:"CSC", url:"https://csc.unisg.ch/" }] },
-    { de:"Master-Wahl", en:"Choosing your Master",
-      titleDe:"Und danach?", titleEn:"And after that?",
-      bodyDe:"Die HSG bietet 14 eigene Master-Programme an – von Finance über Recht bis Computer Science. Im Master-Guide siehst du alle Programme mit Zulassungsvoraussetzungen auf einen Blick und kannst dir anhand deiner Interessen passende Vorschläge anzeigen lassen.",
-      bodyEn:"HSG offers 14 of its own Master's programmes – from finance to law to computer science. The Master's guide gives you every programme with its admission requirements at a glance, and can suggest the ones that fit your interests.",
-      links:[{ labelDe:"Master-Guide", labelEn:"Master's guide", url:"#masters" }] },
     { de:"Bachelorarbeit", en:"Bachelor's thesis",
       titleDe:"Der krönende Abschluss", titleEn:"The final milestone",
       bodyDe:"Zum Abschluss steht die Bachelorarbeit an. Suchst du eine Betreuungsperson oder möchtest mit einem Unternehmen zusammenarbeiten, bietet Studyond ein umfassendes Netzwerk. Alles Wichtige zu Ablauf, Fristen und Quellen findest du im eigenen Bachelorarbeit-Guide.",
       bodyEn:"At the end comes your Bachelor's thesis. If you're looking for a supervisor or want to work with a company, Studyond offers an extensive network. For everything on process, deadlines and sources, check out the dedicated Bachelor's Thesis guide.",
       links:[{ tool:"Studyond", url:"https://studyond.com/" }, { labelDe:"Bachelorarbeit-Guide", labelEn:"Bachelor's Thesis guide", url:"#bachelorarbeit" }] },
+    { de:"Master-Wahl", en:"Choosing your Master",
+      titleDe:"Und danach?", titleEn:"And after that?",
+      bodyDe:"Die HSG bietet 14 eigene Master-Programme an – von Finance über Recht bis Computer Science. Im Master-Guide siehst du alle Programme mit Zulassungsvoraussetzungen auf einen Blick und kannst dir anhand deiner Interessen passende Vorschläge anzeigen lassen.",
+      bodyEn:"HSG offers 14 of its own Master's programmes – from finance to law to computer science. The Master's guide gives you every programme with its admission requirements at a glance, and can suggest the ones that fit your interests.",
+      links:[{ labelDe:"Master-Guide", labelEn:"Master's guide", url:"#masters" }] },
   ];
 
   let journeyIndex = 0;
