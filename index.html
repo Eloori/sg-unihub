@@ -610,8 +610,11 @@
      a long bullet list — scanning four key figures at a glance beats
      reading seven sentences to find them. */
   .guide-stats{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:.7rem; margin:0 0 1.3rem; }
-  .guide-stat{ padding:.85rem 1rem; border-radius:10px; background:var(--accent-soft); border:1px solid var(--line); }
-  .guide-stat-value{ display:block; font-family:var(--font-display); font-weight:800; font-size:1.05rem; color:var(--text); line-height:1.25; margin-bottom:.55rem; }
+  /* min-width:0 overrides the grid item's default min-width:auto, which
+     otherwise lets an unbreakable long word (e.g. "Motivationsschreiben")
+     force the column wider than its track and spill past the tile's edge. */
+  .guide-stat{ padding:.85rem 1rem; border-radius:10px; background:var(--accent-soft); border:1px solid var(--line); min-width:0; }
+  .guide-stat-value{ display:block; font-family:var(--font-display); font-weight:800; font-size:1.05rem; color:var(--text); line-height:1.25; margin-bottom:.55rem; overflow-wrap:break-word; word-break:break-word; hyphens:auto; }
   .guide-stat-label{ display:block; font-family:var(--font-mono); font-size:.68rem; letter-spacing:.02em; color:var(--text-2); line-height:1.4; }
 
   .guide-points{ margin:0 0 1.2rem; padding:0; list-style:none; display:flex; flex-direction:column; gap:.65rem; }
