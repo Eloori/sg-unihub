@@ -3649,6 +3649,15 @@
   const searchResultsEl = document.getElementById('searchResults');
   const MYHSG_URL = 'https://universitaetstgallen.sharepoint.com/sites/myHSG/SitePages/Home.aspx';
   let SEARCH_INDEX = null;
+  // arriving.html (the "Arriving & Housing" page) is a separate static HTML
+  // file, not part of this SPA's DOM, so it can't be indexed from the page
+  // the way DATA/GUIDE/MASTERS/thesis content is. Fetched lazily (same-
+  // origin, so this works once published — it can't be tested over a plain
+  // file:// URL) the first time the search modal opens, and merged into
+  // results once it lands; a search started before it resolves just
+  // re-renders once it does.
+  let ARRIVING_INDEX = null;
+  let arrivingFetchStarted = false;
 
   const stripTags = s => String(s || '').replace(/<[^>]+>/g, '');
   const escHtml = s => String(s || '')
@@ -3791,6 +3800,52 @@
       </a>`;
   }
 
+  // Parses a fetched copy of arriving.html into search entries. Its
+  // checklist phases (.phase) and info cards (.pcard) already carry stable
+  // ids (added alongside this feature) that arriving.html's own router
+  // smooth-scrolls to on load via location.hash, so a result here only
+  // needs to point at "arriving.html#<id>" — no scroll-handling of our own.
+  // That page is English-only, so titleDe/bodyDe just reuse the English text.
+  function parseArrivingIndex(html){
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const idx = [];
+    doc.querySelectorAll('.phase[id]').forEach(phase => {
+      const h3 = phase.querySelector('h3');
+      if(!h3) return;
+      const body = stripTags(Array.from(phase.querySelectorAll('li')).map(li => li.textContent).join(' '));
+      idx.push({
+        titleDe: h3.textContent, titleEn: h3.textContent,
+        bodyDe: body, bodyEn: body,
+        metaDe: 'Ankommen & Wohnen', metaEn: 'Arriving & Housing',
+        external: `arriving.html#${phase.id}`,
+      });
+    });
+    doc.querySelectorAll('.pcard[id]').forEach(card => {
+      const h4 = card.querySelector('h4');
+      if(!h4) return;
+      const p = card.querySelector('p');
+      idx.push({
+        titleDe: h4.textContent, titleEn: h4.textContent,
+        bodyDe: stripTags(p ? p.textContent : ''), bodyEn: stripTags(p ? p.textContent : ''),
+        metaDe: 'Ankommen & Wohnen', metaEn: 'Arriving & Housing',
+        external: `arriving.html#${card.id}`,
+      });
+    });
+    idx.forEach(e => {
+      e.titleWords = wordsOf(e.titleDe + ' ' + e.titleEn);
+      e.bodyWords = wordsOf(e.bodyDe + ' ' + e.bodyEn);
+    });
+    return idx;
+  }
+  function ensureArrivingIndex(){
+    if(arrivingFetchStarted) return;
+    arrivingFetchStarted = true;
+    fetch('arriving.html').then(r => r.ok ? r.text() : '').then(html => {
+      ARRIVING_INDEX = html ? parseArrivingIndex(html) : [];
+      if(searchModal.classList.contains('open')) renderSearchResults(searchInput.value);
+    }).catch(() => { ARRIVING_INDEX = []; });
+  }
+
   function renderSearchResults(query){
     const tokens = tokenize(query || '');
     if(!tokens.length){
@@ -3799,7 +3854,8 @@
       return;
     }
     if(!SEARCH_INDEX) SEARCH_INDEX = buildSearchIndex();
-    const scored = SEARCH_INDEX
+    const fullIndex = ARRIVING_INDEX ? SEARCH_INDEX.concat(ARRIVING_INDEX) : SEARCH_INDEX;
+    const scored = fullIndex
       .map(e => ({ e, s: scoreEntry(e, tokens) }))
       .filter(x => x.s > 0)
       .sort((a, b) => b.s - a.s)
@@ -3826,6 +3882,12 @@
 
   function goToSearchResult(entry){
     closeSearchModal();
+    if(entry.external){
+      // A different static page of sg/unihub itself (not an outside site,
+      // so no new tab) — its own router scrolls to the #id on load.
+      window.location.href = entry.external;
+      return;
+    }
     if(entry.view){
       showView(entry.view);
       try{ history.replaceState(null, '', '#' + entry.view); }catch(e){}
@@ -3845,6 +3907,7 @@
     searchModal.classList.add('open');
     searchModal.setAttribute('aria-hidden', 'false');
     searchBtn.setAttribute('aria-expanded', 'true');
+    ensureArrivingIndex();
     renderSearchResults(searchInput.value);
     searchInput.focus();
   }
