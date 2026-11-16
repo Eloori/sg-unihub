@@ -1212,7 +1212,7 @@
            data-en="From finding a topic to your defence: the key facts, deadlines and sources for your Bachelor's thesis."></p>
       </header>
 
-      <div class="category-box guide-section">
+      <div class="category-box guide-section" id="thesis-facts">
         <div class="contact-links">
           <a class="journey-link" href="https://universitaetstgallen.sharepoint.com/sites/BBWL/SitePages/en/Bachelor's%20Thesis.aspx?locale=en" target="_blank" rel="noopener" data-goatcounter-click="ba-source-myhsg">→ MyHSG</a>
           <a class="journey-link" href="https://universitaetstgallen.sharepoint.com/sites/BachelorDE/Freigegebene%20Dokumente/BWL/2026_%20BA%20Thesis%20Info_BBWL%20Bachelorarbeitsinformationstag_EN.pdf?web=1" target="_blank" rel="noopener" data-goatcounter-click="ba-source-pdf" data-de="→ Infopräsentation (PDF)" data-en="→ Info presentation (PDF)"></a>
@@ -3702,18 +3702,82 @@
         view: 'bachelorarbeit', selector: `#${li.id}`,
       });
     });
+    // The Bachelorarbeit view's key-facts box (ECTS, page limit, submission
+    // dates, …) is static markup, not driven by a JS array like GUIDE/
+    // MASTERS above, so it has to be pulled from the DOM explicitly or it
+    // never ends up in the index at all — read generically from every
+    // [data-de] node inside it, so it keeps tracking that box's text if it's
+    // ever edited.
+    const thesisFacts = document.getElementById('thesis-facts');
+    if(thesisFacts){
+      const nodes = Array.from(thesisFacts.querySelectorAll('[data-de]'));
+      idx.push({
+        titleDe: 'Bachelorarbeit', titleEn: "Bachelor's Thesis",
+        bodyDe: stripTags(nodes.map(el => el.dataset.de).join(' ')),
+        bodyEn: stripTags(nodes.map(el => el.dataset.en || el.dataset.de).join(' ')),
+        metaDe: 'Bachelorarbeit', metaEn: "Bachelor's thesis",
+        view: 'bachelorarbeit', selector: '#thesis-facts',
+      });
+    }
+    // Pre-split title/body into words once per entry (used by tokenLevel
+    // below) instead of re-splitting on every keystroke.
+    idx.forEach(e => {
+      e.titleWords = wordsOf(e.titleDe + ' ' + e.titleEn);
+      e.bodyWords = wordsOf(e.bodyDe + ' ' + e.bodyEn);
+    });
     return idx;
   }
 
-  const tokenize = q => q.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const wordsOf = s => (String(s || '').toLowerCase().match(/[a-zà-öø-ÿ0-9]+/gi) || []);
+  const tokenize = q => wordsOf(q);
+
+  // Restricted edit distance (Damerau-Levenshtein with adjacent transposition
+  // as a single edit) — lets a one-letter typo or a swapped pair of letters
+  // ("etcs" for "ects") still find the right word, without the plain
+  // substring check below having to allow near-arbitrary matches.
+  function editDistance(a, b){
+    const al = a.length, bl = b.length;
+    const d = [[...Array(bl + 1).keys()]];
+    for(let i = 1; i <= al; i++) d.push([i]);
+    for(let i = 1; i <= al; i++){
+      for(let j = 1; j <= bl; j++){
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        let v = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+        if(i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) v = Math.min(v, d[i - 2][j - 2] + 1);
+        d[i][j] = v;
+      }
+    }
+    return d[al][bl];
+  }
+  // Only tolerate a typo once a word is long enough that one still
+  // recognisably means the same thing — short tokens require an exact
+  // (sub)word match, or almost anything would start matching everything.
+  const fuzzyBudget = len => (len <= 3 ? 0 : len <= 5 ? 1 : 2);
+  // ~1 = exact (sub)word match (nudged up slightly for repeat mentions, so
+  // ties don't come down to an entry's arbitrary position in the index),
+  // 0.5 = typo-tolerant-only match, 0 = no match. Only "does a word contain
+  // the query token" (never the reverse — "token.includes(w)" would let any
+  // short common word, "a"/"is"/"zu", trivially match as a substring of
+  // nearly every longer query token, which is what first caused this to
+  // match almost everything).
+  function tokenScore(token, words){
+    let hits = 0;
+    for(const w of words){ if(w.includes(token)) hits++; }
+    if(hits) return 1 + Math.min(hits - 1, 4) * 0.05;
+    const budget = fuzzyBudget(token.length);
+    if(!budget) return 0;
+    for(const w of words){
+      if(Math.abs(w.length - token.length) <= budget && editDistance(token, w) <= budget) return 0.5;
+    }
+    return 0;
+  }
   function scoreEntry(entry, tokens){
-    const titleHay = (entry.titleDe + ' ' + entry.titleEn).toLowerCase();
-    const bodyHay = (entry.bodyDe + ' ' + entry.bodyEn).toLowerCase();
     let score = 0;
-    for(const t of tokens){
-      if(!titleHay.includes(t) && !bodyHay.includes(t)) return 0; // AND logic across tokens
-      if(titleHay.includes(t)) score += 3;
-      if(bodyHay.includes(t)) score += 1;
+    for(const token of tokens){
+      const inTitle = tokenScore(token, entry.titleWords);
+      const inBody = tokenScore(token, entry.bodyWords);
+      if(!inTitle && !inBody) return 0; // AND logic across tokens
+      score += inTitle * 4 + inBody;
     }
     return score;
   }
@@ -3739,7 +3803,7 @@
       .map(e => ({ e, s: scoreEntry(e, tokens) }))
       .filter(x => x.s > 0)
       .sort((a, b) => b.s - a.s)
-      .slice(0, 8);
+      .slice(0, 10);
     if(!scored.length){
       searchResultsEl.innerHTML = fallbackResultHTML();
       applyLang(lang);
