@@ -617,7 +617,7 @@ footer a{color:var(--muted)}
 <footer>
   <div class="wrap">
     <span>sg/unihub is an independent student project and is not operated by the University of St. Gallen.</span>
-    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.20</span></span>
+    <span><a href="./#impressum">Imprint</a> · <a href="./#datenschutz">Privacy</a> · <span class="mono" id="modeTag">Eloori Interactive · v1.2.22</span></span>
   </div>
 </footer>
 
@@ -680,7 +680,7 @@ footer a{color:var(--muted)}
       <div class="field"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:500"><input type="checkbox" id="lHsg" style="margin-top:4px"> All flatmates are HSG students <span class="hint" style="font-weight:400">(shown with a green check on your listing)</span></label></div>
       <div class="field"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:500"><input type="checkbox" id="lConsent" style="margin-top:4px"> I confirm my landlord agrees to this sublet, and the listing is accurate.</label></div>
       <div class="field">
-        <label>Photos <span class="hint" style="font-weight:400">(1–8, the first one is the cover)</span></label>
+        <label>Photos <span class="hint" style="font-weight:400">(1–12, the first one is the cover)</span></label>
         <label class="uploader" id="uploader">
           <input type="file" id="photoInput" accept="image/*" multiple hidden>
           <svg class="ic" style="display:block;margin:0 auto 6px;color:var(--accent)"><use href="#i-camera"/></svg>
@@ -734,7 +734,7 @@ const CONFIG = {
   STRIPE_BOOST_LINK: "https://buy.stripe.com/4gM8wR1Hd7Ed0G4cEB2Ry00", // CHF 9.99 boost
   ALLOWED_DOMAINS: ["student.unisg.ch", "unisg.ch"],
   SEMESTERS_AHEAD: 6,        // how many semesters (from the current one) listers can pick; updates itself
-  MAX_PHOTOS: 8,
+  MAX_PHOTOS: 12,
   OTP_LENGTH: 6,             // must match Supabase → Auth → "Email OTP Length"
   CONTACT_EMAIL: "contact@sgunihub.ch",
   CONTACT_FUNCTION: "bright-worker"
