@@ -796,6 +796,29 @@
   }
   @media (prefers-reduced-motion: reduce){ .modal-overlay, .modal-box{ transition:none; } }
 
+  /* ---------- Search modal ---------- */
+  #searchModal .modal-box{max-width:560px;}
+  .search-modal-body{padding-top:.2rem;}
+  .search-input{
+    width:100%; font:inherit; font-size:1rem; padding:.78rem 1rem; box-sizing:border-box;
+    border:1px solid var(--line); border-radius:12px; background:var(--bg); color:var(--text);
+    margin-bottom:1rem;
+  }
+  .search-input:focus{outline:2px solid var(--accent); outline-offset:1px; border-color:transparent;}
+  .search-results{display:flex; flex-direction:column; gap:.35rem; max-height:min(60vh,420px); overflow-y:auto;}
+  .search-result{
+    all:unset; cursor:pointer; display:flex; flex-direction:column; gap:.15rem;
+    padding:.7rem .85rem; border-radius:10px; color:var(--text);
+  }
+  .search-result:hover, .search-result:focus-visible{background:var(--accent-soft);}
+  .search-result-title{font-weight:700; font-size:.94rem;}
+  .search-result-meta{font-family:var(--font-mono); font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--accent);}
+  .search-result-desc{font-size:.82rem; color:var(--text-2); line-height:1.4;}
+  .search-hint{font-size:.86rem; color:var(--text-2); padding:.4rem .1rem;}
+  .search-result--fallback{border:1px dashed var(--line);}
+  .search-result--fallback .search-result-title::after{content:" ↗"; opacity:.6;}
+  .search-highlight{outline:3px solid var(--accent); outline-offset:3px; border-radius:10px;}
+
   /* ---------- Newsletter banner + modal ---------- */
   .nl-banner{position:relative; display:flex; align-items:center; gap:1.4rem; flex-wrap:wrap;
     background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--accent);
@@ -1068,6 +1091,9 @@
       <button class="hamburger" id="menuBtn" type="button" aria-label="Menü" aria-expanded="false" aria-controls="menuPanel">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
+      <button class="hamburger" id="searchBtn" type="button" aria-label="Suche" aria-expanded="false" aria-controls="searchModal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
       <nav class="menu-panel" id="menuPanel">
         <a href="#dashboard" data-view-link="dashboard" data-de="Dashboard" data-en="Dashboard"></a>
         <a href="#guide" data-view-link="guide" data-de="Neu an der HSG" data-en="New to HSG"></a>
@@ -1264,7 +1290,7 @@
         <p class="guide-footnote" data-de="Der Ablauf folgt dem offiziellen Prozess von MyHSG. Die Tool-Empfehlungen einzelner Schritte (z. B. Studyond, EndNote, Swisscovery, Consensus, SciSpace, EDOK, Delta Lektorat) sind praktische Tipps und keine offiziellen Vorgaben der HSG. Delta Lektorat ist Partner von sg/unihub."
            data-en="The process itself follows MyHSG's official steps. The tool recommendations within individual steps (e.g. Studyond, EndNote, Swisscovery, Consensus, SciSpace, EDOK, Delta Lektorat) are practical tips, not official HSG requirements. Delta Lektorat is an sg/unihub partner."></p>
         <ol class="thesis-steps">
-          <li class="thesis-step">
+          <li class="thesis-step" id="thesis-step-1">
             <div class="thesis-step-num">1</div>
             <div class="thesis-step-body">
               <h3 data-de="Thema &amp; Betreuung finden" data-en="Find a topic &amp; supervisor"></h3>
@@ -1277,7 +1303,7 @@
               </div>
             </div>
           </li>
-          <li class="thesis-step">
+          <li class="thesis-step" id="thesis-step-2">
             <div class="thesis-step-num">2</div>
             <div class="thesis-step-body">
               <h3 data-de="Bei My Thesis anmelden" data-en="Register on My Thesis"></h3>
@@ -1288,7 +1314,7 @@
               </div>
             </div>
           </li>
-          <li class="thesis-step">
+          <li class="thesis-step" id="thesis-step-3">
             <div class="thesis-step-num">3</div>
             <div class="thesis-step-body">
               <h3 data-de="Schreiben" data-en="Write your thesis"></h3>
@@ -1300,7 +1326,7 @@
               </div>
             </div>
           </li>
-          <li class="thesis-step">
+          <li class="thesis-step" id="thesis-step-4">
             <div class="thesis-step-num">4</div>
             <div class="thesis-step-body">
               <h3 data-de="Richtig zitieren" data-en="Cite correctly"></h3>
@@ -1311,7 +1337,7 @@
               </div>
             </div>
           </li>
-          <li class="thesis-step">
+          <li class="thesis-step" id="thesis-step-5">
             <div class="thesis-step-num">5</div>
             <div class="thesis-step-body">
               <h3 data-de="Quellen finden" data-en="Find your sources"></h3>
@@ -1324,7 +1350,7 @@
               </div>
             </div>
           </li>
-          <li class="thesis-step">
+          <li class="thesis-step" id="thesis-step-6">
             <div class="thesis-step-num">6</div>
             <div class="thesis-step-body">
               <h3 data-de="Korrekturlesen lassen" data-en="Get it proofread"></h3>
@@ -1378,7 +1404,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.22): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.23): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1779,9 +1805,24 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.22</p>
+      <p class="credit">Eloori Interactive · v1.2.23</p>
     </div>
   </footer>
+
+  <div class="modal-overlay" id="searchModal" aria-hidden="true">
+    <div class="modal-box search-box" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle">
+      <div class="modal-head">
+        <h2 id="searchModalTitle" data-de="Suche" data-en="Search"></h2>
+        <button type="button" class="modal-close" id="searchModalClose" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body search-modal-body">
+        <input type="text" id="searchInput" class="search-input"
+               data-de-ph="Tool, Abkürzung oder Thema suchen…" data-en-ph="Search for a tool, abbreviation or topic…"
+               autocomplete="off" spellcheck="false" aria-label="Suche">
+        <div id="searchResults" class="search-results"></div>
+      </div>
+    </div>
+  </div>
 
   <div class="modal-overlay" id="nlModal" aria-hidden="true">
     <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="nlModalTitle">
@@ -2897,7 +2938,7 @@
     const footnote = topic.footnoteDe
       ? `<p class="guide-footnote" data-de="${esc(topic.footnoteDe)}" data-en="${esc(topic.footnoteEn)}"></p>` : '';
     return `
-      <section class="category-box guide-section">
+      <section class="category-box guide-section" id="guide-${slug(topic.de)}">
         <div class="cat-head">
           <span class="cat-index">${num}</span>
           <div>
@@ -3592,6 +3633,170 @@
   });
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeMenu(); });
   menuPanel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  // ---------- Site search ----------
+  // Searches dashboard tools (DATA), guide topics (GUIDE), master's programmes
+  // (MASTERS) and the Bachelorarbeit step-by-step list, all of which already
+  // live on this page — so a match scrolls to the real spot on the site
+  // instead of opening a new page. Only the no-match fallback (a link to
+  // MyHSG) actually leaves sg/unihub. The index is built lazily on first open
+  // rather than at top-level, since it reads GUIDE/MASTERS/VIEWS, which are
+  // declared further down in this script (safe once called only from a
+  // click/input handler, which runs after the whole script has executed).
+  const searchBtn = document.getElementById('searchBtn');
+  const searchModal = document.getElementById('searchModal');
+  const searchInput = document.getElementById('searchInput');
+  const searchResultsEl = document.getElementById('searchResults');
+  const MYHSG_URL = 'https://universitaetstgallen.sharepoint.com/sites/myHSG/SitePages/Home.aspx';
+  let SEARCH_INDEX = null;
+
+  const stripTags = s => String(s || '').replace(/<[^>]+>/g, '');
+  const escHtml = s => String(s || '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1).trim() + '…' : s);
+
+  function buildSearchIndex(){
+    const idx = [];
+    DATA.forEach(cat => {
+      (cat.items || []).forEach(it => {
+        idx.push({
+          titleDe: it.name, titleEn: it.name,
+          bodyDe: stripTags(it.de || ''), bodyEn: stripTags(it.en || ''),
+          metaDe: 'Tool/Link', metaEn: 'Tool/link',
+          view: 'dashboard', selector: `[data-pin-id="${slug(it.name)}"]`,
+        });
+      });
+    });
+    GUIDE.forEach(topic => {
+      const partsDe = [topic.introDe, topic.noteDe, topic.tableNoteDe, topic.footnoteDe];
+      const partsEn = [topic.introEn, topic.noteEn, topic.tableNoteEn, topic.footnoteEn];
+      (topic.points || []).forEach(p => { partsDe.push(p.de); partsEn.push(p.en); });
+      idx.push({
+        titleDe: topic.de, titleEn: topic.en,
+        bodyDe: stripTags(partsDe.filter(Boolean).join(' ')),
+        bodyEn: stripTags(partsEn.filter(Boolean).join(' ')),
+        metaDe: 'Guide', metaEn: 'Guide',
+        view: 'guide', selector: `#guide-${slug(topic.de)}`,
+      });
+    });
+    MASTERS.forEach(m => {
+      const partsDe = [m.abbr, m.nameDe];
+      const partsEn = [m.abbr, m.nameEn];
+      (m.points || []).forEach(p => { partsDe.push(p.de); partsEn.push(p.en); });
+      idx.push({
+        titleDe: m.nameDe, titleEn: m.nameEn,
+        bodyDe: stripTags(partsDe.filter(Boolean).join(' ')),
+        bodyEn: stripTags(partsEn.filter(Boolean).join(' ')),
+        metaDe: 'Master', metaEn: "Master's",
+        view: 'masters', selector: `#master-${m.id}`,
+      });
+    });
+    document.querySelectorAll('.thesis-step').forEach(li => {
+      const h3 = li.querySelector('h3[data-de]');
+      const p = li.querySelector('p[data-de]');
+      if(!h3 || !li.id) return;
+      idx.push({
+        titleDe: h3.dataset.de, titleEn: h3.dataset.en || h3.dataset.de,
+        bodyDe: stripTags(p ? p.dataset.de : ''), bodyEn: stripTags(p ? (p.dataset.en || p.dataset.de) : ''),
+        metaDe: 'Bachelorarbeit', metaEn: "Bachelor's thesis",
+        view: 'bachelorarbeit', selector: `#${li.id}`,
+      });
+    });
+    return idx;
+  }
+
+  const tokenize = q => q.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  function scoreEntry(entry, tokens){
+    const titleHay = (entry.titleDe + ' ' + entry.titleEn).toLowerCase();
+    const bodyHay = (entry.bodyDe + ' ' + entry.bodyEn).toLowerCase();
+    let score = 0;
+    for(const t of tokens){
+      if(!titleHay.includes(t) && !bodyHay.includes(t)) return 0; // AND logic across tokens
+      if(titleHay.includes(t)) score += 3;
+      if(bodyHay.includes(t)) score += 1;
+    }
+    return score;
+  }
+
+  function fallbackResultHTML(){
+    return `
+      <a class="search-result search-result--fallback" href="${MYHSG_URL}" target="_blank" rel="noopener" data-goatcounter-click="search-fallback-myhsg">
+        <span class="search-result-meta" data-de="Nicht gefunden" data-en="Not found"></span>
+        <span class="search-result-title">MyHSG</span>
+        <span class="search-result-desc" data-de="Keine Treffer auf sg/unihub – auf MyHSG nachschauen. Öffnet MyHSG in einem neuen Tab und verlässt diese Seite." data-en="No matches on sg/unihub – check MyHSG instead. Opens MyHSG in a new tab and leaves this site."></span>
+      </a>`;
+  }
+
+  function renderSearchResults(query){
+    const tokens = tokenize(query || '');
+    if(!tokens.length){
+      searchResultsEl.innerHTML = `<p class="search-hint" data-de="Tippe, um nach einem Tool, Link oder Thema zu suchen…" data-en="Start typing to search a tool, link or topic…"></p>`;
+      applyLang(lang);
+      return;
+    }
+    if(!SEARCH_INDEX) SEARCH_INDEX = buildSearchIndex();
+    const scored = SEARCH_INDEX
+      .map(e => ({ e, s: scoreEntry(e, tokens) }))
+      .filter(x => x.s > 0)
+      .sort((a, b) => b.s - a.s)
+      .slice(0, 8);
+    if(!scored.length){
+      searchResultsEl.innerHTML = fallbackResultHTML();
+      applyLang(lang);
+      return;
+    }
+    searchResultsEl.innerHTML = scored.map((x, i) => {
+      const e = x.e;
+      return `
+        <button type="button" class="search-result" data-result-idx="${i}">
+          <span class="search-result-meta" data-de="${escHtml(e.metaDe)}" data-en="${escHtml(e.metaEn)}"></span>
+          <span class="search-result-title" data-de="${escHtml(e.titleDe)}" data-en="${escHtml(e.titleEn)}"></span>
+          <span class="search-result-desc" data-de="${escHtml(truncate(e.bodyDe, 130))}" data-en="${escHtml(truncate(e.bodyEn, 130))}"></span>
+        </button>`;
+    }).join('');
+    applyLang(lang);
+    searchResultsEl.querySelectorAll('.search-result[data-result-idx]').forEach(btn => {
+      btn.addEventListener('click', () => goToSearchResult(scored[+btn.dataset.resultIdx].e));
+    });
+  }
+
+  function goToSearchResult(entry){
+    closeSearchModal();
+    if(entry.view){
+      showView(entry.view);
+      try{ history.replaceState(null, '', '#' + entry.view); }catch(e){}
+    }
+    if(entry.selector){
+      setTimeout(() => {
+        const target = document.querySelector(entry.selector);
+        if(!target) return;
+        target.scrollIntoView({ behavior:'smooth', block:'center' });
+        target.classList.add('search-highlight');
+        setTimeout(() => target.classList.remove('search-highlight'), 1600);
+      }, 60);
+    }
+  }
+
+  function openSearchModal(){
+    searchModal.classList.add('open');
+    searchModal.setAttribute('aria-hidden', 'false');
+    searchBtn.setAttribute('aria-expanded', 'true');
+    renderSearchResults(searchInput.value);
+    searchInput.focus();
+  }
+  function closeSearchModal(){
+    searchModal.classList.remove('open');
+    searchModal.setAttribute('aria-hidden', 'true');
+    searchBtn.setAttribute('aria-expanded', 'false');
+  }
+  searchBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    searchModal.classList.contains('open') ? closeSearchModal() : openSearchModal();
+  });
+  document.getElementById('searchModalClose').addEventListener('click', closeSearchModal);
+  searchModal.addEventListener('click', (e) => { if(e.target === searchModal) closeSearchModal(); });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && searchModal.classList.contains('open')) closeSearchModal(); });
+  searchInput.addEventListener('input', () => renderSearchResults(searchInput.value));
 
   // ---------- License text overlay (Phosphor Icons attribution) ----------
   // Phosphor's own licensing guidance asks that the MIT license text be
