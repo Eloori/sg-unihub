@@ -625,6 +625,9 @@
   .guide-stat-value{ display:block; font-family:var(--font-display); font-weight:800; font-size:1.05rem; color:var(--text); line-height:1.25; margin-bottom:.55rem; overflow-wrap:break-word; word-break:break-word; hyphens:auto; }
   .guide-stat-label{ display:block; font-family:var(--font-mono); font-size:.68rem; letter-spacing:.02em; color:var(--text-2); line-height:1.4; }
 
+  .master-career{ margin:0 0 1.2rem; padding:.85rem 1rem; border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0; }
+  .master-career-label{ display:block; font-family:var(--font-mono); font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:.3rem; }
+  .master-career p{ margin:0; font-size:.94rem; line-height:1.55; color:var(--text); }
   .guide-points{ margin:0 0 1.2rem; padding:0; list-style:none; display:flex; flex-direction:column; gap:.65rem; }
   .guide-points li{
     position:relative; padding-left:1.3rem; font-size:.94rem; line-height:1.55; color:var(--text);
@@ -1404,7 +1407,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.23): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.24): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1805,7 +1808,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.23</p>
+      <p class="credit">Eloori Interactive · v1.2.24</p>
     </div>
   </footer>
 
@@ -3283,6 +3286,25 @@
       sources:[{ label:"Universität St.Gallen: Zulassung Joint Medical Master (unisg.ch)", url:"https://www.unisg.ch/en/studying/admission/admission-master/joint-medical-master-in-stgallen/" }] },
   ];
 
+  // Career direction per programme, summarised from each programme's
+  // official career page on unisg.ch (retrieved November 2026).
+  const MASTER_CAREERS = {
+    sim:{ de:"Viele starten in der Strategieberatung, daneben in Finanzdienstleistungen, Industrie, Venture Capital, Gesundheitswesen oder im eigenen Unternehmen, oft in internationalen Strategierollen.", en:"Many start in strategy consulting, others in financial services, industry, venture capital, healthcare or their own company, often in international strategy roles.", url:"https://www.unisg.ch/en/studying/programmes/master/strategy-and-international-management-sim/career-outlook/" },
+    mbf:{ de:"Banking (32 %) und Beratung (29 %) sind die häufigsten Einstiege, daneben Versicherungen, Corporate Finance, M&A, Private Equity und Asset Management. Top-Arbeitgeber 2024–2026 u. a. McKinsey, BCG, UBS, Bain, J.P. Morgan und Goldman Sachs.", en:"Banking (32%) and consulting (29%) are the most common starts, plus insurance, corporate finance, M&A, private equity and asset management. Top employers 2024–2026 include McKinsey, BCG, UBS, Bain, J.P. Morgan and Goldman Sachs.", url:"https://www.unisg.ch/en/studying/programmes/master/banking-and-finance-mbf/career-opportunities/" },
+    macfin:{ de:"Beratung (30 %), spezialisierte Finanzrollen (25 %) wie Wirtschaftsprüfung, Corporate Finance oder M&A sowie Finanzabteilungen in Industrie und Handel (20 %).", en:"Consulting (30%), specialised finance roles (25%) such as audit, corporate finance or M&A, and finance departments in industry and commerce (20%).", url:"https://www.unisg.ch/en/studium/programme/master/accounting-and-corporate-finance-macfin/career-opportunities/" },
+    mgm:{ de:"Beratung (40 %) oder direkt ins Management in Industrie und Handel (30 %). Typische Einstiege: Strategieberatung, Inhouse Consulting und Corporate Development, Unternehmertum und Nachfolge, Finance oder General Management.", en:"Consulting (40%) or straight into management roles in industry and commerce (30%). Typical starts: strategy consulting, in-house consulting and corporate development, entrepreneurship and succession, finance or general management.", url:"https://www.unisg.ch/en/studying/programmes/master/general-management-mgm/karrieremoeglichkeiten/" },
+    mimm:{ de:"Marketing- und Produktmanagement, Marktforschung, Customer Relationship Management sowie Strategieberatung bis hin zu Führungsrollen in internationalen Unternehmen. Auch Gründung oder eine akademische Laufbahn sind möglich.", en:"Marketing and product management, market research, customer relationship management and strategy consulting, up to leadership roles in international companies. Founding a company or an academic career are options too.", url:"https://www.unisg.ch/en/studying/programmes/master/master-in-marketing-management-mimm/your-career/" },
+    mbi:{ de:"Digitalisierung und Transformation: 40 % starten in der Beratung, 8 % direkt im Management, viele in Produkt- und Innovationsrollen, z. B. als Product Manager.", en:"Digitalisation and transformation: 40% start in consulting, 8% directly in management, many in product and innovation roles, e.g. as product manager.", url:"https://www.unisg.ch/en/studying/programmes/master/master-in-business-innovation-mbi-1/career-opportunities/" },
+    mia:{ de:"Beratung, internationale Unternehmen, Diplomatie sowie internationale Organisationen und NGOs.", en:"Consulting, international companies, diplomacy, international organisations and NGOs.", url:"https://www.unisg.ch/de/studium/programme/master/international-affairs-and-goverance-mia/your-career/" },
+    mecon:{ de:"Finanzdienstleister wie Banken und Versicherungen (35 %), Unternehmen (19 %), Beratung (18 %), Forschung an Universitäten (16 %) und öffentlicher Sektor, z. B. EZB oder Weltbank (12 %).", en:"Financial services such as banks and insurers (35%), companies (19%), consulting (18%), university research (16%) and the public sector, e.g. ECB or World Bank (12%).", url:"https://www.unisg.ch/en/studying/programmes/master/economics-mecon/career-opportunities/" },
+    miqef:{ de:"Finanzdienstleistungen (44 %) und Beratung (20 %) sind die häufigsten Einstiege; 86 % erhalten zwei oder mehr Jobangebote.", en:"Financial services (44%) and consulting (20%) are the most common starts; 86% receive two or more job offers.", url:"https://www.unisg.ch/en/studying/programmes/master/quantitative-economics-and-finance-miqe-f/career-opportunities/" },
+    mcs:{ de:"Data Science, Softwareentwicklung, Produktmanagement, Business Analysis, IT- und Strategieberatung sowie Gründung eines Tech-Startups.", en:"Data science, software development, product management, business analysis, IT and strategy consulting, and founding a tech startup.", url:"https://www.unisg.ch/en/studium/programme/master/mcs/career-opportunities/" },
+    mil:{ de:"Regierung und Verwaltung, internationale Organisationen und Unternehmensberatung.", en:"Government, international organisations and management consulting.", url:"https://www.unisg.ch/en/studying/why-hsg/great-career-opportunities/" },
+    mlaw:{ de:"Anwaltslaufbahn und Notariat (nach Praktikum und Anwaltsprüfung), Gericht und Staatsanwaltschaft, Unternehmensjurist:in, öffentliche Verwaltung, Compliance sowie Beratung und Revision.", en:"Lawyer or notary (after traineeship and bar exam), courts and public prosecution, in-house counsel, public administration, compliance, and consulting or audit.", url:"https://www.unisg.ch/en/studying/programmes/master/university-of-stgallen-masters-degree-major-in-law-mlaw/career-opportunities/" },
+    mle:{ de:"Alle juristischen Berufe inkl. Anwaltstätigkeit (nach Praktikum und Prüfung), besonders Unternehmensjurist:in, dazu Regulierung, Verwaltung, internationale Organisationen und Führungsrollen in Unternehmen.", en:"All legal careers incl. the bar (after traineeship and exam), especially in-house counsel, plus regulation, administration, international organisations and leadership roles in business.", url:"https://www.unisg.ch/en/studying/programmes/master/law-and-economics-mle/career-opportunities/" },
+    jmm:{ de:"Klinische Tätigkeit als Ärztin oder Arzt im Spital oder in eigener Praxis (nach eidgenössischer Prüfung und Facharztweiterbildung), auch biomedizinische Forschung ist möglich.", en:"Clinical work as a doctor in hospitals or private practice (after the federal exam and specialist training); biomedical research is possible too.", url:"https://uzh.ch/de/studies/programs/master/human_medicine_hsg.html" },
+  };
+
   function masterSectionHTML(m, i){
     const num = String(i+1).padStart(2,'0');
     const esc = s => s.replace(/"/g,'&quot;');
@@ -3301,12 +3323,17 @@
               <span class="guide-stat-label" data-de="${esc(s.labelDe)}" data-en="${esc(s.labelEn)}"></span>
             </div>`).join('')}
         </div>
+        ${MASTER_CAREERS[m.id] ? `
+        <div class="master-career">
+          <span class="master-career-label" data-de="Berufliche Richtung" data-en="Career paths"></span>
+          <p data-de="${esc(MASTER_CAREERS[m.id].de)}" data-en="${esc(MASTER_CAREERS[m.id].en)}"></p>
+        </div>` : ''}
         <ul class="guide-points">
           ${m.points.map(p => `<li data-de="${esc(p.de)}" data-en="${esc(p.en)}"></li>`).join('')}
         </ul>
         <div class="guide-sources">
           <span data-de="Quellen (Zulassungsvoraussetzungen abgerufen im November 2026)" data-en="Sources (admission requirements retrieved November 2026)"></span>:
-          ${m.sources.map((s,si) => `${si > 0 ? ' · ' : ' '}<a class="guide-source" href="${s.url}" target="_blank" rel="noopener">${s.label}</a>`).join('')}
+          ${m.sources.map((s,si) => `${si > 0 ? ' · ' : ' '}<a class="guide-source" href="${s.url}" target="_blank" rel="noopener">${s.label}</a>`).join('')}${MASTER_CAREERS[m.id] ? ` · <a class="guide-source" href="${MASTER_CAREERS[m.id].url}" target="_blank" rel="noopener" data-de="Karriereseite" data-en="Career page"></a>` : ''}
         </div>
       </section>`;
   }
@@ -3692,6 +3719,7 @@
       const partsDe = [m.abbr, m.nameDe];
       const partsEn = [m.abbr, m.nameEn];
       (m.points || []).forEach(p => { partsDe.push(p.de); partsEn.push(p.en); });
+      if (MASTER_CAREERS[m.id]) { partsDe.push(MASTER_CAREERS[m.id].de); partsEn.push(MASTER_CAREERS[m.id].en); }
       idx.push({
         titleDe: m.nameDe, titleEn: m.nameEn,
         bodyDe: stripTags(partsDe.filter(Boolean).join(' ')),
