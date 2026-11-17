@@ -1407,7 +1407,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.24): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.25): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1808,7 +1808,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.24</p>
+      <p class="credit">Eloori Interactive · v1.2.25</p>
     </div>
   </footer>
 
@@ -2080,7 +2080,7 @@
     return s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   }
   // GoatCounter's script loads async and may not be ready yet (e.g. right at
-  // page load, or never — an ad-/tracker-blocker, or this preview's CSP,
+  // page load, on a slow phone connection, or never — an ad-/tracker-blocker, or this preview's CSP,
   // which is expected and fine). Poll briefly instead of firing once and
   // silently missing the very first pageview.
   function trackPageview(path){
@@ -2090,7 +2090,7 @@
       if(window.goatcounter && window.goatcounter.count){
         clearInterval(t);
         try{ window.goatcounter.count({ path }); }catch(e){}
-      } else if(tries > 30){
+      } else if(tries > 200){  // ~20 s: slow mobile networks / home-screen app cold starts
         clearInterval(t);
       }
     }, 100);
@@ -2109,7 +2109,7 @@
       if(window.goatcounter && window.goatcounter.count){
         clearInterval(t);
         try{ window.goatcounter.count({ path, event: true }); }catch(e){}
-      } else if(tries > 30){
+      } else if(tries > 200){  // ~20 s: slow mobile networks / home-screen app cold starts
         clearInterval(t);
       }
     }, 100);
