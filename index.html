@@ -1424,7 +1424,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.27): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.28): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1825,7 +1825,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.27</p>
+      <p class="credit">Eloori Interactive · v1.2.28</p>
     </div>
   </footer>
 
@@ -2008,7 +2008,7 @@
     // the remaining study/exam-prep tools are merged into this one ordinary
     // category — no more pooling, no more per-group subtitles, just a single
     // title for all five since they're all "Lernsachen" now.
-    { de:"Lernen & Prüfungsvorbereitung", en:"Learning & Exam Prep",
+    { de:"Lernen & Prüfungsvorbereitung", en:"Learning & Exam Prep", anchor:"lernen",
       subDe:"Mit anderen lernen und dich auf Prüfungen vorbereiten", subEn:"Study with others and prepare for your exams",
       items:[
         { name:"StudyGroups", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z"/></svg>', url:"https://studygroups.ch", tag:"studygroups.ch",
@@ -2366,6 +2366,7 @@
     const num = String(boxNum).padStart(2,'0');
     const box = document.createElement('section');
     box.className = 'category-box' + (wide ? ' wide' : '');
+    if(cat.anchor) box.id = cat.anchor; // deep link, e.g. sgunihub.ch/#lernen (newsletter)
     box.innerHTML = `
       <div class="cat-head">
         <span class="cat-index">${num}</span>
@@ -4099,7 +4100,18 @@ SOFTWARE.`;
     // GoatCounter's default one-shot on-load count (disabled via no_onload).
     trackPageview('/' + name);
   }
-  function routeFromHash(){ showView((location.hash || '#dashboard').slice(1)); }
+  // A hash that is not a view but the id of a dashboard category (e.g. #lernen,
+  // used in the newsletter) opens the dashboard and scrolls to that box.
+  function routeFromHash(){
+    const h = (location.hash || '#dashboard').slice(1);
+    const cat = !VIEWS.includes(h) && h ? document.getElementById(h) : null;
+    if(cat && cat.classList.contains('category-box')){
+      showView('dashboard');
+      setTimeout(() => cat.scrollIntoView({ behavior:'smooth', block:'start' }), 150);
+      return;
+    }
+    showView(h);
+  }
   window.addEventListener('hashchange', routeFromHash);
   routeFromHash();
 
