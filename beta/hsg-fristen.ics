@@ -1,0 +1,510 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//sg/unihub//HSG-Fristen//DE
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:sg/unihub HSG-Fristen
+X-WR-TIMEZONE:Europe/Zurich
+X-WR-CALDESC:Wichtige Termine aus dem HSG-Semesterkalender (Bachelor)
+REFRESH-INTERVAL;VALUE=DURATION:P1D
+X-PUBLISHED-TTL:P1D
+BEGIN:VTIMEZONE
+TZID:Europe/Zurich
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:90ba809ce8089b44@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Semestereinschreibung FS 2027
+DTSTART;VALUE=DATE:20261015
+DTEND;VALUE=DATE:20261201
+TRANSP:TRANSPARENT
+URL:https://compass.unisg.ch/termenrollment
+DESCRIPTION:Jetzt einschreiben: https://compass.unisg.ch/termenrollment\nAl
+ le HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kal
+ ender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:d4376abae9596b50@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Bewerbung Partneruniversität HS27/FS28
+DTSTART;TZID=Europe/Zurich:20261119T000000
+DTEND;TZID=Europe/Zurich:20261210T160000
+URL:https://www.unisg.ch/de/studium/austauschprogramm/outgoing-hsg-studiere
+ nde/
+DESCRIPTION:Zur Bewerbung: https://www.unisg.ch/de/studium/austauschprogram
+ m/outgoing-hsg-studierende/\nAlle HSG-Tools auf https://sgunihub.ch\nOhne 
+ Gewähr. Massgebend ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:2da00896d0cefe46@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Anmeldefrist Studienrichtungswechsel HS
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261201
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:b2b7790cb44f031a@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Anmeldefrist Zweitstudium HS
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261201
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:9c6b5f9a9b7bdf94@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Prüfungsplan mit Zeit und Raum
+DTSTART;VALUE=DATE:20261210
+DTEND;VALUE=DATE:20261211
+TRANSP:TRANSPARENT
+URL:https://compass.unisg.ch/exams
+DESCRIPTION:Prüfungen ansehen: https://compass.unisg.ch/exams\nAlle HSG-To
+ ols auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in 
+ Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:4ef8dc344893f918@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Versand Semesterrechnung FS 2027
+DTSTART;VALUE=DATE:20261211
+DTEND;VALUE=DATE:20261212
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:0df6ed73af36db6d@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Ende Lehrbetrieb Herbstsemester
+DTSTART;VALUE=DATE:20261219
+DTEND;VALUE=DATE:20261220
+TRANSP:TRANSPARENT
+DESCRIPTION:Letzte Vorlesungswoche\nAlle HSG-Tools auf https://sgunihub.ch\
+ nOhne Gewähr. Massgebend ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:1a63d1a661c47592@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Zahlungsfrist Semesterrechnung
+DTSTART;VALUE=DATE:20270115
+DTEND;VALUE=DATE:20270116
+TRANSP:TRANSPARENT
+DESCRIPTION:Ohne Zahlung kein Bidding\nAlle HSG-Tools auf https://sgunihub.
+ ch\nOhne Gewähr. Massgebend ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:eb7cc33f235237a5@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Buchhaltungsprüfung Januar
+DTSTART;TZID=Europe/Zurich:20270115T091500
+DTEND;TZID=Europe/Zurich:20270115T121500
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:31f391dbe0e0e2a3@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Zentrale Prüfungen Herbstsemester
+DTSTART;VALUE=DATE:20270118
+DTEND;VALUE=DATE:20270221
+TRANSP:TRANSPARENT
+URL:https://compass.unisg.ch/exams
+DESCRIPTION:Prüfungen ansehen: https://compass.unisg.ch/exams\nAlle HSG-To
+ ols auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in 
+ Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:1a61e35517cfda31@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Noten dezentrale Prüfungen (BA)
+DTSTART;TZID=Europe/Zurich:20270128T110000
+DURATION:PT0M
+URL:https://compass.unisg.ch/achievementgraduations
+DESCRIPTION:Noten ansehen: https://compass.unisg.ch/achievementgraduations\
+ nAlle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der 
+ Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:5ffb25f0aa6613d7@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Noten Mid-Terms Herbstsemester
+DTSTART;VALUE=DATE:20270128
+DTEND;VALUE=DATE:20270129
+TRANSP:TRANSPARENT
+URL:https://compass.unisg.ch/achievementgraduations
+DESCRIPTION:Noten ansehen: https://compass.unisg.ch/achievementgraduations\
+ nAlle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der 
+ Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:bedd154f92098332@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Bidding FS: Vorrunde
+DTSTART;TZID=Europe/Zurich:20270128T150000
+DTEND;TZID=Europe/Zurich:20270204T120000
+URL:https://compass.unisg.ch/bidding
+DESCRIPTION:Zum Bidding: https://compass.unisg.ch/bidding\nAlle HSG-Tools a
+ uf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in Compa
+ ss.
+END:VEVENT
+BEGIN:VEVENT
+UID:1b69f64f786359df@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Frist Antrag Urlaubssemester FS
+DTSTART;VALUE=DATE:20270131
+DTEND;VALUE=DATE:20270201
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:2af672319d96b5b1@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Stipendien\, Darlehen und Gebührenerlass FS27
+DTSTART;VALUE=DATE:20270201
+DTEND;VALUE=DATE:20270302
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:8263bc219c2827dd@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Bidding FS: 1. Hauptrunde
+DTSTART;TZID=Europe/Zurich:20270204T150000
+DTEND;TZID=Europe/Zurich:20270210T120000
+URL:https://compass.unisg.ch/bidding
+DESCRIPTION:Zum Bidding: https://compass.unisg.ch/bidding\nAlle HSG-Tools a
+ uf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in Compa
+ ss.
+END:VEVENT
+BEGIN:VEVENT
+UID:9cc924e2afcea8d2@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Noten Buchhaltungsprüfung Januar
+DTSTART;TZID=Europe/Zurich:20270209T080000
+DURATION:PT0M
+URL:https://compass.unisg.ch/achievementgraduations
+DESCRIPTION:Noten ansehen: https://compass.unisg.ch/achievementgraduations\
+ nAlle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der 
+ Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:63b6f8fde4b32882@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Bidding FS: 2. Hauptrunde
+DTSTART;TZID=Europe/Zurich:20270210T150000
+DTEND;TZID=Europe/Zurich:20270215T120000
+URL:https://compass.unisg.ch/bidding
+DESCRIPTION:Zum Bidding: https://compass.unisg.ch/bidding\nAlle HSG-Tools a
+ uf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in Compa
+ ss.
+END:VEVENT
+BEGIN:VEVENT
+UID:c17fb6680eabb54e@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Bidding FS: 3. Hauptrunde
+DTSTART;TZID=Europe/Zurich:20270215T150000
+DTEND;TZID=Europe/Zurich:20270218T120000
+URL:https://compass.unisg.ch/bidding
+DESCRIPTION:Zum Bidding: https://compass.unisg.ch/bidding\nAlle HSG-Tools a
+ uf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in Compa
+ ss.
+END:VEVENT
+BEGIN:VEVENT
+UID:637ecf5ae79afd7e@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Bidding FS: 1. Wartelistenrunde
+DTSTART;TZID=Europe/Zurich:20270218T150000
+DTEND;TZID=Europe/Zurich:20270222T120000
+URL:https://compass.unisg.ch/bidding
+DESCRIPTION:Zum Bidding: https://compass.unisg.ch/bidding\nAlle HSG-Tools a
+ uf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in Compa
+ ss.
+END:VEVENT
+BEGIN:VEVENT
+UID:a5e6aa14368310bd@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Start Lehrbetrieb Frühjahrssemester
+DTSTART;VALUE=DATE:20270222
+DTEND;VALUE=DATE:20270223
+TRANSP:TRANSPARENT
+DESCRIPTION:Vorlesungen bis 28. Mai\nAlle HSG-Tools auf https://sgunihub.ch
+ \nOhne Gewähr. Massgebend ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:2b85547e2079c120@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Bidding FS: 2. Wartelistenrunde
+DTSTART;TZID=Europe/Zurich:20270222T140000
+DTEND;TZID=Europe/Zurich:20270226T120000
+URL:https://compass.unisg.ch/bidding
+DESCRIPTION:Zum Bidding: https://compass.unisg.ch/bidding\nAlle HSG-Tools a
+ uf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in Compa
+ ss.
+END:VEVENT
+BEGIN:VEVENT
+UID:465bd65efd4673af@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Bidding FS: 3. Wartelistenrunde
+DTSTART;TZID=Europe/Zurich:20270226T140000
+DTEND;TZID=Europe/Zurich:20270301T120000
+URL:https://compass.unisg.ch/bidding
+DESCRIPTION:Zum Bidding: https://compass.unisg.ch/bidding\nAlle HSG-Tools a
+ uf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in Compa
+ ss.
+END:VEVENT
+BEGIN:VEVENT
+UID:1f5fc53fa71e1214@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Bidding FS: 4. Wartelistenrunde
+DTSTART;TZID=Europe/Zurich:20270301T140000
+DTEND;TZID=Europe/Zurich:20270303T120000
+URL:https://compass.unisg.ch/bidding
+DESCRIPTION:Zum Bidding: https://compass.unisg.ch/bidding\nAlle HSG-Tools a
+ uf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in Compa
+ ss.
+END:VEVENT
+BEGIN:VEVENT
+UID:c06f268eff0ded02@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Bidding FS: 5. Wartelistenrunde
+DTSTART;TZID=Europe/Zurich:20270303T140000
+DTEND;TZID=Europe/Zurich:20270305T120000
+URL:https://compass.unisg.ch/bidding
+DESCRIPTION:Zum Bidding: https://compass.unisg.ch/bidding\nAlle HSG-Tools a
+ uf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in Compa
+ ss.
+END:VEVENT
+BEGIN:VEVENT
+UID:7542d6a5946d1842@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Noten zentrale Prüfungen (BA)
+DTSTART;TZID=Europe/Zurich:20270304T110000
+DURATION:PT0M
+URL:https://compass.unisg.ch/achievementgraduations
+DESCRIPTION:Noten ansehen: https://compass.unisg.ch/achievementgraduations\
+ nAlle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der 
+ Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:be42c66d84526a26@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Frist freiwilliger 2. Versuch FS
+DTSTART;VALUE=DATE:20270305
+DTEND;VALUE=DATE:20270306
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:5dbac4b0e360f343@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Bidding FS: Kursabmeldephase
+DTSTART;TZID=Europe/Zurich:20270305T140000
+DTEND;TZID=Europe/Zurich:20270319T235900
+URL:https://compass.unisg.ch/bidding
+DESCRIPTION:Kurse abmelden: https://compass.unisg.ch/bidding\nAlle HSG-Tool
+ s auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in Co
+ mpass.
+END:VEVENT
+BEGIN:VEVENT
+UID:f54427ad3080ee84@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Prüfungseinsicht zentrale Prüfungen
+DTSTART;VALUE=DATE:20270308
+DTEND;VALUE=DATE:20270323
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:2351843bd71ccde3@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Frist Exmatrikulation per Ende HS
+DTSTART;VALUE=DATE:20270312
+DTEND;VALUE=DATE:20270313
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:20c74e8c02ad5ae1@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Semestereinschreibung HS 2027
+DTSTART;VALUE=DATE:20270315
+DTEND;VALUE=DATE:20270701
+TRANSP:TRANSPARENT
+URL:https://compass.unisg.ch/termenrollment
+DESCRIPTION:Jetzt einschreiben: https://compass.unisg.ch/termenrollment\nAl
+ le HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kal
+ ender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:770f84944cfd70c6@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Buchhaltungsprüfung März
+DTSTART;TZID=Europe/Zurich:20270320T091500
+DTEND;TZID=Europe/Zurich:20270320T121500
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:d4a4dba524a4bcf9@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Kostenlose Prüfungsabmeldung FS
+DTSTART;VALUE=DATE:20270329
+DTEND;VALUE=DATE:20270413
+TRANSP:TRANSPARENT
+URL:https://compass.unisg.ch/exams
+DESCRIPTION:Prüfungen verwalten: https://compass.unisg.ch/exams\nAlle HSG-
+ Tools auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender i
+ n Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:fcb0c02c417ca28a@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Graduation Day Bachelor
+DTSTART;VALUE=DATE:20270402
+DTEND;VALUE=DATE:20270403
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:477e2aeb21bd256b@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Semester-Break Frühjahrssemester
+DTSTART;VALUE=DATE:20270405
+DTEND;VALUE=DATE:20270419
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:0b415150284ba5e0@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Mid-Term-Prüfungen FS
+DTSTART;VALUE=DATE:20270416
+DTEND;VALUE=DATE:20270418
+TRANSP:TRANSPARENT
+URL:https://compass.unisg.ch/exams
+DESCRIPTION:Prüfungen ansehen: https://compass.unisg.ch/exams\nAlle HSG-To
+ ols auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in 
+ Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:66ad2d7d508c5430@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Prüfungsplan FS mit Zeit und Raum
+DTSTART;VALUE=DATE:20270528
+DTEND;VALUE=DATE:20270529
+TRANSP:TRANSPARENT
+URL:https://compass.unisg.ch/exams
+DESCRIPTION:Prüfungen ansehen: https://compass.unisg.ch/exams\nAlle HSG-To
+ ols auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in 
+ Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:60e00ab949b6fc0d@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Ende Lehrbetrieb Frühjahrssemester
+DTSTART;VALUE=DATE:20270529
+DTEND;VALUE=DATE:20270530
+TRANSP:TRANSPARENT
+DESCRIPTION:Danach Prüfungsphase\nAlle HSG-Tools auf https://sgunihub.ch\n
+ Ohne Gewähr. Massgebend ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:8b7e2f8b01b231f0@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Buchhaltungsprüfung Juni
+DTSTART;TZID=Europe/Zurich:20270617T091500
+DTEND;TZID=Europe/Zurich:20270617T121500
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:e241feadf831a870@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Zentrale Prüfungen Frühjahrssemester
+DTSTART;VALUE=DATE:20270621
+DTEND;VALUE=DATE:20270725
+TRANSP:TRANSPARENT
+URL:https://compass.unisg.ch/exams
+DESCRIPTION:Prüfungen ansehen: https://compass.unisg.ch/exams\nAlle HSG-To
+ ols auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der Kalender in 
+ Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:5e64c6361daee50a@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Frist Anmeldung Zusatzqualifikationen
+DTSTART;VALUE=DATE:20270630
+DTEND;VALUE=DATE:20270701
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:84185bfdd0c27c94@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Noten dezentrale Prüfungen FS (BA)
+DTSTART;TZID=Europe/Zurich:20270708T110000
+DURATION:PT0M
+URL:https://compass.unisg.ch/achievementgraduations
+DESCRIPTION:Noten ansehen: https://compass.unisg.ch/achievementgraduations\
+ nAlle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der 
+ Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:0a687bb0b171042e@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Versand Semesterrechnung HS 2027
+DTSTART;VALUE=DATE:20270721
+DTEND;VALUE=DATE:20270722
+TRANSP:TRANSPARENT
+DESCRIPTION:Alle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgeben
+ d ist der Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:0299b14830482573@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Noten zentrale Prüfungen FS (BA)
+DTSTART;TZID=Europe/Zurich:20270812T110000
+DURATION:PT0M
+URL:https://compass.unisg.ch/achievementgraduations
+DESCRIPTION:Noten ansehen: https://compass.unisg.ch/achievementgraduations\
+ nAlle HSG-Tools auf https://sgunihub.ch\nOhne Gewähr. Massgebend ist der 
+ Kalender in Compass.
+END:VEVENT
+BEGIN:VEVENT
+UID:8b20e0bfc8f0bed8@sgunihub.ch
+DTSTAMP:20261127T130117Z
+SUMMARY:Zahlungsfrist Semesterrechnung HS
+DTSTART;VALUE=DATE:20270813
+DTEND;VALUE=DATE:20270814
+TRANSP:TRANSPARENT
+DESCRIPTION:Semesterrechnung HS 2027\nAlle HSG-Tools auf https://sgunihub.c
+ h\nOhne Gewähr. Massgebend ist der Kalender in Compass.
+END:VEVENT
+END:VCALENDAR
