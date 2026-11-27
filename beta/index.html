@@ -1395,8 +1395,8 @@
             <div class="d2-feat">
               <span class="d2-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-48-56a8,8,0,0,1-8,8H136v16a8,8,0,0,1-16,0V160H104a8,8,0,0,1,0-16h16V128a8,8,0,0,1,16,0v16h16A8,8,0,0,1,160,152Z"/></svg></span>
               <div style="flex:1"><b data-de="HSG-Fristen im Kalender" data-en="HSG deadlines in your calendar"></b><p data-de="Alle wichtigen Semesterdaten automatisch in Apple oder Google Kalender, jeweils mit Link zur richtigen Seite." data-en="All key semester dates automatically in Apple or Google Calendar, each with a link to the right page."></p></div>
-              <a class="d2-btn ghost" href="webcal://sgunihub.ch/hsg-fristen.ics" data-goatcounter-click="calendar-subscribe" data-de="Kalender abonnieren" data-en="Subscribe to calendar"></a>
-              <span class="d2-small"><span data-de="Google Kalender oder kein Abo?" data-en="Google Calendar or no subscription?"></span> <a href="hsg-fristen.ics" download data-goatcounter-click="calendar-download" data-de="Datei herunterladen" data-en="Download the file"></a></span>
+              <a class="d2-btn ghost" id="d2CalSub" href="webcal://sgunihub.ch/hsg-fristen.ics" data-goatcounter-click="calendar-subscribe" data-de="Kalender abonnieren" data-en="Subscribe to calendar"></a>
+              <span class="d2-small"><a id="d2CalGoogle" href="https://calendar.google.com/calendar/render?cid=webcal%3A%2F%2Fsgunihub.ch%2Fhsg-fristen.ics" target="_blank" rel="noopener" data-goatcounter-click="calendar-google" data-de="In Google Kalender öffnen" data-en="Open in Google Calendar"></a> · <a href="hsg-fristen.ics" download data-goatcounter-click="calendar-download" data-de="Datei herunterladen" data-en="Download the file"></a></span>
             </div>
             <div class="d2-feat">
               <span class="d2-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg></span>
@@ -4939,6 +4939,15 @@ SOFTWARE.`;
         b.href = STORE[br]; b.removeAttribute('aria-disabled'); b.dataset.goatcounterClick = 'extension-' + br;
         b.dataset.de = `Zu ${NAME} hinzufügen`; b.dataset.en = `Add to ${NAME}`;
       }
+    })();
+
+    // Calendar links point at the .ics next to this page (so /beta/ uses /beta/hsg-fristen.ics).
+    (function(){
+      if(!/^https?:$/.test(location.protocol)) return;
+      const ics = new URL('hsg-fristen.ics', location.href);
+      const webcal = 'webcal://' + ics.host + ics.pathname;
+      $('d2CalSub').href = webcal;
+      $('d2CalGoogle').href = 'https://calendar.google.com/calendar/render?cid=' + encodeURIComponent(webcal);
     })();
 
     function renderAll(){ renderGreeting(); renderQuick(); renderNext(); renderTodos(); renderEvents(); renderJobs(); renderDeals(); renderTools(); }
