@@ -1144,6 +1144,11 @@
   .d2-qa{ position:relative; display:flex; min-width:0; }
   .d2-qa > .d2-tool{ flex:1; }
   .d2-qa:hover{ z-index:60; }
+  .d2-qa a{ -webkit-touch-callout:none; -webkit-user-drag:none; user-select:none; -webkit-user-select:none; }
+  .d2-qa.d2-dragging{ z-index:100; cursor:grabbing; }
+  .d2-qa.d2-dragging .d2-tool{ border-color:var(--accent); box-shadow:0 18px 40px var(--shadow); }
+  .d2-sorting, .d2-sorting a{ cursor:grabbing; }
+  .d2-sorting .d2-tip, .d2-sorting .d2-swap{ display:none !important; }
   .d2-qa:nth-child(4n) .d2-tip{ left:auto; right:0; }
   .d2-swap{ position:absolute; top:-9px; right:-9px; z-index:90; width:30px; height:30px; border-radius:99px; border:1px solid var(--line); background:var(--surface); color:var(--accent); display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; box-shadow:0 6px 16px var(--shadow); transition:opacity .15s; }
   .d2-swap svg{ width:15px; height:15px; }
@@ -1327,7 +1332,7 @@
           <section class="d2-card">
             <div class="d2-head">
               <h2 class="d2-h" data-de="Schnellzugriff" data-en="Quick access"></h2>
-              <span class="d2-meta" data-de="Tauschsymbol auf einer Kachel ersetzt sie" data-en="Use the swap icon on a tile to replace it"></span>
+              <span class="d2-meta" data-de="Ziehen zum Verschieben, Tauschsymbol zum Ersetzen" data-en="Drag to reorder, swap icon to replace"></span>
             </div>
             <div class="d2-quick" id="d2Quick"></div>
           </section>
@@ -4753,7 +4758,7 @@ SOFTWARE.`;
     quick = quick.slice(0, 8);
     let picking = -1;
     function renderQuick(){
-      $('d2Quick').innerHTML = quick.map((n, i) => `<div class="d2-qa">${toolHTML(TOOLS.get(n))}
+      $('d2Quick').innerHTML = quick.map((n, i) => `<div class="d2-qa" data-q="${escDesc(n)}">${toolHTML(TOOLS.get(n))}
         <button type="button" class="d2-swap" data-swap="${i}" data-de-title="${escDesc(n)} ersetzen" data-en-title="Replace ${escDesc(TOOLS.get(n).nameEn || n)}">${IC.swap}</button></div>`).join('');
     }
     function renderPick(){
@@ -4784,6 +4789,79 @@ SOFTWARE.`;
     $('d2ModalClose').addEventListener('click', closePick);
     $('d2Modal').addEventListener('click', e => { if(e.target === $('d2Modal')) closePick(); });
     document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('d2Modal').hidden) closePick(); });
+
+    // ---------- Drag to reorder quick tiles ----------
+    // Mouse: drag after a few pixels. Touch: long press (350 ms) so normal
+    // scrolling keeps working. Neighbours slide into place (FLIP animation).
+    (function(){
+      const grid = $('d2Quick');
+      let drag = null, justDragged = false;
+      const inside = (r, x, y) => x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+      grid.addEventListener('dragstart', e => e.preventDefault());
+      grid.addEventListener('contextmenu', e => { if(drag) e.preventDefault(); });
+      grid.addEventListener('pointerdown', e => {
+        if(e.button !== 0 || e.target.closest('[data-swap]')) return;
+        const el = e.target.closest('.d2-qa'); if(!el) return;
+        drag = { el, id:e.pointerId, x:e.clientX, y:e.clientY, on:false, touch:e.pointerType !== 'mouse', timer:null };
+        if(drag.touch) drag.timer = setTimeout(() => { if(drag && !drag.on) start(); }, 350);
+      });
+      function start(){
+        drag.on = true;
+        const r = drag.el.getBoundingClientRect();
+        drag.ox = drag.x - r.left; drag.oy = drag.y - r.top;
+        drag.el.classList.add('d2-dragging'); grid.classList.add('d2-sorting');
+        try{ drag.el.setPointerCapture(drag.id); }catch(err){}
+        if(drag.touch && navigator.vibrate) navigator.vibrate(10);
+      }
+      function follow(x, y){
+        const el = drag.el; el.style.transform = '';
+        const r = el.getBoundingClientRect();
+        el.style.transform = `translate(${x - drag.ox - r.left}px, ${y - drag.oy - r.top}px) scale(1.04)`;
+      }
+      document.addEventListener('pointermove', e => {
+        if(!drag || e.pointerId !== drag.id) return;
+        if(!drag.on){
+          const moved = Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 6;
+          if(drag.touch){ if(moved){ clearTimeout(drag.timer); drag = null; } return; }
+          if(!moved) return;
+          start();
+        }
+        e.preventDefault();
+        const kids = [...grid.children];
+        const over = kids.find(k => k !== drag.el && !k.getAnimations().length && inside(k.getBoundingClientRect(), e.clientX, e.clientY));
+        if(over){
+          const from = kids.indexOf(drag.el), to = kids.indexOf(over);
+          const before = new Map(kids.map(k => [k, k.getBoundingClientRect()]));
+          grid.insertBefore(drag.el, from < to ? over.nextSibling : over);
+          kids.forEach(k => {
+            if(k === drag.el) return;
+            const a = before.get(k), b = k.getBoundingClientRect();
+            if(a.left !== b.left || a.top !== b.top)
+              k.animate([{ transform:`translate(${a.left - b.left}px, ${a.top - b.top}px)` }, { transform:'none' }], { duration:180, easing:'ease-out' });
+          });
+        }
+        follow(e.clientX, e.clientY);
+      }, { passive:false });
+      document.addEventListener('touchmove', e => { if(drag && drag.on) e.preventDefault(); }, { passive:false });
+      function end(e){
+        if(!drag || e.pointerId !== drag.id) return;
+        clearTimeout(drag.timer);
+        if(drag.on){
+          const el = drag.el;
+          const r0 = el.getBoundingClientRect(); el.style.transform = ''; const r1 = el.getBoundingClientRect();
+          el.classList.remove('d2-dragging'); grid.classList.remove('d2-sorting');
+          el.animate([{ transform:`translate(${r0.left - r1.left}px, ${r0.top - r1.top}px)` }, { transform:'none' }], { duration:160, easing:'ease-out' });
+          const order = [...grid.children].map(k => k.dataset.q);
+          grid.querySelectorAll('[data-swap]').forEach((b, i) => { b.dataset.swap = i; });
+          if(order.join('|') !== quick.join('|')){ quick = order; store.set(QUICK_KEY, quick); trackEvent('quick-reorder'); }
+          justDragged = true; setTimeout(() => { justDragged = false; }, 400);
+        }
+        drag = null;
+      }
+      document.addEventListener('pointerup', end);
+      document.addEventListener('pointercancel', end);
+      grid.addEventListener('click', e => { if(justDragged){ e.preventDefault(); e.stopPropagation(); justDragged = false; } }, true);
+    })();
 
     // ---------- Greeting + semester week ----------
     function renderGreeting(){
