@@ -1094,6 +1094,171 @@
   @keyframes drift-b{ from{ transform:translate(0,0) scale(1); } to{ transform:translate(-7vw,-6vh) scale(1.12); } }
   @keyframes drift-c{ from{ transform:translate(0,0) scale(1); } to{ transform:translate(-5vw,6vh) scale(0.92); } }
   @media (prefers-reduced-motion: reduce){ .bg-blob{ animation:none; } }
+
+  /* ================= v1.3.0: new dashboard + header ================= */
+  #langBtn{ display:none !important; }
+  .topbar{ margin-bottom:1.4rem; row-gap:.9rem; }
+  .d2-lang{ display:flex; padding:3px; border-radius:10px; border:1px solid var(--line); background:var(--surface); }
+  .d2-lang button{ border:0; background:transparent; color:var(--text-2); font:600 .78rem var(--font-mono); padding:.45rem .65rem; border-radius:7px; cursor:pointer; }
+  .d2-lang button.on{ background:var(--accent); color:var(--accent-contrast); }
+  .d2-search{ display:flex; align-items:center; gap:.5rem; width:300px; min-height:40px; padding:0 .8rem; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--text-2); box-sizing:border-box; }
+  .d2-search svg{ width:16px; height:16px; flex-shrink:0; }
+  .d2-search input{ flex:1; min-width:0; border:0; background:transparent; font:inherit; font-size:.88rem; color:var(--text); outline:none; min-height:38px; }
+  .d2-nav{ flex-basis:100%; display:flex; flex-wrap:wrap; gap:.25rem; border-bottom:1px solid var(--line); }
+  .d2-nav a{ padding:.6rem .8rem; font-size:.9rem; font-weight:600; color:var(--text-2); text-decoration:none; border-bottom:2px solid transparent; margin-bottom:-1px; }
+  .d2-nav a:hover{ color:var(--text); }
+  .d2-nav a.active{ color:var(--accent); border-bottom-color:var(--accent); }
+  @media (min-width:901px){ #menuBtn, #searchBtn{ display:none !important; } }
+  @media (max-width:900px){ .d2-nav, .d2-search{ display:none !important; } }
+
+  .d2{ display:flex; flex-direction:column; gap:20px; }
+  .d2-greet{ display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px; }
+  .d2-greet p{ margin:0 0 2px; font-size:.88rem; color:var(--text-2); }
+  .d2-greet h1{ margin:0; font-family:var(--font-display); font-size:2.2rem; font-weight:600; line-height:1.15; }
+  .d2-week{ flex:0 1 360px; min-width:240px; }
+  .d2-week-top{ display:flex; justify-content:space-between; gap:8px; font-size:.8rem; color:var(--text-2); margin-bottom:6px; }
+  .d2-week-top b{ color:var(--text); }
+  .d2-bar{ height:8px; border-radius:99px; background:var(--line); overflow:hidden; }
+  .d2-bar span{ display:block; height:100%; border-radius:99px; background:var(--accent); }
+  .d2-top{ display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:20px; align-items:stretch; }
+  .d2-three{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+  .d2-card{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:20px; display:flex; flex-direction:column; min-width:0; box-sizing:border-box; }
+  .d2-head{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:6px 12px; margin-bottom:14px; }
+  .d2-h{ margin:0; font-family:var(--font-display); font-size:1.3rem; font-weight:600; }
+  .d2-h.sm{ font-size:1.15rem; }
+  .d2-meta{ font-size:.78rem; color:var(--text-2); }
+  .d2-sub{ margin:-6px 0 16px; font-size:.82rem; color:var(--text-2); }
+  .d2-quick{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-rows:1fr; gap:10px; flex:1; }
+
+  .d2-tool{ position:relative; display:flex; flex-direction:column; justify-content:space-between; gap:10px; padding:14px; background:var(--bg); border:1px solid var(--line); border-radius:14px; color:var(--text); text-decoration:none; min-width:0; box-sizing:border-box; transition:border-color .2s, transform .2s; }
+  .d2-tool:hover{ border-color:var(--accent); transform:translateY(-2px); z-index:60; }
+  .d2-tool:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; z-index:60; }
+  .d2-ico{ width:40px; height:40px; border-radius:11px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; flex-shrink:0; font:700 .78rem var(--font-mono); }
+  .d2-ico svg{ width:22px; height:22px; }
+  .d2-name{ display:block; font-weight:700; font-size:.92rem; line-height:1.25; hyphens:auto; overflow-wrap:anywhere; }
+  .d2-host{ display:block; margin-top:3px; font-family:var(--font-mono); font-size:.66rem; color:var(--text-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .d2-badge{ position:absolute; top:14px; right:14px; font-size:.7rem; font-weight:700; color:var(--accent); background:var(--accent-soft); border-radius:99px; padding:3px 8px; white-space:nowrap; }
+  .d2-tip{ display:none; position:absolute; left:0; top:calc(100% + 8px); z-index:70; width:max(100%,280px); box-sizing:border-box; padding:14px 16px; border-radius:14px; background:var(--surface); border:1px solid var(--line); box-shadow:0 12px 32px var(--shadow); font-size:.82rem; line-height:1.5; font-weight:500; color:var(--text); }
+  .d2-tip strong{ display:block; margin-bottom:4px; }
+  .d2-tool:hover .d2-tip, .d2-tool:focus-visible .d2-tip{ display:block; }
+  .d2-qa{ position:relative; display:flex; min-width:0; }
+  .d2-qa > .d2-tool{ flex:1; }
+  .d2-qa:hover{ z-index:60; }
+  .d2-qa a{ -webkit-touch-callout:none; -webkit-user-drag:none; user-select:none; -webkit-user-select:none; }
+  .d2-qa.d2-dragging{ z-index:100; cursor:grabbing; }
+  .d2-qa.d2-dragging .d2-tool{ border-color:var(--accent); box-shadow:0 18px 40px var(--shadow); }
+  .d2-sorting, .d2-sorting a{ cursor:grabbing; }
+  .d2-sorting .d2-tip, .d2-sorting .d2-swap{ display:none !important; }
+  .d2-qa:nth-child(4n) .d2-tip{ left:auto; right:0; }
+  .d2-swap{ position:absolute; top:-9px; right:-9px; z-index:90; width:30px; height:30px; border-radius:99px; border:1px solid var(--line); background:var(--surface); color:var(--accent); display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; box-shadow:0 6px 16px var(--shadow); transition:opacity .15s; }
+  .d2-swap svg{ width:15px; height:15px; }
+  .d2-qa:hover .d2-swap, .d2-swap:focus-visible{ opacity:1; }
+
+  .d2-row{ display:flex; align-items:center; gap:12px; padding:9px 0; border-top:1px solid var(--line); }
+  .d2-date{ width:44px; height:44px; border-radius:12px; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; }
+  .d2-date small{ font-family:var(--font-mono); font-size:.6rem; color:var(--text-2); text-transform:uppercase; }
+  .d2-date b{ font-family:var(--font-display); font-size:1.05rem; font-weight:600; line-height:1; }
+  .d2-rt{ flex:1; min-width:0; }
+  .d2-rt b{ display:block; font-size:.85rem; }
+  .d2-rt a{ font-size:.75rem; font-weight:700; color:var(--accent); text-decoration:none; }
+  .d2-rt span{ font-size:.75rem; color:var(--text-2); }
+  .d2-chip{ flex-shrink:0; font-size:.72rem; font-weight:700; border-radius:99px; padding:5px 10px; white-space:nowrap; background:var(--accent-soft); color:var(--accent); }
+  .d2-chip.warn{ background:rgba(234,138,40,.16); color:#8A4205; }
+  .d2-chip.run{ background:rgba(45,217,196,.16); color:#0B5E55; }
+  :root[data-theme="dark"] .d2-chip.warn{ color:#FDBA74; }
+  :root[data-theme="dark"] .d2-chip.run{ color:#2DD9C4; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .d2-chip.warn{ color:#FDBA74; } :root:not([data-theme="light"]) .d2-chip.run{ color:#2DD9C4; } }
+  .d2-linkbtn{ margin-top:auto; padding:10px 0 0; border:0; border-top:1px solid var(--line); background:none; color:var(--accent); font:inherit; font-size:.82rem; font-weight:700; text-align:left; cursor:pointer; text-decoration:none; display:block; }
+
+  .d2-todos{ flex:1; display:flex; flex-direction:column; margin-bottom:12px; }
+  .d2-todo{ display:flex; align-items:center; gap:10px; min-height:40px; border-top:1px solid var(--line); }
+  .d2-todo input{ width:18px; height:18px; accent-color:var(--accent); flex-shrink:0; }
+  .d2-todo label{ flex:1; font-size:.88rem; cursor:pointer; overflow-wrap:anywhere; }
+  .d2-todo.done label{ color:var(--text-2); text-decoration:line-through; }
+  .d2-x{ border:0; background:transparent; color:var(--text-2); width:32px; height:32px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .d2-x svg{ width:14px; height:14px; }
+  .d2-empty{ font-size:.85rem; color:var(--text-2); padding:10px 0; border-top:1px solid var(--line); }
+  .d2-add{ display:flex; gap:8px; }
+  .d2-input{ flex:1; min-width:0; min-height:44px; border:1px solid var(--line); border-radius:10px; padding:0 12px; font:inherit; font-size:.88rem; background:var(--bg); color:var(--text); box-sizing:border-box; }
+  .d2-btn{ min-height:44px; border:0; border-radius:10px; background:var(--accent); color:var(--accent-contrast); font:inherit; font-weight:700; cursor:pointer; padding:0 16px; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; }
+  .d2-btn svg{ width:18px; height:18px; }
+  .d2-btn.ghost{ background:transparent; color:var(--accent); border:1px solid var(--accent); }
+  .d2-btn[aria-disabled="true"]{ opacity:.55; cursor:default; }
+  .d2-ev{ padding:8px 0; border-top:1px solid var(--line); }
+  .d2-ev small{ display:flex; justify-content:space-between; gap:8px; font-family:var(--font-mono); font-size:.7rem; color:var(--text-2); }
+  .d2-ev b{ display:block; font-size:.88rem; margin-top:2px; }
+  .d2-ev b span{ font-weight:500; color:var(--text-2); }
+  .d2-job{ display:flex; align-items:flex-start; gap:12px; padding:12px; border:1px solid var(--line); border-radius:14px; background:var(--bg); color:var(--text); text-decoration:none; margin-bottom:10px; transition:border-color .2s; }
+  .d2-job:hover{ border-color:var(--accent); }
+  .d2-job .d2-ico{ width:36px; height:36px; }
+  .d2-job b{ display:block; font-size:.85rem; line-height:1.35; }
+  .d2-job span span{ display:block; font-size:.75rem; color:var(--text-2); margin-top:3px; }
+  .d2-foot{ margin-top:auto; display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px 10px; font-size:.82rem; font-weight:700; }
+  .d2-foot a{ color:var(--accent); text-decoration:none; }
+  .d2-foot a.muted{ color:var(--text-2); }
+
+  .d2-deals{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+  .d2-deal{ justify-content:flex-start; gap:4px; padding:16px; }
+  .d2-deal .d2-val{ font-family:var(--font-display); font-size:1.65rem; font-weight:600; color:var(--accent); line-height:1.1; }
+  .d2-deal .d2-name{ font-size:.92rem; }
+  .d2-deal .d2-host{ font-size:.72rem; white-space:normal; }
+  .d2-partner{ position:absolute; top:16px; right:16px; font:500 .62rem var(--font-mono); color:#0B5E55; background:rgba(45,217,196,.18); border-radius:99px; padding:2px 8px; }
+  :root[data-theme="dark"] .d2-partner{ color:#2DD9C4; }
+  .d2-deals .d2-tool:nth-child(4n) .d2-tip{ left:auto; right:0; }
+
+  .d2-tabs{ display:flex; flex-wrap:wrap; gap:6px; }
+  .d2-tabs button{ min-height:38px; padding:0 14px; border-radius:99px; border:1px solid var(--line); background:var(--surface); color:var(--text); font:inherit; font-size:.84rem; font-weight:700; cursor:pointer; }
+  .d2-tabs button.on{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
+  .d2-tools{ display:grid; gap:12px; }
+  .d2-tools .d2-tool:last-child .d2-tip{ left:auto; right:0; }
+
+  .d2-feat{ display:flex; flex-direction:column; gap:12px; padding:20px; border-radius:16px; background:var(--bg); border:1px solid var(--line); }
+  .d2-feat .d2-ico{ width:44px; height:44px; background:var(--accent); color:var(--accent-contrast); }
+  .d2-feat b{ display:block; font-size:1rem; }
+  .d2-feat p{ margin:4px 0 0; font-size:.85rem; line-height:1.45; color:var(--text-2); }
+  .d2-feat .nl-form{ margin:0; flex:0 0 auto; }
+  .d2-steps{ margin:8px 0 0; padding-left:18px; font-size:.85rem; line-height:1.45; color:var(--text-2); }
+  .d2-steps li+li{ margin-top:4px; }
+  .d2-steps[hidden]{ display:none; }
+  .d2-eyebrow{ margin:0 0 4px; font:500 .7rem var(--font-mono); letter-spacing:.06em; text-transform:uppercase; color:var(--accent); }
+  .d2-small{ font-size:.78rem; color:var(--text-2); }
+  .d2-small a{ color:var(--accent); }
+  .d2-more{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+  .d2-more a{ display:flex; align-items:center; gap:14px; padding:18px; background:var(--surface); border:1px solid var(--line); border-radius:16px; color:var(--text); text-decoration:none; transition:border-color .2s, transform .2s; }
+  .d2-more a:hover{ border-color:var(--accent); transform:translateY(-2px); }
+  .d2-more b{ display:block; font-size:.95rem; }
+  .d2-more small{ display:block; font-size:.78rem; color:var(--text-2); }
+  .d2-more .arr{ margin-left:auto; color:var(--text-2); display:flex; }
+  .d2-more .arr svg{ width:18px; height:18px; }
+
+  .d2-modal{ position:fixed; inset:0; z-index:500; background:rgba(10,15,25,.45); display:flex; align-items:center; justify-content:center; padding:20px; }
+  .d2-modal[hidden]{ display:none; }
+  .d2-dialog{ width:100%; max-width:680px; max-height:78vh; background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:22px; display:flex; flex-direction:column; gap:12px; box-shadow:0 12px 32px var(--shadow); box-sizing:border-box; }
+  .d2-pick{ flex:1; overflow:auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); align-content:start; gap:8px; }
+  .d2-pick button{ display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--line); border-radius:12px; background:var(--bg); color:var(--text); cursor:pointer; text-align:left; font:inherit; }
+  .d2-pick button:hover{ border-color:var(--accent); }
+  .d2-pick .d2-ico{ width:32px; height:32px; }
+  .d2-pick .d2-ico svg{ width:18px; height:18px; }
+  .d2-pick b{ display:block; font-size:.85rem; }
+  .d2-pick small{ display:block; font-size:.72rem; color:var(--text-2); }
+
+  @media (hover:none){ .d2-swap{ opacity:1; } .d2-tool:hover .d2-tip{ display:none; } }
+  @media (max-width:1020px){
+    .d2-top, .d2-three, .d2-more{ grid-template-columns:minmax(0,1fr); }
+    .d2-quick, .d2-deals, .d2-tools{ grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  }
+  @media (max-width:640px){ .d2-greet h1{ font-size:1.8rem; } }
+  /* Same playful hover as the previous tiles: the icon fills and tilts slightly. */
+  .d2-ico{ transition:background .35s ease, color .35s ease, transform .35s cubic-bezier(.34,1.56,.64,1); }
+  .d2-tool:hover .d2-ico, .d2-tool:focus-visible .d2-ico, .d2-job:hover .d2-ico, .d2-more a:hover .d2-ico, .d2-pick button:hover .d2-ico{
+    background:var(--accent); color:var(--accent-contrast); transform:scale(1.08) rotate(-4deg);
+  }
+  .d2-feat:hover .d2-ico{ transform:scale(1.08) rotate(-4deg); }
+  .d2-deal:hover .d2-val{ transform:rotate(-2deg); }
+  .d2-deal .d2-val{ display:inline-block; transform-origin:left center; transition:transform .35s cubic-bezier(.34,1.56,.64,1); }
+  @media (prefers-reduced-motion: reduce){ .d2-ico, .d2-deal .d2-val, .d2-tool{ transition:none; } .d2-tool:hover .d2-ico, .d2-deal:hover .d2-val{ transform:none; } }
+  @media (min-width:901px){ .brand{ font-size:1.5rem; line-height:1; } .brand-badge{ font-size:.74rem; } }
+
 </style>
 </head>
 <body>
@@ -1126,35 +1291,161 @@
       <span class="brand-badge" data-de="inoffizielles Studierendenprojekt" data-en="unofficial student project"></span>
     </div>
     <div class="controls">
+      <div class="d2-lang" role="group" aria-label="Sprache / Language">
+        <button type="button" data-lang-set="de">DE</button>
+        <button type="button" data-lang-set="en">EN</button>
+      </div>
       <button class="ctrl-btn" id="langBtn" type="button" aria-label="Sprache wechseln">EN</button>
       <button class="ctrl-btn" id="themeBtn" type="button" aria-label="Farbmodus wechseln"></button>
+      <label class="d2-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="d2SearchField" autocomplete="off" aria-label="Suche" data-de-ph="Tool, Club oder Thema suchen" data-en-ph="Search tools, clubs or topics">
+      </label>
     </div>
+    <nav class="d2-nav" aria-label="Hauptmenü">
+      <a href="#dashboard" data-view-link="dashboard" data-de="Dashboard" data-en="Dashboard"></a>
+      <a href="#guide" data-view-link="guide" data-de="Neu an der HSG" data-en="New to HSG"></a>
+      <a href="#journey" data-view-link="journey" data-de="Deine Studienreise" data-en="Your Study Journey"></a>
+      <a href="#bachelorarbeit" data-view-link="bachelorarbeit" data-de="Bachelorarbeit" data-en="Bachelor's Thesis"></a>
+      <a href="#masters" data-view-link="masters" data-de="Master-Wahl" data-en="Choosing your Master"></a>
+      <a href="arriving.html" data-goatcounter-click="nav-arriving" data-de="Ankommen &amp; Wohnen" data-en="Arriving &amp; Housing"></a>
+      <a href="#contact" data-view-link="contact" data-de="Kontakt" data-en="Contact"></a>
+    </nav>
   </div>
 
   <main id="app">
 
     <section class="view" id="view-dashboard" data-view="dashboard">
-      <header class="hero">
-        <h1 class="wordmark">sg<span class="slash">/</span>unihub</h1>
-        <p class="tagline" data-de="Alle wichtigen Tools, Clubs und Angebote der HSG – an einem Ort."
-           data-en="Every essential HSG tool, club and offer – in one place."></p>
+      <div class="d2">
+        <section class="d2-greet">
+          <div>
+            <p id="d2Date"></p>
+            <h1 id="d2Hello"></h1>
+          </div>
+          <div class="d2-week">
+            <div class="d2-week-top"><b id="d2WeekLabel"></b><span id="d2WeekSub"></span></div>
+            <div class="d2-bar"><span id="d2WeekBar"></span></div>
+          </div>
+        </section>
 
-        <div class="hero-ctas">
-          <a class="journey-cta" href="#journey" data-view-link="journey">
-            <span class="journey-cta-icon">▶</span>
-            <span data-de="Studienreise ansehen" data-en="Watch the Journey"></span>
-          </a>
-          <a class="journey-cta" href="#bachelorarbeit" data-view-link="bachelorarbeit">
-            <span class="journey-cta-icon">✎</span>
-            <span data-de="Bachelorarbeit-Guide" data-en="Bachelor's Thesis Guide"></span>
-          </a>
-          <a class="journey-cta" href="arriving.html" data-goatcounter-click="hero-arriving">
-            <span class="journey-cta-icon">✈</span>
-            <span data-de="Ankommen &amp; Wohnen" data-en="Arriving &amp; Housing"></span>
-          </a>
+        <div class="d2-top">
+          <section class="d2-card">
+            <div class="d2-head">
+              <h2 class="d2-h" data-de="Schnellzugriff" data-en="Quick access"></h2>
+              <span class="d2-meta" data-de="Ziehen zum Verschieben, Tauschsymbol zum Ersetzen" data-en="Drag to reorder, swap icon to replace"></span>
+            </div>
+            <div class="d2-quick" id="d2Quick"></div>
+          </section>
+          <section class="d2-card">
+            <div class="d2-head" style="margin-bottom:4px">
+              <h2 class="d2-h" data-de="Als Nächstes" data-en="Coming up"></h2>
+              <span class="d2-meta" data-de="HSG-Semesterkalender" data-en="HSG academic calendar"></span>
+            </div>
+            <div id="d2Next"></div>
+            <button type="button" class="d2-linkbtn" id="d2ToCal" data-goatcounter-click="next-calendar" data-de="Alle Termine im Kalender abonnieren" data-en="Subscribe to all dates in your calendar"></button>
+          </section>
         </div>
-      </header>
 
+        <div class="d2-three">
+          <section class="d2-card">
+            <h2 class="d2-h sm" style="margin-bottom:8px" data-de="Meine ToDos" data-en="My to-dos"></h2>
+            <div class="d2-todos" id="d2Todos"></div>
+            <form class="d2-add" id="d2TodoForm">
+              <input class="d2-input" id="d2TodoInput" type="text" maxlength="120" aria-label="ToDo" data-de-ph="Neues ToDo" data-en-ph="New to-do">
+              <button class="d2-btn" type="submit" style="width:44px;padding:0" data-de-title="ToDo hinzufügen" data-en-title="Add to-do"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></button>
+            </form>
+          </section>
+          <section class="d2-card">
+            <h2 class="d2-h sm" style="margin-bottom:8px" data-de="Events diese Woche" data-en="Events this week"></h2>
+            <div style="flex:1" id="d2Events"></div>
+            <div class="d2-foot" style="margin-top:10px">
+              <a href="https://uniclubs.ch/" target="_blank" rel="noopener" data-goatcounter-click="events-uniclubs" data-de="Alle Events auf UniClubs" data-en="All events on UniClubs"></a>
+              <a class="muted" href="#contact" data-view-link="contact" data-de="Event eintragen" data-en="Add your event"></a>
+            </div>
+          </section>
+          <section class="d2-card">
+            <h2 class="d2-h sm" style="margin-bottom:8px" data-de="Offene Stellen" data-en="Open positions"></h2>
+            <div style="flex:1" id="d2Jobs"></div>
+            <div class="d2-foot" style="margin-top:10px">
+              <a href="https://hsgcareer.ch/fuer-studierende/" target="_blank" rel="noopener" data-goatcounter-click="jobs-csc" data-de="Alle Stellen bei CSC" data-en="All jobs at CSC"></a>
+              <a class="muted" href="#contact" data-view-link="contact" data-de="Stelle inserieren" data-en="Post a job"></a>
+            </div>
+          </section>
+        </div>
+
+        <section class="d2-card" id="tools">
+          <div class="d2-head" style="margin-bottom:6px">
+            <h2 class="d2-h" data-de="Alle Tools" data-en="All tools"></h2>
+            <div class="d2-tabs" role="tablist" id="d2Tabs"></div>
+          </div>
+          <p class="d2-sub" style="margin:0 0 16px" id="d2CatSub"></p>
+          <div class="d2-tools" id="d2Tools"></div>
+        </section>
+
+        <section class="d2-card" id="deals">
+          <div class="d2-head">
+            <div>
+              <h2 class="d2-h" data-de="Studi-Deals St. Gallen" data-en="Student Deals St.Gallen"></h2>
+              <p class="d2-meta" style="margin:4px 0 0" data-de="Vergünstigungen für Studierende. Bei Deals mit Code wird dieser beim Klick kopiert." data-en="Discounts for students. Deals with a code copy it to your clipboard when you click."></p>
+            </div>
+          </div>
+          <div class="d2-deals" id="d2Deals"></div>
+        </section>
+
+        <section class="d2-card" id="d2Always" style="padding:26px">
+          <p class="d2-eyebrow" data-de="Immer dabei" data-en="Always with you"></p>
+          <h2 class="d2-h" style="font-size:1.5rem;margin-bottom:18px" data-de="Hol dir sg/unihub dorthin, wo du sowieso bist" data-en="Take sg/unihub wherever you already are"></h2>
+          <div class="d2-three" style="gap:16px">
+            <div class="d2-feat" id="d2Chrome">
+              <span class="d2-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V88H40V56Zm0,144H40V104H216v96Z"/></svg></span>
+              <div style="flex:1"><b id="d2ChromeTitle" data-de="Direkt beim Chrome-Start" data-en="Right when Chrome starts"></b><p id="d2ChromeText" data-de="Die Chrome-Erweiterung öffnet sg/unihub als ersten Tab, wenn du Chrome startest. Neue Tabs bleiben ganz normal. Die Erweiterung ist in Arbeit." data-en="The Chrome extension opens sg/unihub as your first tab when Chrome starts. New tabs stay just as they are. The extension is in the works."></p></div>
+              <a class="d2-btn" id="d2ChromeBtn" aria-disabled="true" data-goatcounter-click="chrome-extension" target="_blank" rel="noopener" data-de="Bald verfügbar" data-en="Coming soon"></a>
+            </div>
+            <div class="d2-feat">
+              <span class="d2-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-48-56a8,8,0,0,1-8,8H136v16a8,8,0,0,1-16,0V160H104a8,8,0,0,1,0-16h16V128a8,8,0,0,1,16,0v16h16A8,8,0,0,1,160,152Z"/></svg></span>
+              <div style="flex:1"><b data-de="HSG-Fristen im Kalender" data-en="HSG deadlines in your calendar"></b><p data-de="Alle wichtigen Semesterdaten automatisch in Apple oder Google Kalender, jeweils mit Link zur richtigen Seite." data-en="All key semester dates automatically in Apple or Google Calendar, each with a link to the right page."></p></div>
+              <a class="d2-btn ghost" id="d2CalSub" href="webcal://sgunihub.ch/hsg-fristen.ics" data-goatcounter-click="calendar-subscribe" data-de="Kalender abonnieren" data-en="Subscribe to calendar"></a>
+              <span class="d2-small"><a id="d2CalGoogle" href="https://calendar.google.com/calendar/render?cid=webcal%3A%2F%2Fsgunihub.ch%2Fhsg-fristen.ics" target="_blank" rel="noopener" data-goatcounter-click="calendar-google" data-de="In Google Kalender öffnen" data-en="Open in Google Calendar"></a> · <a href="hsg-fristen.ics" download data-goatcounter-click="calendar-download" data-de="Datei herunterladen" data-en="Download the file"></a></span>
+            </div>
+            <div class="d2-feat">
+              <span class="d2-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg></span>
+              <div style="flex:1"><b>News of the Week</b><p data-de="Jeden Montag, 3 Minuten: Fristen, Lerntipps, Jobs und ein bisschen Humor. Auf Englisch, gratis." data-en="Every Monday, 3 minutes: deadlines, study tips, jobs and a bit of humour. In English, free."></p></div>
+              <form class="nl-form" data-nl-form="dashboard" novalidate>
+                <input type="email" name="email" placeholder="deine@email.ch" data-de-ph="deine@email.ch" data-en-ph="your@email.com" autocomplete="email" aria-label="Email" required>
+                <input type="text" name="website" class="nl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+                <button type="submit" data-de="Abonnieren" data-en="Subscribe"></button>
+                <p class="nl-msg" aria-live="polite"></p>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="d2-h" style="margin-bottom:14px" data-de="Mehr auf sg/unihub" data-en="More on sg/unihub"></h2>
+          <div class="d2-more">
+            <a href="#guide" data-view-link="guide"><span class="d2-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></svg></span><span><b data-de="Neu an der HSG" data-en="New to HSG"></b><small data-de="Aufbau, Bidding, Austausch" data-en="Structure, bidding, exchange"></small></span><span class="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span></a>
+            <a href="#journey" data-view-link="journey"><span class="d2-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M200,168a32.06,32.06,0,0,0-31,24H72a32,32,0,0,1,0-64h96a40,40,0,0,0,0-80H72a8,8,0,0,0,0,16h96a24,24,0,0,1,0,48H72a48,48,0,0,0,0,96h97a32,32,0,1,0,31-40Zm0,48a16,16,0,1,1,16-16A16,16,0,0,1,200,216Z"/></svg></span><span><b data-de="Deine Studienreise" data-en="Your Study Journey"></b><small data-de="Der Bachelor in 9 Schritten" data-en="The Bachelor's in 9 steps"></small></span><span class="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span></a>
+            <a href="#bachelorarbeit" data-view-link="bachelorarbeit"><span class="d2-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M248,92.68a15.86,15.86,0,0,0-4.69-11.31L174.63,12.68a16,16,0,0,0-22.63,0L123.57,41.11l-58,21.77A16.06,16.06,0,0,0,55.35,75.23L32.11,214.68A8,8,0,0,0,40,224a8.4,8.4,0,0,0,1.32-.11l139.44-23.24a16,16,0,0,0,12.35-10.17l21.77-58L243.31,104A15.87,15.87,0,0,0,248,92.68Zm-69.87,92.19L63.32,204l47.37-47.37a28,28,0,1,0-11.32-11.32L52,192.7,71.13,77.86,126,57.29,198.7,130ZM112,132a12,12,0,1,1,12,12A12,12,0,0,1,112,132Zm96-15.32L139.31,48l24-24L232,92.68Z"/></svg></span><span><b data-de="Bachelorarbeit" data-en="Bachelor's Thesis"></b><small data-de="Regeln und Schritt für Schritt" data-en="Rules and step by step"></small></span><span class="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span></a>
+            <a href="arriving.html" data-goatcounter-click="more-arriving"><span class="d2-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M240,208H224V136l2.34,2.34A8,8,0,0,0,237.66,127L139.31,28.68a16,16,0,0,0-22.62,0L18.34,127a8,8,0,0,0,11.32,11.31L32,136v72H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM48,120l80-80,80,80v88H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48Zm96,88H112V160h32Z"/></svg></span><span><b data-de="Ankommen &amp; Wohnen" data-en="Arriving &amp; Housing"></b><small data-de="Für Austauschstudierende" data-en="For exchange students"></small></span><span class="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span></a>
+            <a href="#masters" data-view-link="masters"><span class="d2-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V240a8,8,0,0,0,16,0V199.51a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12ZM128,200c-43.27,0-68.72-21.14-80-33.71V126.4l76.24,40.66a8,8,0,0,0,7.52,0L176,143.47v46.34C163.4,195.69,147.52,200,128,200Zm80-33.75a97.83,97.83,0,0,1-16,14.25V134.93l16-8.53ZM188,118.94l-.22-.13-56-29.87a8,8,0,0,0-7.52,14.12L171,128l-43,22.93L25,96,128,41.07,231,96Z"/></svg></span><span><b data-de="Master-Wahl" data-en="Choosing your Master"></b><small data-de="Programme im Vergleich" data-en="Programmes compared"></small></span><span class="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span></a>
+            <a href="#business" data-view-link="business"><span class="d2-ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM172.42,72.84l-64,32a8.05,8.05,0,0,0-3.58,3.58l-32,64A8,8,0,0,0,80,184a8.1,8.1,0,0,0,3.58-.84l64-32a8.05,8.05,0,0,0,3.58-3.58l32-64a8,8,0,0,0-10.74-10.74ZM138,138,97.89,158.11,118,118l40.15-20.07Z"/></svg></span><span><b data-de="Über sg/unihub" data-en="About sg/unihub"></b><small data-de="Warum es diese Seite gibt" data-en="Why this site exists"></small></span><span class="arr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span></a>
+          </div>
+        </section>
+      </div>
+
+      <div class="d2-modal" id="d2Modal" hidden>
+        <div class="d2-dialog" role="dialog" aria-modal="true" aria-labelledby="d2ModalTitle">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+            <h3 class="d2-h sm" id="d2ModalTitle"></h3>
+            <button type="button" class="ctrl-btn" id="d2ModalClose" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button>
+          </div>
+          <input class="d2-input" type="search" id="d2PickSearch" autocomplete="off" aria-label="Tool" data-de-ph="Tool suchen" data-en-ph="Search tools">
+          <div class="d2-pick" id="d2PickList"></div>
+        </div>
+      </div>
+
+      <!-- Previous dashboard (v1.2.x): kept hidden so older code paths (pinning, deep links, newsletter banner) keep working without errors. -->
+      <div hidden>
       <div class="nl-banner" id="nlBanner" hidden>
         <div class="nl-text">
           <span class="nl-eyebrow">News of the Week</span>
@@ -1172,11 +1463,12 @@
 
       <div class="board" id="categories"></div>
 
-      <!-- The grid above is filled in by JS (see renderCategories()), so a
+      <!-- (kept) The grid above is filled in by JS (see renderCategories()), so a
            crawler or browser that doesn't run JavaScript would otherwise see
            an empty page here. This noscript block mirrors the real category
            and tool names so that content stays visible and indexable either
            way; it never shows at all once JS has populated the real grid. -->
+      </div>
       <noscript>
         <section style="padding:2rem 1.25rem;max-width:860px;margin:0 auto;font-family:system-ui,sans-serif;line-height:1.6;color:#1a2b3c;">
           <h2>Alle Tools &amp; Angebote der HSG auf einen Blick</h2>
@@ -1424,7 +1716,7 @@
             <h2>Warum sg/unihub?</h2>
             <p>An der HSG gibt es unterdessen extrem viele verschiedene Websites und Tools, die von Studierenden gebaut wurden – Biddit, Studienplan, prisma, UniClubs, und viele mehr. Einzeln sind das alles super Angebote. Das Problem: Man verliert schnell den Überblick, welche es überhaupt gibt und wofür sie da sind. Gleichzeitig gibt es an der HSG auch offizielle Angebote, die man einfach nicht findet, weil sie irgendwo auf einer der vielen HSG-Websites versteckt sind.</p>
             <p>sg/unihub bündelt all diese Tools und Angebote – offizielle wie von Studierenden gebaute – an einem Ort: minimalistisch, übersichtlich und auf Deutsch und Englisch verfügbar. Kein Ersatz für die einzelnen Tools, sondern die zentrale Anlaufstelle, die einem zeigt, welches Tool man wann braucht.</p>
-            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.2.33): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
+            <p>Gebaut habe ich sg/unihub als Nebenprojekt neben dem Studium – über Eloori Interactive, meine kleine Software-Schmiede. Die Seite ist noch in aktiver Entwicklung (aktuell v1.3.0): Feedback, Kritik und Vorschläge sind jederzeit willkommen (siehe Kontakt).</p>
           </div>
           <div class="legal-block">
             <h2>So nutzt du sg/unihub am besten</h2>
@@ -1825,7 +2117,7 @@
         <a href="#impressum" data-view-link="impressum" data-de="Impressum" data-en="Legal Notice"></a>
         <a href="#datenschutz" data-view-link="datenschutz" data-de="Datenschutz" data-en="Privacy Policy"></a>
       </div>
-      <p class="credit">Eloori Interactive · v1.2.33</p>
+      <p class="credit">Eloori Interactive · v1.3.0</p>
     </div>
   </footer>
 
@@ -1905,6 +2197,12 @@
         { name:"Room Booking", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,216H208V40a16,16,0,0,0-16-16H64A16,16,0,0,0,48,40V216H24a8,8,0,0,0,0,16H232a8,8,0,0,0,0-16Zm-40,0H176V40h16ZM64,40h96V216H64Zm80,92a12,12,0,1,1-12-12A12,12,0,0,1,144,132Z"/></svg>', url:"https://apps.unisg.ch/gmr/", tag:"apps.unisg.ch/gmr",
           de:"Kostenlos einen Gruppenraum für Lerngruppen, Projektarbeit oder Präsentationsvorbereitung reservieren.",
           en:"Book a free group room for study groups, project work or presentation prep." },
+        { name:"Prüfungen", nameEn:"Exams", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,40H40A16,16,0,0,0,24,56V216a8,8,0,0,0,11.58,7.16L64,208.94l28.42,14.22a8,8,0,0,0,7.16,0L128,208.94l28.42,14.22a8,8,0,0,0,7.16,0L192,208.94l28.42,14.22A8,8,0,0,0,232,216V56A16,16,0,0,0,216,40Zm0,163.06-20.42-10.22a8,8,0,0,0-7.16,0L160,207.06l-28.42-14.22a8,8,0,0,0-7.16,0L96,207.06,67.58,192.84a8,8,0,0,0-7.16,0L40,203.06V56H216ZM60.42,167.16a8,8,0,0,0,10.74-3.58L76.94,152h38.12l5.78,11.58a8,8,0,1,0,14.32-7.16l-32-64a8,8,0,0,0-14.32,0l-32,64A8,8,0,0,0,60.42,167.16ZM96,113.89,107.06,136H84.94ZM136,128a8,8,0,0,1,8-8h16V104a8,8,0,0,1,16,0v16h16a8,8,0,0,1,0,16H176v16a8,8,0,0,1-16,0V136H144A8,8,0,0,1,136,128Z"/></svg>', url:"https://compass.unisg.ch/exams", tag:"compass.unisg.ch/exams", de:"Deine Prüfungstermine ansehen, dich von Prüfungen abmelden oder sie verschieben, direkt in Compass.", en:"View your exam dates, deregister from exams or reschedule them, right in Compass." },
+        { name:"Noten", nameEn:"Grades", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,96A88,88,0,1,0,72,163.83V240a8,8,0,0,0,11.58,7.16L128,225l44.43,22.21A8.07,8.07,0,0,0,176,248a8,8,0,0,0,8-8V163.83A87.85,87.85,0,0,0,216,96ZM56,96a72,72,0,1,1,72,72A72.08,72.08,0,0,1,56,96ZM168,227.06l-36.43-18.21a8,8,0,0,0-7.16,0L88,227.06V174.37a87.89,87.89,0,0,0,80,0ZM128,152A56,56,0,1,0,72,96,56.06,56.06,0,0,0,128,152Zm0-96A40,40,0,1,1,88,96,40,40,0,0,1,128,56Z"/></svg>', url:"https://compass.unisg.ch/achievementgraduations", tag:"compass.unisg.ch/achievementgraduations", de:"Deine Noten, Leistungsnachweise und Abschlüsse auf einen Blick, direkt in Compass.", en:"Your grades, transcripts and degrees at a glance, right in Compass." },
+        { name:"Drucker", nameEn:"Printing", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M214.67,72H200V40a8,8,0,0,0-8-8H64a8,8,0,0,0-8,8V72H41.33C27.36,72,16,82.77,16,96v80a8,8,0,0,0,8,8H56v32a8,8,0,0,0,8,8H192a8,8,0,0,0,8-8V184h32a8,8,0,0,0,8-8V96C240,82.77,228.64,72,214.67,72ZM72,48H184V72H72ZM184,208H72V160H184Zm40-40H200V152a8,8,0,0,0-8-8H64a8,8,0,0,0-8,8v16H32V96c0-4.41,4.19-8,9.33-8H214.67c5.14,0,9.33,3.59,9.33,8Zm-24-52a12,12,0,1,1-12-12A12,12,0,0,1,200,116Z"/></svg>', url:"https://print2me.unisg.ch/RicohmyPrint/Login.aspx", tag:"print2me.unisg.ch", de:"Druckaufträge für die Uni-Drucker hochladen, freigeben und verwalten (print2me, mit HSG-Login).", en:"Upload, release and manage print jobs for the university printers (print2me, with HSG login)." },
+        { name:"Mensa", nameEn:"Mensa", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M72,88V40a8,8,0,0,1,16,0V88a8,8,0,0,1-16,0ZM216,40V224a8,8,0,0,1-16,0V176H152a8,8,0,0,1-8-8,268.75,268.75,0,0,1,7.22-56.88c9.78-40.49,28.32-67.63,53.63-78.47A8,8,0,0,1,216,40ZM200,53.9c-32.17,24.57-38.47,84.42-39.7,106.1H200ZM119.89,38.69a8,8,0,1,0-15.78,2.63L112,88.63a32,32,0,0,1-64,0l7.88-47.31a8,8,0,1,0-15.78-2.63l-8,48A8.17,8.17,0,0,0,32,88a48.07,48.07,0,0,0,40,47.32V224a8,8,0,0,0,16,0V135.32A48.07,48.07,0,0,0,128,88a8.17,8.17,0,0,0-.11-1.31Z"/></svg>', url:"https://www.restaurant-unisg.ch/dokumente/menueplaene/hsg/menueplan-1.pdf", urlEn:"https://www.restaurant-unisg.ch/dokumente/menueplaene/hsg/menuplan_eng..pdf", tag:"restaurant-unisg.ch", de:"Menüplan der Mensa im Hauptgebäude für die aktuelle Woche (PDF). Die Datei wird jede Woche unter derselben Adresse ersetzt.", en:"This week's menu of the Mensa in the main building (PDF). The file is replaced every week under the same address." },
+        { name:"Bidding", nameEn:"Bidding", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M243.32,116.69l-16-16a16,16,0,0,0-20.84-1.53L156.84,49.52a16,16,0,0,0-1.52-20.84l-16-16a16,16,0,0,0-22.63,0l-64,64a16,16,0,0,0,0,22.63l16,16a16,16,0,0,0,20.83,1.52L96.69,124,31.31,189.38A25,25,0,0,0,66.63,224.7L132,159.32l7.17,7.16a16,16,0,0,0,1.52,20.84l16,16a16,16,0,0,0,22.63,0l64-64A16,16,0,0,0,243.32,116.69ZM80,104,64,88l64-64,16,16ZM55.32,213.38a9,9,0,0,1-12.69,0,9,9,0,0,1,0-12.68L108,135.32,120.69,148ZM101,105.66,145.66,61,195,110.34,150.35,155ZM168,192l-16-16,4-4h0l56-56h0l4-4,16,16Z"/></svg>', url:"https://compass.unisg.ch/bidding", tag:"compass.unisg.ch/bidding", de:"Die Kurswahl fürs nächste Semester, direkt in Compass. Zur Planung und für Kursbewertungen hilft Biddit.", en:"Course bidding for next semester, right in Compass. Biddit helps with planning and course ratings." },
+        { name:"Semestereinschreibung", nameEn:"Semester enrolment", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M168,152a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,152Zm-8-40H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm56-64V216a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V48A16,16,0,0,1,56,32H92.26a47.92,47.92,0,0,1,71.48,0H200A16,16,0,0,1,216,48ZM96,64h64a32,32,0,0,0-64,0ZM200,48H173.25A47.93,47.93,0,0,1,176,64v8a8,8,0,0,1-8,8H88a8,8,0,0,1-8-8V64a47.93,47.93,0,0,1,2.75-16H56V216H200Z"/></svg>', url:"https://compass.unisg.ch/termenrollment", tag:"compass.unisg.ch/termenrollment", de:"Einschreibung fürs nächste Semester in Compass. Voraussetzung ist die rechtzeitig bezahlte Semesterrechnung.", en:"Enrol for next semester in Compass. Your semester invoice must be paid on time." },
       ]},
     // Not a normal tool list — real, named discount partners, each with a
     // big value + the company name as the label (see `special` handling in
@@ -1958,6 +2256,7 @@
         { name:"UniClubs", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M111.49,52.63a15.8,15.8,0,0,0-26,5.77L33,202.78A15.83,15.83,0,0,0,47.76,224a16,16,0,0,0,5.46-1l144.37-52.5a15.8,15.8,0,0,0,5.78-26Zm-8.33,135.21-35-35,13.16-36.21,58.05,58.05Zm-55,20,14-38.41,24.45,24.45ZM156,168.64,87.36,100l13-35.87,91.43,91.43ZM160,72a37.8,37.8,0,0,1,3.84-15.58C169.14,45.83,179.14,40,192,40c6.7,0,11-2.29,13.65-7.21A22,22,0,0,0,208,23.94,8,8,0,0,1,224,24c0,12.86-8.52,32-32,32-6.7,0-11,2.29-13.65,7.21A22,22,0,0,0,176,72.06,8,8,0,0,1,160,72ZM136,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm101.66,82.34a8,8,0,1,1-11.32,11.31l-16-16a8,8,0,0,1,11.32-11.32Zm4.87-42.75-24,8a8,8,0,0,1-5.06-15.18l24-8a8,8,0,0,1,5.06,15.18Z"/></svg>', url:"https://uniclubs.ch/", tag:"uniclubs.ch",
           de:"All-in-One-Plattform für Studierendenorganisationen: Clubs entdecken, Mitgliedschaften verwalten, Events organisieren, gemeinsamer Kalender.",
           en:"All-in-one platform for student organizations: discover clubs, manage memberships, organize events, shared calendar." },
+        { name:"Club-Übersicht", nameEn:"Club directory", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z"/></svg>', url:"https://shsg.ch/clubs?sort=nameAsc", tag:"shsg.ch/clubs", de:"Alle Vereine und Clubs der HSG auf einen Blick, mit Beschreibung, Kategorie und Kontakt (SHSG).", en:"All of HSG's student clubs at a glance, with description, category and contact (SHSG)." },
         { name:"prisma", icon:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M88,112a8,8,0,0,1,8-8h80a8,8,0,0,1,0,16H96A8,8,0,0,1,88,112Zm8,40h80a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16ZM232,64V184a24,24,0,0,1-24,24H32A24,24,0,0,1,8,184.11V88a8,8,0,0,1,16,0v96a8,8,0,0,0,16,0V64A16,16,0,0,1,56,48H216A16,16,0,0,1,232,64Zm-16,0H56V184a23.84,23.84,0,0,1-1.37,8H208a8,8,0,0,0,8-8Z"/></svg>', url:"https://prisma-hsg.ch/", tag:"prisma-hsg.ch",
           de:"Seit rund 65 Jahren das studentisch geführte Magazin der HSG – auf Deutsch und Englisch, Campus-Themen und gesellschaftliche Fragen.",
           en:"HSG's student-run magazine for nearly 65 years – in German and English, covering campus life and broader social topics." },
@@ -2114,7 +2413,10 @@
   // page load, on a slow phone connection, or never — an ad-/tracker-blocker, or this preview's CSP,
   // which is expected and fine). Poll briefly instead of firing once and
   // silently missing the very first pageview.
+  const SGU_NEWTAB = /[?&]source=(newtab|extension)\b/.test(location.search);
   function trackPageview(path){
+    if(SGU_NEWTAB) path = '/extension' + path;
+    if(location.pathname.indexOf('/beta/') === 0) path = '/beta' + path;
     let tries = 0;
     const t = setInterval(() => {
       tries++;
@@ -4381,6 +4683,410 @@ SOFTWARE.`;
   //    own background refetch actually lands with a different version —
   //    catches the slow case above, however long that refetch takes,
   //    instead of giving up after one fixed-length check.
+
+  // ================= v1.3.0: new dashboard =================
+  // Renders the dashboard sections (quick access, coming up, to-dos, events,
+  // jobs, deals, all tools) from DATA, JOBS and the HSG calendar below. Text
+  // goes in as data-de/data-en and applyLang() fills it, like everywhere else.
+  (function(){
+    const $ = id => document.getElementById(id);
+    if(!$('d2Quick')) return;
+    const IC = {"swap": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M213.66,181.66l-32,32a8,8,0,0,1-11.32-11.32L188.69,184H48a8,8,0,0,1,0-16H188.69l-18.35-18.34a8,8,0,0,1,11.32-11.32l32,32A8,8,0,0,1,213.66,181.66Zm-139.32-64a8,8,0,0,0,11.32-11.32L67.31,88H208a8,8,0,0,0,0-16H67.31L85.66,53.66A8,8,0,0,0,74.34,42.34l-32,32a8,8,0,0,0,0,11.32Z\"/></svg>", "close": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z\"/></svg>", "plus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z\"/></svg>", "briefcase": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M216,56H176V48a24,24,0,0,0-24-24H104A24,24,0,0,0,80,48v8H40A16,16,0,0,0,24,72V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V72A16,16,0,0,0,216,56ZM96,48a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96ZM216,72v41.61A184,184,0,0,1,128,136a184.07,184.07,0,0,1-88-22.38V72Zm0,128H40V131.64A200.19,200.19,0,0,0,128,152a200.25,200.25,0,0,0,88-20.37V200ZM104,112a8,8,0,0,1,8-8h32a8,8,0,0,1,0,16H112A8,8,0,0,1,104,112Z\"/></svg>", "browser": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V88H40V56Zm0,144H40V104H216v96Z\"/></svg>", "calplus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-48-56a8,8,0,0,1-8,8H136v16a8,8,0,0,1-16,0V160H104a8,8,0,0,1,0-16h16V128a8,8,0,0,1,16,0v16h16A8,8,0,0,1,160,152Z\"/></svg>", "mail": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z\"/></svg>", "arrow": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z\"/></svg>", "info": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z\"/></svg>", "path": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M200,168a32.06,32.06,0,0,0-31,24H72a32,32,0,0,1,0-64h96a40,40,0,0,0,0-80H72a8,8,0,0,0,0,16h96a24,24,0,0,1,0,48H72a48,48,0,0,0,0,96h97a32,32,0,1,0,31-40Zm0,48a16,16,0,1,1,16-16A16,16,0,0,1,200,216Z\"/></svg>", "pen": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M248,92.68a15.86,15.86,0,0,0-4.69-11.31L174.63,12.68a16,16,0,0,0-22.63,0L123.57,41.11l-58,21.77A16.06,16.06,0,0,0,55.35,75.23L32.11,214.68A8,8,0,0,0,40,224a8.4,8.4,0,0,0,1.32-.11l139.44-23.24a16,16,0,0,0,12.35-10.17l21.77-58L243.31,104A15.87,15.87,0,0,0,248,92.68Zm-69.87,92.19L63.32,204l47.37-47.37a28,28,0,1,0-11.32-11.32L52,192.7,71.13,77.86,126,57.29,198.7,130ZM112,132a12,12,0,1,1,12,12A12,12,0,0,1,112,132Zm96-15.32L139.31,48l24-24L232,92.68Z\"/></svg>", "house": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M240,208H224V136l2.34,2.34A8,8,0,0,0,237.66,127L139.31,28.68a16,16,0,0,0-22.62,0L18.34,127a8,8,0,0,0,11.32,11.31L32,136v72H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM48,120l80-80,80,80v88H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48Zm96,88H112V160h32Z\"/></svg>", "cap": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V240a8,8,0,0,0,16,0V199.51a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12ZM128,200c-43.27,0-68.72-21.14-80-33.71V126.4l76.24,40.66a8,8,0,0,0,7.52,0L176,143.47v46.34C163.4,195.69,147.52,200,128,200Zm80-33.75a97.83,97.83,0,0,1-16,14.25V134.93l16-8.53ZM188,118.94l-.22-.13-56-29.87a8,8,0,0,0-7.52,14.12L171,128l-43,22.93L25,96,128,41.07,231,96Z\"/></svg>", "search": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z\"/></svg>", "notebook": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M184,112a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h64A8,8,0,0,1,184,112Zm-8,24H112a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm48-88V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H72V48H48Zm160,0V48H88V208H208Z\"/></svg>", "calendar": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-68-76a12,12,0,1,1-12-12A12,12,0,0,1,140,132Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,132ZM96,172a12,12,0,1,1-12-12A12,12,0,0,1,96,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,140,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,172Z\"/></svg>", "compass": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM172.42,72.84l-64,32a8.05,8.05,0,0,0-3.58,3.58l-32,64A8,8,0,0,0,80,184a8.1,8.1,0,0,0,3.58-.84l64-32a8.05,8.05,0,0,0,3.58-3.58l32-64a8,8,0,0,0-10.74-10.74ZM138,138,97.89,158.11,118,118l40.15-20.07Z\"/></svg>"};
+    let TERMINE = [{"s": "2026-10-15", "t": "Semestereinschreibung FS 2027", "e": "2026-11-30", "a": "Jetzt einschreiben", "u": "https://compass.unisg.ch/termenrollment", "h": 1, "te": "Enrolment spring 2027", "ae": "Enrol now"}, {"s": "2026-11-19", "t": "Bewerbung Partneruni HS27/FS28", "e": "2026-12-10", "st": "00:00", "et": "16:00", "a": "Zur Bewerbung", "u": "https://www.unisg.ch/de/studium/austauschprogramm/outgoing-hsg-studierende/", "h": 1, "te": "Partner uni application AS27/SS28", "ae": "Apply"}, {"s": "2026-11-30", "t": "Anmeldefrist Studienrichtungswechsel HS", "te": "Deadline: change of programme (autumn)"}, {"s": "2026-11-30", "t": "Anmeldefrist Zweitstudium HS", "te": "Deadline: second degree (autumn)"}, {"s": "2026-12-10", "t": "Prüfungsplan mit Räumen", "a": "Prüfungen ansehen", "u": "https://compass.unisg.ch/exams", "h": 1, "te": "Exam schedule with rooms", "ae": "View exams"}, {"s": "2026-12-11", "t": "Versand Semesterrechnung FS 2027", "te": "Semester invoice spring 2027 sent"}, {"s": "2026-12-19", "t": "Ende Lehrbetrieb Herbstsemester", "a": "Letzte Vorlesungswoche", "h": 1, "te": "Autumn lectures end", "ae": "Last week of lectures"}, {"s": "2027-01-15", "t": "Zahlungsfrist Semesterrechnung", "a": "Ohne Zahlung kein Bidding", "h": 1, "te": "Invoice payment deadline", "ae": "No payment, no bidding"}, {"s": "2027-01-15", "t": "Buchhaltungsprüfung Januar", "st": "09:15", "et": "12:15", "te": "Accounting exam January"}, {"s": "2027-01-18", "t": "Zentrale Prüfungen Herbstsemester", "e": "2027-02-20", "a": "Prüfungen ansehen", "u": "https://compass.unisg.ch/exams", "h": 1, "te": "Central exams (autumn)", "ae": "View exams"}, {"s": "2027-01-28", "t": "Noten dezentrale Prüfungen (BA)", "st": "11:00", "a": "Noten ansehen", "u": "https://compass.unisg.ch/achievementgraduations", "h": 1, "te": "Grades: decentral exams", "ae": "View grades"}, {"s": "2027-01-28", "t": "Noten Mid-Terms Herbstsemester", "a": "Noten ansehen", "u": "https://compass.unisg.ch/achievementgraduations", "te": "Grades mid-terms autumn semester", "ae": "View grades"}, {"s": "2027-01-28", "t": "Bidding FS: Vorrunde", "e": "2027-02-04", "st": "15:00", "et": "12:00", "a": "Zum Bidding", "u": "https://compass.unisg.ch/bidding", "h": 1, "te": "Bidding spring: pre-round", "ae": "Go to bidding"}, {"s": "2027-01-31", "t": "Frist Antrag Urlaubssemester FS", "te": "Deadline: leave of absence (spring)"}, {"s": "2027-02-01", "t": "Stipendien, Darlehen und Gebührenerlass FS27", "e": "2027-03-01", "te": "Scholarships, loans and fee waivers SS27"}, {"s": "2027-02-04", "t": "Bidding FS: 1. Hauptrunde", "e": "2027-02-10", "st": "15:00", "et": "12:00", "a": "Zum Bidding", "u": "https://compass.unisg.ch/bidding", "h": 1, "te": "Bidding spring: 1st main round", "ae": "Go to bidding"}, {"s": "2027-02-09", "t": "Noten Buchhaltungsprüfung Januar", "st": "08:00", "a": "Noten ansehen", "u": "https://compass.unisg.ch/achievementgraduations", "te": "Grades accounting exam January", "ae": "View grades"}, {"s": "2027-02-10", "t": "Bidding FS: 2. Hauptrunde", "e": "2027-02-15", "st": "15:00", "et": "12:00", "a": "Zum Bidding", "u": "https://compass.unisg.ch/bidding", "h": 1, "te": "Bidding spring: 2nd main round", "ae": "Go to bidding"}, {"s": "2027-02-15", "t": "Bidding FS: 3. Hauptrunde", "e": "2027-02-18", "st": "15:00", "et": "12:00", "a": "Zum Bidding", "u": "https://compass.unisg.ch/bidding", "h": 1, "te": "Bidding spring: 3rd main round", "ae": "Go to bidding"}, {"s": "2027-02-18", "t": "Bidding FS: 1. Wartelistenrunde", "e": "2027-02-22", "st": "15:00", "et": "12:00", "a": "Zum Bidding", "u": "https://compass.unisg.ch/bidding", "h": 1, "te": "Bidding spring: 1st waitlist round", "ae": "Go to bidding"}, {"s": "2027-02-22", "t": "Start Lehrbetrieb Frühjahrssemester", "a": "Vorlesungen bis 28. Mai", "h": 1, "te": "Spring lectures start", "ae": "Lectures until 28 May"}, {"s": "2027-02-22", "t": "Bidding FS: 2. Wartelistenrunde", "e": "2027-02-26", "st": "14:00", "et": "12:00", "a": "Zum Bidding", "u": "https://compass.unisg.ch/bidding", "te": "Bidding spring: 2nd waitlist round", "ae": "Go to bidding"}, {"s": "2027-02-26", "t": "Bidding FS: 3. Wartelistenrunde", "e": "2027-03-01", "st": "14:00", "et": "12:00", "a": "Zum Bidding", "u": "https://compass.unisg.ch/bidding", "te": "Bidding spring: 3rd waitlist round", "ae": "Go to bidding"}, {"s": "2027-03-01", "t": "Bidding FS: 4. Wartelistenrunde", "e": "2027-03-03", "st": "14:00", "et": "12:00", "a": "Zum Bidding", "u": "https://compass.unisg.ch/bidding", "te": "Bidding spring: 4th waitlist round", "ae": "Go to bidding"}, {"s": "2027-03-03", "t": "Bidding FS: 5. Wartelistenrunde", "e": "2027-03-05", "st": "14:00", "et": "12:00", "a": "Zum Bidding", "u": "https://compass.unisg.ch/bidding", "te": "Bidding spring: 5th waitlist round", "ae": "Go to bidding"}, {"s": "2027-03-04", "t": "Noten zentrale Prüfungen (BA)", "st": "11:00", "a": "Noten ansehen", "u": "https://compass.unisg.ch/achievementgraduations", "h": 1, "te": "Grades: central exams", "ae": "View grades"}, {"s": "2027-03-05", "t": "Frist freiwilliger 2. Versuch FS", "te": "Deadline: voluntary 2nd attempt (spring)"}, {"s": "2027-03-05", "t": "Bidding FS: Kursabmeldephase", "e": "2027-03-19", "st": "14:00", "et": "23:59", "a": "Kurse abmelden", "u": "https://compass.unisg.ch/bidding", "h": 1, "te": "Bidding: course drop phase", "ae": "Drop courses"}, {"s": "2027-03-08", "t": "Prüfungseinsicht zentrale Prüfungen", "e": "2027-03-22", "te": "Exam review central exams"}, {"s": "2027-03-12", "t": "Frist Exmatrikulation per Ende HS", "te": "Deadline: exmatriculation end of autumn"}, {"s": "2027-03-15", "t": "Semestereinschreibung HS 2027", "e": "2027-06-30", "a": "Jetzt einschreiben", "u": "https://compass.unisg.ch/termenrollment", "h": 1, "te": "Enrolment autumn 2027", "ae": "Enrol now"}, {"s": "2027-03-20", "t": "Buchhaltungsprüfung März", "st": "09:15", "et": "12:15", "te": "Accounting exam March"}, {"s": "2027-03-29", "t": "Kostenlose Prüfungsabmeldung FS", "e": "2027-04-12", "a": "Prüfungen verwalten", "u": "https://compass.unisg.ch/exams", "h": 1, "te": "Free exam deregistration (spring)", "ae": "Manage exams"}, {"s": "2027-04-02", "t": "Graduation Day Bachelor", "te": "Graduation Day Bachelor"}, {"s": "2027-04-05", "t": "Semester-Break Frühjahrssemester", "e": "2027-04-18", "h": 1, "te": "Spring semester break"}, {"s": "2027-04-16", "t": "Mid-Term-Prüfungen FS", "e": "2027-04-17", "a": "Prüfungen ansehen", "u": "https://compass.unisg.ch/exams", "h": 1, "te": "Mid-term exams spring", "ae": "View exams"}, {"s": "2027-05-28", "t": "Prüfungsplan FS mit Räumen", "a": "Prüfungen ansehen", "u": "https://compass.unisg.ch/exams", "h": 1, "te": "Spring exam schedule", "ae": "View exams"}, {"s": "2027-05-29", "t": "Ende Lehrbetrieb Frühjahrssemester", "a": "Danach Prüfungsphase", "h": 1, "te": "Spring lectures end", "ae": "Exam period follows"}, {"s": "2027-06-17", "t": "Buchhaltungsprüfung Juni", "st": "09:15", "et": "12:15", "te": "Accounting exam June"}, {"s": "2027-06-21", "t": "Zentrale Prüfungen Frühjahrssemester", "e": "2027-07-24", "a": "Prüfungen ansehen", "u": "https://compass.unisg.ch/exams", "h": 1, "te": "Central exams (spring)", "ae": "View exams"}, {"s": "2027-06-30", "t": "Frist Anmeldung Zusatzqualifikationen", "te": "Deadline: additional qualifications"}, {"s": "2027-07-08", "t": "Noten dezentrale Prüfungen FS (BA)", "st": "11:00", "a": "Noten ansehen", "u": "https://compass.unisg.ch/achievementgraduations", "h": 1, "te": "Grades: decentral exams", "ae": "View grades"}, {"s": "2027-07-21", "t": "Versand Semesterrechnung HS 2027", "te": "Semester invoice autumn 2027 sent"}, {"s": "2027-08-12", "t": "Noten zentrale Prüfungen FS (BA)", "st": "11:00", "a": "Noten ansehen", "u": "https://compass.unisg.ch/achievementgraduations", "h": 1, "te": "Grades: central exams", "ae": "View grades"}, {"s": "2027-08-13", "t": "Zahlungsfrist Semesterrechnung HS", "a": "Semesterrechnung HS 2027", "h": 1, "te": "Invoice payment deadline", "ae": "Autumn 2027 invoice"}];   // fallback; termine.json (from tools/update-termine.py) replaces it below
+    // Club events for the "Events diese Woche" card: { date:'2027-02-24', time:'18:30', title, org, url, featured }
+    const EVENTS = [
+      { date:'2026-11-28', time:'20:00', title:'Edb: Dominic Album Release Show', org:'Amplify', url:'https://uniclubs.ch/hsg/clubs/amplify/events/edb-dominic-album-release-show' },
+      { date:'2026-11-30', time:'19:00', title:'Czech Quiz & Game Night x IMUN', org:'Czech & Slovak Union', url:'https://uniclubs.ch/hsg/clubs/czech-slovak-union/events/czech-quiz-game-night-x-imun' },
+      { date:'2026-11-30', time:'20:10', title:'Improvisation Workshop', org:'Toastmasters St. Gallen', url:'https://uniclubs.ch/hsg/clubs/toastmasters/events/improvisation-workshop-at-toastmasters-st-gallen' },
+      { date:'2026-12-01', time:'14:30', title:'Workshop M&A / Private Banking', org:'Cercle des Francophones', url:'https://uniclubs.ch/hsg/clubs/cercle-des-francophones/events/workshop-m-a-i-private-banking' },
+      { date:'2026-12-01', time:'18:00', title:'Cracking the Case Interview', org:'Consulting Club', url:'https://uniclubs.ch/hsg/clubs/consulting-club/events/cracking-the-case-interview' }
+    ];
+    const QUICK_KEY = 'sgunihub-quick-v1', TODO_KEY = 'sgunihub-todos-v1';
+    const QUICK_DEFAULT = ['Compass','myHSG','Canvas','Courses','Biddit','Studienplan','Drucker','Mensa'];
+    const DAY = 86400000;
+    const L = () => (lang === 'en' ? 'en' : 'de');
+    const tx = (de, en) => `data-de="${escDesc(de)}" data-en="${escDesc(en == null ? de : en)}"`;
+    const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const store = { get(k, d){ try{ const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }catch(e){ return d; } },
+                    set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+
+    // Tools by name (deal duplicates such as Ecoreps are skipped: the tool entry wins).
+    const TOOLS = new Map(), CAT_OF = new Map();
+    DATA.forEach(cat => { if(cat.special) return; cat.items.forEach(it => { if(!TOOLS.has(it.name)){ TOOLS.set(it.name, it); CAT_OF.set(it.name, cat); } }); });
+    const DEALS = (DATA.find(c => c.special === 'deals') || { items:[] }).items;
+    const PARTNERS = ['Orell Füssli','Ecoreps','ready','Delta Lektorat'];
+    const CATS = [
+      { k:'studium', de:'Studium', en:'Study', subDe:'Die wichtigsten Portale zuerst, danach Planung, Campus und was einmal pro Semester ansteht.', subEn:'The key portals first, then planning, campus life and what comes up once a semester.',
+        items:['Compass','myHSG','Canvas','Courses','Prüfungen','Noten','Studienplan','Biddit','Room Booking','Drucker','Mensa','Unisport','Bidding','Semestereinschreibung'] },
+      { k:'community', from:'Community & Medien', de:'Community', en:'Community', extra:['Club-Übersicht'] },
+      { k:'events', from:'Events & Grossclubs', de:'Events', en:'Events' },
+      { k:'karriere', from:'Karriere', de:'Karriere', en:'Career' },
+      { k:'lernen', from:'Lernen & Prüfungsvorbereitung', de:'Lernen', en:'Learning' },
+      { k:'thesis', from:'Abschlussarbeit', de:'Abschlussarbeit', en:'Thesis' },
+      { k:'wohnen', from:'Wohnungssuche', de:'Wohnen', en:'Housing' },
+      { k:'rabatte', from:'Rabatte & Vergünstigungen', de:'Rabatte', en:'Perks' }
+    ];
+    CATS.forEach(c => {
+      if(!c.from) return;
+      const src = DATA.find(d => d.de === c.from);
+      c.subDe = src ? src.subDe : ''; c.subEn = src ? src.subEn : '';
+      c.items = src ? src.items.map(i => i.name).filter(n => !(c.extra || []).includes(n)) : [];
+      if(c.extra) c.items.splice(1, 0, ...c.extra);
+      c.anchor = src && src.anchor;
+    });
+    CATS.forEach(c => { c.items = c.items.filter(n => TOOLS.has(n)); });
+    const catLabel = name => { const c = CATS.find(c => c.items.includes(name)); return c ? [c.de, c.en] : ['', '']; };
+
+    const url = it => (L() === 'en' && it.urlEn) ? it.urlEn : it.url;
+    const host = t => !t ? '' : (t.length <= 30 ? t : t.split('/')[0]);
+    const icon = it => it.icon || (it.name === 'ready' ? IC.notebook : `<span>${monogram(it.name)}</span>`);
+    const nm = it => tx(it.name, it.nameEn || it.name);
+
+    function toolHTML(it, extraClass){
+      const id = slug(it.name);
+      return `<a class="d2-tool ${extraClass || ''}" href="${url(it)}" target="_blank" rel="noopener" data-goatcounter-click="tool-${id}"${it.promo ? ` data-promo-code="${it.promo.code}"` : ''}>
+        <span class="d2-ico" aria-hidden="true">${icon(it)}</span>
+        ${it.promo ? `<span class="d2-badge">${it.promo.value}</span>` : ''}
+        <span style="min-width:0"><span class="d2-name" ${nm(it)}></span><span class="d2-host">${esc(host(it.tag))}</span></span>
+        <span class="d2-tip"><strong ${nm(it)}></strong><span class="tile-desc" ${tx(it.de, it.en)}></span></span>
+      </a>`;
+    }
+
+    // ---------- Quick access (swappable) ----------
+    let quick = store.get(QUICK_KEY, QUICK_DEFAULT).filter(n => TOOLS.has(n));
+    QUICK_DEFAULT.forEach(n => { if(quick.length < 8 && !quick.includes(n)) quick.push(n); });
+    quick = quick.slice(0, 8);
+    let picking = -1;
+    function renderQuick(){
+      $('d2Quick').innerHTML = quick.map((n, i) => `<div class="d2-qa" data-q="${escDesc(n)}">${toolHTML(TOOLS.get(n))}
+        <button type="button" class="d2-swap" data-swap="${i}" data-de-title="${escDesc(n)} ersetzen" data-en-title="Replace ${escDesc(TOOLS.get(n).nameEn || n)}">${IC.swap}</button></div>`).join('');
+    }
+    function renderPick(){
+      const q = $('d2PickSearch').value.trim().toLowerCase();
+      const names = [...TOOLS.keys()].filter(n => !quick.includes(n) && (!q || (n + ' ' + (TOOLS.get(n).nameEn || '') + ' ' + catLabel(n).join(' ')).toLowerCase().includes(q)));
+      $('d2PickList').innerHTML = names.map(n => { const it = TOOLS.get(n), c = catLabel(n);
+        return `<button type="button" data-pick="${escDesc(n)}"><span class="d2-ico" aria-hidden="true">${icon(it)}</span><span><b ${nm(it)}></b><small ${tx(c[0], c[1])}></small></span></button>`; }).join('');
+      applyLang(lang);
+    }
+    function openPick(i){
+      picking = i;
+      const it = TOOLS.get(quick[i]);
+      $('d2ModalTitle').dataset.de = `${it.name} ersetzen durch`;
+      $('d2ModalTitle').dataset.en = `Replace ${it.nameEn || it.name} with`;
+      $('d2PickSearch').value = '';
+      $('d2Modal').hidden = false;
+      renderPick();
+      $('d2PickSearch').focus();
+    }
+    const closePick = () => { $('d2Modal').hidden = true; picking = -1; };
+    $('d2Quick').addEventListener('click', e => { const b = e.target.closest('[data-swap]'); if(!b) return; e.preventDefault(); openPick(+b.dataset.swap); });
+    $('d2PickList').addEventListener('click', e => {
+      const b = e.target.closest('[data-pick]'); if(!b || picking < 0) return;
+      quick[picking] = b.dataset.pick; store.set(QUICK_KEY, quick); trackEvent('quick-swap-' + slug(b.dataset.pick));
+      closePick(); renderQuick(); applyLang(lang);
+    });
+    $('d2PickSearch').addEventListener('input', renderPick);
+    $('d2ModalClose').addEventListener('click', closePick);
+    $('d2Modal').addEventListener('click', e => { if(e.target === $('d2Modal')) closePick(); });
+    document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('d2Modal').hidden) closePick(); });
+
+    // ---------- Drag to reorder quick tiles ----------
+    // Mouse: drag after a few pixels. Touch: long press (350 ms) so normal
+    // scrolling keeps working. Neighbours slide into place (FLIP animation).
+    (function(){
+      const grid = $('d2Quick');
+      let drag = null, justDragged = false;
+      const inside = (r, x, y) => x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+      grid.addEventListener('dragstart', e => e.preventDefault());
+      grid.addEventListener('contextmenu', e => { if(drag) e.preventDefault(); });
+      grid.addEventListener('pointerdown', e => {
+        if(e.button !== 0 || e.target.closest('[data-swap]')) return;
+        const el = e.target.closest('.d2-qa'); if(!el) return;
+        drag = { el, id:e.pointerId, x:e.clientX, y:e.clientY, on:false, touch:e.pointerType !== 'mouse', timer:null };
+        if(drag.touch) drag.timer = setTimeout(() => { if(drag && !drag.on) start(); }, 350);
+      });
+      function start(){
+        drag.on = true;
+        const r = drag.el.getBoundingClientRect();
+        drag.ox = drag.x - r.left; drag.oy = drag.y - r.top;
+        drag.el.classList.add('d2-dragging'); grid.classList.add('d2-sorting');
+        try{ drag.el.setPointerCapture(drag.id); }catch(err){}
+        if(drag.touch && navigator.vibrate) navigator.vibrate(10);
+      }
+      function follow(x, y){
+        const el = drag.el; el.style.transform = '';
+        const r = el.getBoundingClientRect();
+        el.style.transform = `translate(${x - drag.ox - r.left}px, ${y - drag.oy - r.top}px) scale(1.04)`;
+      }
+      document.addEventListener('pointermove', e => {
+        if(!drag || e.pointerId !== drag.id) return;
+        if(!drag.on){
+          const moved = Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 6;
+          if(drag.touch){ if(moved){ clearTimeout(drag.timer); drag = null; } return; }
+          if(!moved) return;
+          start();
+        }
+        e.preventDefault();
+        const kids = [...grid.children];
+        const over = kids.find(k => k !== drag.el && !k.getAnimations().length && inside(k.getBoundingClientRect(), e.clientX, e.clientY));
+        if(over){
+          const from = kids.indexOf(drag.el), to = kids.indexOf(over);
+          const before = new Map(kids.map(k => [k, k.getBoundingClientRect()]));
+          grid.insertBefore(drag.el, from < to ? over.nextSibling : over);
+          kids.forEach(k => {
+            if(k === drag.el) return;
+            const a = before.get(k), b = k.getBoundingClientRect();
+            if(a.left !== b.left || a.top !== b.top)
+              k.animate([{ transform:`translate(${a.left - b.left}px, ${a.top - b.top}px)` }, { transform:'none' }], { duration:180, easing:'ease-out' });
+          });
+        }
+        follow(e.clientX, e.clientY);
+      }, { passive:false });
+      document.addEventListener('touchmove', e => { if(drag && drag.on) e.preventDefault(); }, { passive:false });
+      function end(e){
+        if(!drag || e.pointerId !== drag.id) return;
+        clearTimeout(drag.timer);
+        if(drag.on){
+          const el = drag.el;
+          const r0 = el.getBoundingClientRect(); el.style.transform = ''; const r1 = el.getBoundingClientRect();
+          el.classList.remove('d2-dragging'); grid.classList.remove('d2-sorting');
+          el.animate([{ transform:`translate(${r0.left - r1.left}px, ${r0.top - r1.top}px)` }, { transform:'none' }], { duration:160, easing:'ease-out' });
+          const order = [...grid.children].map(k => k.dataset.q);
+          grid.querySelectorAll('[data-swap]').forEach((b, i) => { b.dataset.swap = i; });
+          if(order.join('|') !== quick.join('|')){ quick = order; store.set(QUICK_KEY, quick); trackEvent('quick-reorder'); }
+          justDragged = true; setTimeout(() => { justDragged = false; }, 400);
+        }
+        drag = null;
+      }
+      document.addEventListener('pointerup', end);
+      document.addEventListener('pointercancel', end);
+      grid.addEventListener('click', e => { if(justDragged){ e.preventDefault(); e.stopPropagation(); justDragged = false; } }, true);
+    })();
+
+    // ---------- Greeting + semester week ----------
+    function renderGreeting(){
+      const now = new Date(), h = now.getHours(), en = L() === 'en';
+      $('d2Hello').textContent = en ? (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') : (h < 11 ? 'Guten Morgen' : h < 17 ? 'Guten Tag' : 'Guten Abend');
+      $('d2Date').textContent = now.toLocaleDateString(en ? 'en-GB' : 'de-CH', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+      const teach = TERMINE.filter(x => /^(Start|Ende) Lehrbetrieb/.test(x.t)).map(x => ({ start:/^Start/.test(x.t), d:new Date(x.s + 'T00:00') }));
+      // Semester = from a teaching start (HS 2026: 14.09.2026) to the next teaching end.
+      const starts = [new Date('2026-09-14T00:00'), ...teach.filter(t => t.start).map(t => t.d)];
+      const ends = teach.filter(t => !t.start).map(t => t.d);
+      let label, sub, pct = 100;
+      const cur = starts.filter(s => s <= now).pop();
+      const end = cur && ends.find(e => e >= cur);
+      if(cur && end && now <= end){
+        const total = Math.round((end - cur) / DAY / 7), wk = Math.min(total, Math.floor((now - cur) / DAY / 7) + 1);
+        pct = Math.round(wk / total * 100);
+        label = en ? `Semester week ${wk} of ${total}` : `Semesterwoche ${wk} von ${total}`;
+        const endS = end.toLocaleDateString(en ? 'en-GB' : 'de-CH', { day:'numeric', month:'long' });
+        sub = en ? `Lectures until ${endS}` : `Vorlesungen bis ${endS}`;
+      } else {
+        const next = starts.find(s => s > now);
+        label = en ? 'Lecture-free period' : 'Vorlesungsfreie Zeit';
+        sub = next ? (en ? 'Next start: ' : 'Nächster Start: ') + next.toLocaleDateString(en ? 'en-GB' : 'de-CH', { day:'numeric', month:'long' }) : '';
+      }
+      $('d2WeekLabel').textContent = label; $('d2WeekSub').textContent = sub; $('d2WeekBar').style.width = pct + '%';
+    }
+
+    // ---------- Coming up ----------
+    function renderNext(){
+      const now = new Date(), en = L() === 'en', loc = en ? 'en-GB' : 'de-CH';
+      const dm = d => d.toLocaleDateString(loc, { day:'numeric', month:'long' });
+      const items = TERMINE.filter(x => x.h).map(x => {
+        const st = new Date(x.s + 'T' + (x.st || '00:00'));
+        const en2 = new Date((x.e || x.s) + 'T' + (x.et || ((x.e || !x.st) ? '23:59' : x.st)));
+        return { x, st, en2 };
+      }).filter(o => o.en2 >= now).slice(0, 4);
+      $('d2Next').innerHTML = items.map(({ x, st, en2 }) => {
+        const running = st <= now, ref = running ? en2 : st, n = Math.ceil((ref - now) / DAY);
+        const when = running ? '' : (x.e ? dm(st) + (en ? ' to ' : ' bis ') + dm(en2) : (x.st ? dm(st) + ', ' + x.st : ''));
+        const left = running ? (n <= 0 ? (en ? 'ends today' : 'endet heute') : n === 1 ? (en ? 'ends tomorrow' : 'endet morgen') : (en ? `${n}d left` : `noch ${n} T.`))
+                             : (n <= 0 ? (en ? 'today' : 'heute') : n === 1 ? (en ? 'tomorrow' : 'morgen') : (en ? `in ${n}d` : `in ${n} T.`));
+        const cls = n <= 7 ? 'warn' : running ? 'run' : '';
+        const action = (en ? x.ae : x.a) || '';
+        const line = x.u ? `<a href="${x.u}" target="_blank" rel="noopener" data-goatcounter-click="next-${slug(x.t)}">${esc(action)}</a>${when ? `<span> · ${esc(when)}</span>` : ''}`
+                         : `<span>${esc(action)}${action && when && x.e ? ' · ' + esc(when) : (!action ? esc(when) : '')}</span>`;
+        return `<div class="d2-row"><div class="d2-date"><small>${ref.toLocaleDateString(loc, { month:'short' }).replace('.', '')}</small><b>${ref.getDate()}</b></div>
+          <div class="d2-rt"><b>${esc(en ? x.te : x.t)}</b>${line}</div><span class="d2-chip ${cls}">${left}</span></div>`;
+      }).join('');
+    }
+
+    // ---------- To-dos (stored in this browser only) ----------
+    let todos = store.get(TODO_KEY, []);
+    function renderTodos(){
+      $('d2Todos').innerHTML = todos.length ? todos.map(t => `<div class="d2-todo${t.done ? ' done' : ''}">
+          <input type="checkbox" id="d2t${t.id}" data-todo="${t.id}"${t.done ? ' checked' : ''}>
+          <label for="d2t${t.id}">${esc(t.text)}</label>
+          <button type="button" class="d2-x" data-del="${t.id}" data-de-title="Entfernen" data-en-title="Remove">${IC.close}</button></div>`).join('')
+        : `<p class="d2-empty" ${tx('Noch nichts geplant. Deine ToDos bleiben nur in diesem Browser gespeichert.', 'Nothing planned yet. Your to-dos are only saved in this browser.')}></p>`;
+    }
+    $('d2Todos').addEventListener('change', e => { const id = +e.target.dataset.todo; if(!id) return;
+      todos = todos.map(t => t.id === id ? { ...t, done: !t.done } : t); store.set(TODO_KEY, todos); renderTodos(); applyLang(lang); });
+    $('d2Todos').addEventListener('click', e => { const b = e.target.closest('[data-del]'); if(!b) return;
+      todos = todos.filter(t => t.id !== +b.dataset.del); store.set(TODO_KEY, todos); renderTodos(); applyLang(lang); });
+    $('d2TodoForm').addEventListener('submit', e => { e.preventDefault(); const v = $('d2TodoInput').value.trim(); if(!v) return;
+      todos.push({ id: Date.now(), text: v.slice(0, 120), done: false }); store.set(TODO_KEY, todos); $('d2TodoInput').value = ''; renderTodos(); applyLang(lang); });
+
+    // ---------- Events + jobs ----------
+    function renderEvents(){
+      const now = new Date(), wk = new Date(now.getTime() + 7 * DAY), en = L() === 'en';
+      const list = EVENTS.filter(ev => { const d = new Date(ev.date + 'T23:59'); return d >= now && d <= wk; }).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time)).slice(0, 4);
+      $('d2Events').innerHTML = list.length ? list.map(ev => { const d = new Date(ev.date + 'T00:00');
+        return `<a class="d2-ev" style="display:block;color:var(--text);text-decoration:none" href="${ev.url || 'https://uniclubs.ch/'}" target="_blank" rel="noopener" data-goatcounter-click="event-${slug(ev.title)}">
+          <small><span>${d.toLocaleDateString(en ? 'en-GB' : 'de-CH', { weekday:'short', day:'numeric', month:'short' })}${ev.time ? ' · ' + ev.time : ''}</span>${ev.featured ? '<span>Featured</span>' : ''}</small>
+          <b>${esc(ev.title)} <span>· ${esc(ev.org)}</span></b></a>`; }).join('')
+        : `<p class="d2-empty" ${tx('Diese Woche sind hier noch keine Events eingetragen. Dein Club möchte hier erscheinen? Melde dich.', 'No events listed here this week yet. Want your club to show up here? Get in touch.')}></p>`;
+    }
+    function renderJobs(){
+      const jobs = activeJobs().slice(0, 2);
+      $('d2Jobs').innerHTML = jobs.length ? jobs.map(j => `<a class="d2-job" href="${j.url}" target="_blank" rel="noopener" data-goatcounter-click="${j.track}">
+          <span class="d2-ico" aria-hidden="true">${IC.briefcase}</span>
+          <span style="min-width:0"><b ${tx(j.titleDe, j.titleEn)}></b><span>${esc(j.company)} · <span style="display:inline;margin:0" ${tx(j.metaDe.join(' · '), j.metaEn.join(' · '))}></span></span></span></a>`).join('')
+        : `<p class="d2-empty" ${tx('Gerade keine offenen Stellen. Unternehmen können hier inserieren.', 'No open positions right now. Companies can post here.')}></p>`;
+    }
+
+    // ---------- Deals ----------
+    function renderDeals(){
+      $('d2Deals').innerHTML = DEALS.map(it => { const id = slug(it.name);
+        return `<a class="d2-tool d2-deal" href="${it.url}" target="_blank" rel="noopener" data-goatcounter-click="deal-${id}"${it.copyCode ? ` data-promo-code="${it.copyCode}"` : ''}>
+          ${PARTNERS.includes(it.name) ? '<span class="d2-partner">Partner</span>' : ''}
+          <span class="d2-val" ${tx(it.valueDe, it.valueEn)}></span>
+          <span class="d2-name">${esc(it.name)}</span>
+          <span class="d2-host">${it.copyCode ? 'Code ' + esc(it.copyCode) : esc(it.sub || it.tag)}</span>
+          <span class="d2-tip"><strong>${esc(it.name)}</strong><span class="tile-desc" ${tx(it.de, it.en)}></span></span></a>`; }).join('');
+    }
+
+    // ---------- All tools (tabs) ----------
+    let tab = 'studium';
+    function cols(n){
+      if(n <= 5) return n;
+      for(let c = 7; c >= 3; c--) if(n % c === 0 && n / c >= 2) return c;
+      return n;
+    }
+    function renderTools(){
+      const cat = CATS.find(c => c.k === tab);
+      $('d2Tabs').innerHTML = CATS.map(c => `<button type="button" role="tab" aria-selected="${c.k === tab}" class="${c.k === tab ? 'on' : ''}" data-tab="${c.k}" ${tx(c.de, c.en)}></button>`).join('');
+      $('d2CatSub').dataset.de = cat.subDe; $('d2CatSub').dataset.en = cat.subEn;
+      $('d2Tools').style.gridTemplateColumns = `repeat(${cols(cat.items.length)}, minmax(0,1fr))`;
+      $('d2Tools').innerHTML = cat.items.map(n => toolHTML(TOOLS.get(n))).join('');
+    }
+    $('d2Tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if(!b) return; tab = b.dataset.tab; renderTools(); applyLang(lang); trackEvent('tools-tab-' + tab); });
+
+    // Old deep links (e.g. sgunihub.ch/#lernen from the newsletter) open the matching tab.
+    function deepLink(){
+      const h = (location.hash || '').slice(1);
+      const c = CATS.find(c => c.anchor === h || c.k === h);
+      if(!c) return;
+      tab = c.k; renderTools(); applyLang(lang);
+      setTimeout(() => $('tools').scrollIntoView({ behavior:'smooth', block:'start' }), 200);
+    }
+    window.addEventListener('hashchange', deepLink);
+
+    $('d2ToCal').addEventListener('click', () => $('d2Always').scrollIntoView({ behavior:'smooth', block:'start' }));
+
+    // Header: DE/EN switch + search field (opens the existing search modal).
+    function syncLangButtons(){ document.querySelectorAll('[data-lang-set]').forEach(b => b.classList.toggle('on', b.dataset.langSet === L())); }
+    document.querySelectorAll('[data-lang-set]').forEach(b => b.addEventListener('click', () => {
+      if(b.dataset.langSet === lang) return;
+      lang = b.dataset.langSet; applyLang(lang); renderAll(); applyLang(lang); syncLangButtons();
+    }));
+    const field = $('d2SearchField');
+    if(field){
+      const hand = () => { openSearchModal(); searchInput.value = field.value; renderSearchResults(searchInput.value); field.value = ''; };
+      field.addEventListener('input', hand);
+      field.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); hand(); } });
+    }
+
+    // Chrome extension card: live link once the store listing exists; inside the
+    // page opened by the extension it just confirms that it's already active.
+    // Store links per browser. Empty = not published yet ("Bald verfügbar").
+    const STORE = {
+      firefox: '', // https://addons.mozilla.org/firefox/addon/sg-unihub/ once approved
+      chrome: 'https://chromewebstore.google.com/detail/obfhjmonikoneiohobfocenglgnaeepl',
+      edge: ''
+    };
+    // Safari (Mac) and iPhone/iPad: no extension, just a short how-to that can be
+    // ticked off with "Verstanden". The card stays (so the row keeps 3 cards) and
+    // switches to a small done state that can show the steps again.
+    function safariCard(ios, t, b, h){
+      const KEY = 'sgunihub-safari-hint-v1';
+      const steps = ios ? [
+        ['Tippe in Safari auf das Teilen-Symbol (bei neuem iOS im Menü mit den drei Punkten).', 'In Safari, tap the Share icon (on newer iOS it sits in the three-dot menu).'],
+        ['Wähle "Zum Home-Bildschirm".', 'Choose "Add to Home Screen".'],
+        ['Tippe auf "Hinzufügen". Fertig, sg/unihub öffnet sich jetzt wie eine App.', 'Tap "Add". Done, sg/unihub now opens like an app.']
+      ] : [
+        ['Drücke in Safari Cmd + Komma und öffne den Tab "Allgemein" (Englisch: "General").', 'In Safari, press Cmd + comma and open the "General" tab.'],
+        ['Stelle "Safari öffnen mit" auf "Einem neuen Fenster" und "Neue Fenster öffnen mit" auf "Startseite" (Englisch: "Homepage").', 'Set "Safari opens with" to "A new window" and "New windows open with" to "Homepage".'],
+        ['Trage bei "Startseite" bzw. "Homepage" sgunihub.ch ein. Neue Tabs bleiben ganz normal.', 'Enter sgunihub.ch as "Homepage". New tabs stay just as they are.']
+      ];
+      const ol = document.createElement('ol'); ol.className = 'd2-steps';
+      steps.forEach(([de, en]) => { const li = document.createElement('li'); li.dataset.de = de; li.dataset.en = en; ol.appendChild(li); });
+      t.after(ol);
+      b.removeAttribute('href'); b.removeAttribute('target'); b.removeAttribute('aria-disabled');
+      b.setAttribute('role', 'button'); b.tabIndex = 0; b.classList.add('ghost');
+      const standalone = ios && (navigator.standalone || matchMedia('(display-mode: standalone)').matches);
+      const paint = done => {
+        ol.hidden = done;
+        if(done){
+          h.dataset.de = ios ? 'sg/unihub auf dem Home-Bildschirm' : 'sg/unihub als Startseite';
+          h.dataset.en = ios ? 'sg/unihub on your home screen' : 'sg/unihub as your homepage';
+          t.dataset.de = 'Erledigt, danke! Die Anleitung findest du hier jederzeit wieder.';
+          t.dataset.en = 'All set, thanks! You can bring the steps back here any time.';
+          b.dataset.de = 'Anleitung zeigen'; b.dataset.en = 'Show steps';
+          b.dataset.goatcounterClick = 'safari-hint-show';
+        } else {
+          h.dataset.de = ios ? 'sg/unihub wie eine App' : 'sg/unihub beim Safari-Start';
+          h.dataset.en = ios ? 'sg/unihub like an app' : 'sg/unihub when Safari starts';
+          t.dataset.de = ios ? 'In drei Schritten auf deinem Home-Bildschirm, ganz ohne App Store:' : 'Für Safari gibt es keine Erweiterung, aber die Startseite geht in drei Schritten:';
+          t.dataset.en = ios ? 'On your home screen in three steps, no App Store needed:' : "There's no Safari extension, but setting the homepage takes three steps:";
+          b.dataset.de = 'Verstanden'; b.dataset.en = 'Got it';
+          b.dataset.goatcounterClick = ios ? 'ios-hint-ok' : 'safari-hint-ok';
+        }
+        applyLang(lang);
+      };
+      const toggle = () => { const done = ol.hidden ? false : true; store.set(KEY, done); paint(done); };
+      b.addEventListener('click', toggle);
+      b.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); } });
+      paint(standalone || store.get(KEY, false) === true);
+    }
+    (function(){
+      const t = $('d2ChromeText'), b = $('d2ChromeBtn'), h = $('d2ChromeTitle');
+      const ua = navigator.userAgent;
+      const ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+      const safari = !ios && /Safari\//.test(ua) && !/Chrome|Chromium|Edg\/|OPR\/|Firefox\//.test(ua);
+      if(ios || safari){ safariCard(ios, t, b, h); return; }
+      const br = /Firefox\//.test(ua) ? 'firefox' : /Edg\//.test(ua) ? 'edge' : 'chrome';
+      const NAME = { firefox:'Firefox', edge:'Edge', chrome:'Chrome' }[br];
+      h.dataset.de = `Direkt beim ${NAME}-Start`; h.dataset.en = `Right when ${NAME} starts`;
+      t.dataset.de = `Die Erweiterung öffnet sg/unihub als ersten Tab, wenn du ${NAME} startest. Neue Tabs bleiben ganz normal.` + (STORE[br] ? ' Kostenlos, ohne Zugriff auf deine Daten.' : ' Für ' + NAME + ' ist sie bald verfügbar.');
+      t.dataset.en = `The extension opens sg/unihub as your first tab when ${NAME} starts. New tabs stay just as they are.` + (STORE[br] ? ' Free, with no access to your data.' : ' Coming soon for ' + NAME + '.');
+      if(SGU_NEWTAB){
+        t.dataset.de = 'Du nutzt die sg/unihub-Erweiterung bereits. Danke!'; t.dataset.en = "You're already using the sg/unihub extension. Thanks!";
+        b.dataset.de = 'Aktiv'; b.dataset.en = 'Active'; b.removeAttribute('href');
+      } else if(STORE[br]){
+        b.href = STORE[br]; b.removeAttribute('aria-disabled'); b.dataset.goatcounterClick = 'extension-' + br;
+        b.dataset.de = `Zu ${NAME} hinzufügen`; b.dataset.en = `Add to ${NAME}`;
+      }
+    })();
+
+    // Calendar links point at the .ics next to this page (so /beta/ uses /beta/hsg-fristen.ics).
+    (function(){
+      if(!/^https?:$/.test(location.protocol)) return;
+      const ics = new URL('hsg-fristen.ics', location.href);
+      const webcal = 'webcal://' + ics.host + ics.pathname;
+      $('d2CalSub').href = webcal;
+      $('d2CalGoogle').href = 'https://calendar.google.com/calendar/render?cid=' + encodeURIComponent(webcal);
+    })();
+
+    function renderAll(){ renderGreeting(); renderQuick(); renderNext(); renderTodos(); renderEvents(); renderJobs(); renderDeals(); renderTools(); }
+    renderAll(); applyLang(lang); syncLangButtons(); deepLink();
+    fetch('termine.json', { cache:'no-cache' }).then(r => r.ok ? r.json() : null).then(d => {
+      if(Array.isArray(d) && d.length){ TERMINE = d; renderGreeting(); renderNext(); applyLang(lang); }
+    }).catch(() => {});
+    setInterval(() => { renderGreeting(); renderNext(); applyLang(lang); }, 10 * 60 * 1000);
+  })();
+
   if ('serviceWorker' in navigator) {
     const versionIn = (text) => (text.match(/Eloori Interactive · (v[\d.]+)/) || [])[1];
     const reloadOnceFor = (latest) => {
