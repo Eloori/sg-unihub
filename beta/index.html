@@ -1239,7 +1239,7 @@
   .d2-pick button:hover{ border-color:var(--accent); }
   .d2-pick .d2-ico{ width:32px; height:32px; }
   .d2-pick .d2-ico svg{ width:18px; height:18px; }
-  .d2-pick b{ display:block; font-size:.85rem; }
+  .d2-pick b{ display:block; font-size:.85rem; overflow-wrap:anywhere; }
   .d2-pick small{ display:block; font-size:.72rem; color:var(--text-2); }
   .d2-pickview{ display:flex; flex-direction:column; gap:12px; flex:1; min-height:0; }
   .d2-pickview > .d2-input{ flex:none; }
@@ -1465,7 +1465,7 @@
             <button type="button" class="ctrl-btn" id="d2ModalClose" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button>
           </div>
           <div class="d2-pickview" id="d2PickView">
-            <input class="d2-input" type="search" id="d2PickSearch" autocomplete="off" aria-label="Tool" data-de-ph="Tool suchen" data-en-ph="Search tools">
+            <input class="d2-input" type="search" id="d2PickSearch" maxlength="40" autocomplete="off" aria-label="Tool" data-de-ph="Tool suchen" data-en-ph="Search tools">
             <div class="d2-pick" id="d2PickList"></div>
           </div>
           <form class="d2-addform" id="d2AddForm" hidden novalidate>
@@ -4814,9 +4814,10 @@ SOFTWARE.`;
     }
     function renderPick(){
       const raw = $('d2PickSearch').value.trim(), q = raw.toLowerCase();
+      const shown = raw.length > 22 ? raw.slice(0, 20).trim() + '...' : raw;
       const names = [...TOOLS.keys()].filter(n => !quick.includes(n) && (!q || (n + ' ' + (TOOLS.get(n).nameEn || '') + ' ' + catLabel(n).join(' ')).toLowerCase().includes(q)));
       names.sort((a, b) => (TOOLS.get(b).custom ? 1 : 0) - (TOOLS.get(a).custom ? 1 : 0));
-      const add = `<button type="button" class="d2-add" data-addlink><span class="d2-ico" aria-hidden="true">${IC.plus}</span><span><b ${tx(raw ? `"${raw}" als eigenen Link hinzufügen` : 'Eigenen Link hinzufügen', raw ? `Add "${raw}" as your own link` : 'Add your own link')}></b><small ${tx('Name, Link und Symbol wählen', 'Pick a name, link and icon')}></small></span></button>`;
+      const add = `<button type="button" class="d2-add" data-addlink><span class="d2-ico" aria-hidden="true">${IC.plus}</span><span><b ${tx(raw ? `"${shown}" als eigenen Link hinzufügen` : 'Eigenen Link hinzufügen', raw ? `Add "${shown}" as your own link` : 'Add your own link')}></b><small ${tx('Name, Link und Symbol wählen', 'Pick a name, link and icon')}></small></span></button>`;
       const empty = q && !names.length ? `<p class="d2-pickempty" ${tx('Dieses Tool gibt es auf sg/unihub noch nicht. Füge es einfach selbst hinzu:', "This tool isn't on sg/unihub yet. Just add it yourself:")}></p>` : '';
       $('d2PickList').innerHTML = empty + (q && !names.length ? add : '') + names.map(n => { const it = TOOLS.get(n), c = it.custom ? ['Eigener Link', 'Your own link'] : catLabel(n);
         const btn = `<button type="button" data-pick="${escDesc(n)}"><span class="d2-ico" aria-hidden="true">${icon(it)}</span><span><b ${nm(it)}></b><small ${tx(c[0], c[1])}></small></span></button>`;
