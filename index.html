@@ -1251,10 +1251,11 @@
   .d2-pick .d2-del:hover{ color:#d14343; background:var(--accent-soft); }
   .d2-pick .d2-del svg{ width:14px; height:14px; }
   .d2-pickempty{ grid-column:1/-1; margin:2px 0 4px; font-size:.85rem; color:var(--text-2); }
-  .d2-addform{ display:flex; flex-direction:column; gap:12px; overflow:auto; }
+  .d2-addform{ display:flex; flex-direction:column; gap:12px; overflow:auto; padding:4px; margin:-4px; }
   .d2-addform[hidden]{ display:none; }
   .d2-addform label{ display:flex; flex-direction:column; gap:6px; font-size:.8rem; font-weight:700; color:var(--text-2); }
-  .d2-addform .d2-input{ flex:none; width:100%; }
+  .d2-addform .d2-input{ flex:none; width:100%; min-height:40px; font-size:.86rem; }
+  .d2-addform .d2-input:focus, .d2-pickview > .d2-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
   .d2-addlbl{ display:block; font-size:.8rem; font-weight:700; color:var(--text-2); margin-bottom:6px; }
   .d2-icopick{ display:flex; flex-wrap:wrap; gap:6px; }
   .d2-icopick button{ width:40px; height:40px; border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--text); display:grid; place-items:center; cursor:pointer; padding:0; font:inherit; font-weight:800; font-size:.8rem; }
