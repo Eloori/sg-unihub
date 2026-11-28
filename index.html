@@ -1170,7 +1170,8 @@
   @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .d2-chip.warn{ color:#FDBA74; } :root:not([data-theme="light"]) .d2-chip.run{ color:#2DD9C4; } }
   .d2-linkbtn{ margin-top:auto; padding:10px 0 0; border:0; border-top:1px solid var(--line); background:none; color:var(--accent); font:inherit; font-size:.82rem; font-weight:700; text-align:left; cursor:pointer; text-decoration:none; display:block; }
 
-  .d2-todos{ flex:1; display:flex; flex-direction:column; margin-bottom:12px; }
+  .d2-todos{ flex:1 1 auto; display:flex; flex-direction:column; margin-bottom:12px; max-height:252px; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; padding-right:4px; }
+  .d2-todos .d2-todo{ flex:none; }
   .d2-todo{ display:flex; align-items:center; gap:10px; min-height:40px; border-top:1px solid var(--line); }
   .d2-todo input{ width:18px; height:18px; accent-color:var(--accent); flex-shrink:0; }
   .d2-todo label{ flex:1; font-size:.88rem; cursor:pointer; overflow-wrap:anywhere; }
@@ -5032,7 +5033,7 @@ SOFTWARE.`;
     $('d2Todos').addEventListener('click', e => { const b = e.target.closest('[data-del]'); if(!b) return;
       todos = todos.filter(t => t.id !== +b.dataset.del); store.set(TODO_KEY, todos); renderTodos(); applyLang(lang); });
     $('d2TodoForm').addEventListener('submit', e => { e.preventDefault(); const v = $('d2TodoInput').value.trim(); if(!v) return;
-      todos.push({ id: Date.now(), text: v.slice(0, 120), done: false }); store.set(TODO_KEY, todos); $('d2TodoInput').value = ''; renderTodos(); applyLang(lang); });
+      todos.push({ id: Date.now(), text: v.slice(0, 120), done: false }); store.set(TODO_KEY, todos); $('d2TodoInput').value = ''; renderTodos(); applyLang(lang); const tl = $('d2Todos'); tl.scrollTop = tl.scrollHeight; });
 
     // ---------- Events + jobs ----------
     function renderEvents(){
